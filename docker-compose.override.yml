@@ -1,0 +1,44 @@
+# Surcouche dev (fusionnée automatiquement avec docker-compose.yml).
+services:
+  database:
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+
+  php:
+    build:
+      target: backend_dev
+    environment:
+      APP_ENV: dev
+    volumes:
+      - ./backend:/var/www/backend
+      # Recouvre le volume nommé backend_public (prod) qui masquerait
+      # sinon public/index.php dans le conteneur.
+      - ./backend/public:/var/www/backend/public
+      - /var/www/backend/var
+
+  web:
+    volumes:
+      - ./docker/nginx/backend.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./backend/public:/var/www/backend/public:ro
+    ports:
+      - "${BACKEND_PORT:-8000}:80"
+
+  mercure:
+    environment:
+      MERCURE_EXTRA_DIRECTIVES: |
+        cors_origins http://localhost:5173 http://127.0.0.1:5173
+        anonymous
+    ports:
+      - "${MERCURE_PORT:-3000}:80"
+
+  frontend:
+    build:
+      target: frontend_dev
+    environment:
+      VITE_API_PROXY: http://web:80
+      VITE_MERCURE_URL: http://localhost:${MERCURE_PORT:-3000}/.well-known/mercure
+      CHOKIDAR_USEPOLLING: "true"
+    volumes:
+      - ./frontend:/app
+      # Conserve les node_modules (binaires natifs) de l'image.
+      - /app/node_modules

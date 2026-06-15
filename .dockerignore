@@ -1,0 +1,19 @@
+# Évite d'envoyer des fichiers lourds/inutiles dans le contexte de build.
+.git
+.gitignore
+**/node_modules
+frontend/dist
+backend/vendor
+backend/var
+**/*.log
+
+# Fichiers d'orchestration / env (injectés par compose, pas par le build)
+docker-compose*.yml
+.env
+.env.prod
+.env.*.local
+
+# Doc / éditeurs
+.vscode
+.idea
+README*.md

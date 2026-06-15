@@ -1,0 +1,18 @@
+{
+  "app": {
+    "name": "DinoQuest"
+  },
+  "nav": {
+    "home": "Accueil",
+    "map": "Carte",
+    "projects": "Projets citoyens",
+    "register": "Inscription",
+    "login": "Connexion",
+    "account": "Mon compte",
+    "play": "Jouer"
+  },
+  "common": {
+    "loading": "Chargement…",
+    "notFound": "Page introuvable"
+  }
+}
