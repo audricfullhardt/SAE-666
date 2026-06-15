@@ -15,11 +15,6 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 #[Route('/api/auth')]
 class AuthController extends AbstractController
 {
-    /**
-     * Cette route doit exister pour que le RouterListener (priorité 32) ne renvoie
-     * pas un 404 avant que le firewall json_login (priorité 8) n'intercepte la requête.
-     * Le corps n'est jamais exécuté : Lexik renvoie le JWT via le success_handler.
-     */
     #[Route('/login', name: 'api_auth_login', methods: ['POST'])]
     public function login(): never
     {

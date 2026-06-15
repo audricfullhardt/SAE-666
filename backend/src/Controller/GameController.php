@@ -197,9 +197,6 @@ class GameController extends AbstractController
         return $code;
     }
 
-    /**
-     * @return array<int, array<string, mixed>>
-     */
     private function serializePlayers(GameSession $session): array
     {
         $players = $this->players->findBy(['session' => $session], ['turnOrder' => 'ASC', 'id' => 'ASC']);

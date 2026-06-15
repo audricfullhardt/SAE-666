@@ -3,8 +3,4 @@ lexik_jwt_authentication:
     public_key: '%env(resolve:JWT_PUBLIC_KEY)%'
     pass_phrase: '%env(JWT_PASSPHRASE)%'
     token_ttl: 3600
-    # Le claim d'identité par défaut est `username`. Comme notre User expose
-    # getUsername() (champ d'affichage != identifiant), Lexik y stockerait le
-    # username au lieu de l'email, et le rechargement via le provider
-    # (property: email) échouerait (401). On stocke donc l'email comme identité.
     user_id_claim: email
