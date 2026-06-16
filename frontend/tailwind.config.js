@@ -9,7 +9,18 @@ export default {
       screens: { '2xl': '1400px' },
     },
     extend: {
+      fontFamily: {
+        luckiest: ['Luckiest Guy', 'cursive'],
+        patrick: ['Patrick Hand', 'sans-serif'],
+        nunito: ['Nunito', 'sans-serif'],
+      },
       colors: {
+        vert: '#01BF63',
+        foret: '#013D22',
+        jaune: '#FFB000',
+        bleu: '#0094FF',
+        rouge: '#FE3B2F',
+        menthe: '#F2FBEF',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

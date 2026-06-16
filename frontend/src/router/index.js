@@ -18,15 +18,20 @@ const routes = [
     component: () => import('@/views/ProjectsView.vue'),
   },
   {
+    path: '/auth',
+    name: 'auth',
+    component: () => import('@/views/auth/AuthView.vue'),
+    meta: { guestOnly: true, layout: 'blank' },
+  },
+  {
     path: '/inscription',
     name: 'register',
-    component: () => import('@/views/RegisterView.vue'),
+    redirect: () => ({ name: 'auth', query: { mode: 'register' } }),
   },
   {
     path: '/connexion',
     name: 'login',
-    component: () => import('@/views/auth/LoginView.vue'),
-    meta: { guestOnly: true },
+    redirect: () => ({ name: 'auth', query: { mode: 'login' } }),
   },
   {
     path: '/compte',
@@ -38,18 +43,20 @@ const routes = [
     path: '/jeu',
     name: 'lobby',
     component: () => import('@/views/game/LobbyView.vue'),
+    meta: { layout: 'game' },
   },
   {
     path: '/jeu/plateau',
     name: 'board',
     component: () => import('@/views/game/BoardView.vue'),
+    meta: { layout: 'game' },
   },
   {
-    // Ouvert via QR code, ex : /jeu/mini-jeu/quiz-dinos?match=ABC
     path: '/jeu/mini-jeu/:game',
     name: 'mini-game',
     component: () => import('@/views/game/MiniGameView.vue'),
     props: true,
+    meta: { layout: 'game' },
   },
   {
     path: '/:pathMatch(.*)*',
@@ -69,7 +76,7 @@ const router = createRouter({
 router.beforeEach((to) => {
   const auth = useAuthStore()
   if (to.meta.requiresAuth && !auth.isAuthenticated) {
-    return { name: 'login', query: { redirect: to.fullPath } }
+    return { name: 'auth', query: { mode: 'login', redirect: to.fullPath } }
   }
   if (to.meta.guestOnly && auth.isAuthenticated) {
     return { name: 'account' }

@@ -1,5 +1,4 @@
 <script setup>
-// TODO: implémenter — Mon compte
 </script>
 
 <template>
