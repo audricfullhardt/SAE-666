@@ -99,7 +99,7 @@ onMounted(async () => {
         <h1 class="font-luckiest text-4xl leading-tight text-white">
           une aventure<br />préhistorique<br />en duel !
         </h1>
-        <div class="shrink-0 text-6xl">🦖</div>
+        <div class="shrink-0 text-6xl"><img src="@/assets/dino_green.png" alt="" class="h-20 w-auto" /></div>
       </div>
       <div class="mt-8 flex justify-center">
         <RouterLink
@@ -157,7 +157,7 @@ onMounted(async () => {
           class="relative rounded-2xl border-2 border-dashed p-5"
           :class="team.border"
         >
-          <span class="absolute -left-2 -top-3 text-2xl">🦖</span>
+          <span class="absolute -left-2 -top-3 text-2xl"><img src="@/assets/dino_green.png" alt="" class="h-20 w-auto" /></span>
           <h3 class="font-luckiest text-lg" :class="team.title">{{ team.name }}</h3>
           <div class="mt-4 grid grid-cols-2 gap-4">
             <div v-for="member in team.members" :key="member.firstName + member.role">

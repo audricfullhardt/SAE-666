@@ -97,7 +97,7 @@ const inputClass =
 
     <div class="flex flex-1 items-start justify-center px-4 pb-8">
       <div class="w-full max-w-sm rounded-3xl bg-white p-6 shadow-xl">
-        <div class="flex justify-center"><img src="@/assets/dino.svg" alt="" class="h-20 w-auto" /></div>
+        <div class="flex justify-center"><img src="@/assets/dino_green.png" alt="" class="h-20 w-auto" /></div>
 
         <h2 class="mt-3 text-center font-luckiest text-3xl text-foret">{{ title }}</h2>
         <p v-if="mode === 'register'" class="text-center font-patrick text-lg text-vert">
@@ -256,7 +256,7 @@ const inputClass =
     </div>
 
     <footer class="bg-vert py-4 text-center">
-      <p class="font-luckiest tracking-wide text-white">DinoMania — 2026</p>
+      <p class="font-luckiest tracking-wide text-white">DinoQuest — 2026</p>
     </footer>
   </main>
 </template>

@@ -92,7 +92,7 @@ watch(
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-3">
           <div class="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-lg">
-            🦖
+            <img src="@/assets/dino_green.png" alt="" class="h-20 w-auto" />
           </div>
           <span v-if="auth.isAuthenticated && auth.username" class="font-patrick text-lg text-white">
             {{ auth.username }}
