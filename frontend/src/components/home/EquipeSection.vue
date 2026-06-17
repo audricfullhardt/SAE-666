@@ -5,75 +5,106 @@ import dinoImg from '@/assets/dino.svg'
 const { t } = useI18n()
 
 /**
- * members: flat list rendered in a staggered 2-column grid.
- * badgeClass must be full strings for Tailwind JIT.
+ * Static pole color maps – full class strings so Tailwind purge keeps them.
+ * titleClass  : section title colour
+ * borderClass : dashed border around the pole card
+ * badgeClass  : member name pill background
  */
-const members = [
-  { name: 'Audric', roleKey: 'home.equipe.roles.backend',   photo: null, badgeClass: 'bg-rouge' },
-  { name: 'Lucy',   roleKey: 'home.equipe.roles.frontend',  photo: null, badgeClass: 'bg-vert'  },
-  { name: 'Théo',   roleKey: 'home.equipe.roles.com',       photo: null, badgeClass: 'bg-jaune' },
-  { name: 'Arthur', roleKey: 'home.equipe.roles.com',       photo: null, badgeClass: 'bg-jaune' },
-  { name: 'Prénom', roleKey: 'home.equipe.roles.graphiste', photo: null, badgeClass: 'bg-bleu'  },
-  { name: 'Prénom', roleKey: 'home.equipe.roles.graphiste', photo: null, badgeClass: 'bg-bleu'  },
+const poleColorMap = {
+  dev:      { titleClass: 'text-rouge', borderClass: 'border-rouge', badgeClass: 'bg-rouge'  },
+  com:      { titleClass: 'text-jaune', borderClass: 'border-jaune', badgeClass: 'bg-jaune'  },
+  creation: { titleClass: 'text-bleu',  borderClass: 'border-bleu',  badgeClass: 'bg-bleu'   },
+}
+
+const poles = [
+  {
+    id: 'dev',
+    members: [
+      { name: 'Audric', roleKey: 'home.equipe.roles.backend',   photo: null },
+      { name: 'Lucy',   roleKey: 'home.equipe.roles.frontend',  photo: null },
+    ],
+  },
+  {
+    id: 'com',
+    members: [
+      { name: 'Théo',   roleKey: 'home.equipe.roles.com', photo: null },
+      { name: 'Arthur', roleKey: 'home.equipe.roles.com', photo: null },
+    ],
+  },
+  {
+    id: 'creation',
+    members: [
+      { name: 'Prénom', roleKey: 'home.equipe.roles.graphiste', photo: null },
+      { name: 'Prénom', roleKey: 'home.equipe.roles.graphiste', photo: null },
+    ],
+  },
 ]
 </script>
 
 <template>
   <section class="bg-white px-6 py-14">
-    <div class="mx-auto max-w-2xl">
-      <!-- Section title -->
-      <h2 class="mb-10 text-center font-luckiest text-3xl uppercase tracking-wide text-rouge md:text-4xl">
-        {{ t('home.equipe.title') }}
+    <div class="mx-auto max-w-3xl">
+      <!-- Section title: "Notre" in bryndan script + "ÉQUIPE" in luckiest rouge -->
+      <h2 class="mb-10 text-center md:text-4xl">
+        <span class="font-bryndan text-3xl text-rouge md:text-4xl">Notre </span>
+        <span class="font-luckiest text-3xl uppercase tracking-wide text-rouge md:text-4xl">Équipe</span>
       </h2>
 
-      <!--
-        Staggered 2-column grid matching the mockup:
-        col-1 (odd items): mt-0   — sits higher
-        col-2 (even items): mt-10 — sits lower
-      -->
-      <div class="grid grid-cols-2 gap-x-6 gap-y-8">
+      <!-- Poles – stack on mobile, 3-col on large screens -->
+      <div class="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-6">
         <div
-          v-for="(member, i) in members"
-          :key="member.name + member.roleKey + i"
-          :class="['flex flex-col items-center gap-2', i % 2 === 1 ? 'mt-10' : 'mt-0']"
+          v-for="pole in poles"
+          :key="pole.id"
+          :class="[
+            'flex-1 rounded-xl border-2 border-dashed p-5',
+            poleColorMap[pole.id].borderClass,
+          ]"
         >
-          <!-- floating dino icon top-right of photo -->
-          <div class="relative">
-            <div v-if="member.photo" class="h-32 w-32 overflow-hidden rounded-xl shadow-md">
-              <img :src="member.photo" :alt="member.name" class="h-full w-full object-cover" />
-            </div>
-            <div
-              v-else
-              :class="[
-                'flex h-32 w-32 items-center justify-center rounded-xl text-4xl font-luckiest text-white shadow-md',
-                member.badgeClass,
-              ]"
-            >
-              {{ member.name[0] }}
-            </div>
-            <!-- pixel dino accent -->
-            <img
-              :src="dinoImg"
-              alt=""
-              aria-hidden="true"
-              class="absolute -right-4 -top-4 h-9 w-9 object-contain"
-            />
+          <!-- Pole heading with dino pixel icon -->
+          <div class="mb-5 flex items-center gap-2">
+            <img :src="dinoImg" alt="" class="h-8 w-8 object-contain" aria-hidden="true" />
+            <h3 :class="['font-luckiest text-lg uppercase tracking-wide', poleColorMap[pole.id].titleClass]">
+              {{ t(`home.equipe.poles.${pole.id}`) }}
+            </h3>
           </div>
 
-          <!-- Name badge -->
-          <span
-            :class="[
-              'rounded-full px-4 py-1 font-luckiest text-xs uppercase tracking-wide text-white',
-              member.badgeClass,
-            ]"
-          >
-            {{ member.name }}
-          </span>
+          <!-- Members grid -->
+          <div class="grid grid-cols-2 gap-4">
+            <div
+              v-for="member in pole.members"
+              :key="member.name + member.roleKey"
+              class="flex flex-col items-center gap-2"
+            >
+              <!-- Photo or initial avatar -->
+              <div v-if="member.photo" class="h-24 w-24 overflow-hidden rounded-lg">
+                <img :src="member.photo" :alt="member.name" class="h-full w-full object-cover" />
+              </div>
+              <div
+                v-else
+                :class="[
+                  'flex h-24 w-24 items-center justify-center rounded-lg text-3xl font-luckiest text-white',
+                  poleColorMap[pole.id].badgeClass,
+                ]"
+              >
+                {{ member.name[0] }}
+              </div>
 
-          <!-- Role -->
-          <span class="text-center font-bryndan text-xs text-gray-500">
-            {{ t(member.roleKey) }}
-          </span>
+              <!-- Name badge -->
+              <span
+                :class="[
+                  'rounded-full px-3 py-0.5 font-luckiest text-xs text-white uppercase tracking-wide',
+                  poleColorMap[pole.id].badgeClass,
+                ]"
+              >
+                {{ member.name }}
+              </span>
+
+              <!-- Role -->
+              <span class="text-center font-bryndan text-xs text-gray-600">
+                {{ t(member.roleKey) }}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

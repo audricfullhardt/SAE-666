@@ -78,6 +78,7 @@
     "contact": {
       "title": "Nous contacter",
       "or": "ou",
+      "cta": "DISCUTONS",
       "entreprises": {
         "title": "Pour les entreprises",
         "text": "Vous souhaitez avoir notre jeu dans votre magasin ?",
@@ -86,7 +87,7 @@
       "joueurs": {
         "title": "Pour les joueurs",
         "text": "Besoin d'infos ? Envie de partager des idées ?",
-        "link": "Formulaire de contact B2C"
+        "link": "Formulaire de contact B2B"
       }
     },
     "footer": {

@@ -69,7 +69,7 @@ function selectOutlet(outlet) {
         />
       </div>
 
-      <!-- Map + detail – always stacked (map first, detail card below), side-by-side on desktop -->
+      <!-- Map + detail – stack on mobile, side-by-side on desktop -->
       <div class="flex flex-col gap-5 md:flex-row md:items-start">
         <!-- Leaflet map -->
         <div class="h-64 flex-1 overflow-hidden rounded-xl border border-gray-200 md:h-80">
@@ -92,7 +92,7 @@ function selectOutlet(outlet) {
         <!-- Selected outlet detail card -->
         <div
           v-if="selectedOutlet"
-          class="w-full rounded-xl border border-gray-200 bg-gray-50 p-5 shadow-sm md:w-64"
+          class="md:w-64 rounded-xl border border-gray-200 bg-gray-50 p-5 shadow-sm"
         >
           <h3 class="mb-3 font-luckiest text-base uppercase tracking-wide text-foret">
             {{ selectedOutlet.name }}

@@ -48,10 +48,10 @@ function next() {
 </script>
 
 <template>
-  <section class="bg-menthe px-6 py-14">
+  <section class="bg-white px-6 py-14">
     <div class="mx-auto max-w-3xl">
       <!-- Section title -->
-      <h2 class="mb-8 font-luckiest text-3xl uppercase tracking-wide text-vert md:text-4xl">
+      <h2 class="mb-8 font-luckiest text-3xl uppercase tracking-wide text-foret md:text-4xl">
         {{ t('home.actualites.title') }}
       </h2>
 
