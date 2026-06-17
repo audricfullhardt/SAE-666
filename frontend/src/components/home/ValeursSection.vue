@@ -13,7 +13,7 @@ const { t } = useI18n()
       </h2>
 
       <!-- Body with highlighted keywords via i18n-t named slots -->
-      <i18n-t keypath="home.valeurs.text" tag="p" class="font-patrick text-base leading-relaxed text-white md:text-lg">
+      <i18n-t keypath="home.valeurs.text" tag="p" class="font-bryndan text-base leading-relaxed text-white md:text-lg">
         <template #kw1>
           <span class="rounded bg-jaune px-1.5 py-0.5 font-bold text-foret">
             {{ t('home.valeurs.kw1') }}

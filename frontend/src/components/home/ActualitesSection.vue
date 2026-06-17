@@ -86,12 +86,12 @@ function next() {
             <h3 class="mb-2 font-luckiest text-xl text-foret">
               {{ t(currentArticle.titleKey) }}
             </h3>
-            <p class="mb-4 font-patrick text-sm leading-relaxed text-gray-600">
+            <p class="mb-4 font-bryndan text-sm leading-relaxed text-gray-600">
               {{ t(currentArticle.excerptKey) }}
             </p>
             <a
               :href="currentArticle.href"
-              class="font-luckiest text-sm text-vert underline-offset-2 hover:underline"
+              class="font-bryndan text-sm text-vert underline-offset-2 hover:underline"
             >
               {{ t('home.actualites.readMore') }}
             </a>

@@ -11,6 +11,7 @@ export default {
     extend: {
       fontFamily: {
         luckiest: ['Luckiest Guy', 'cursive'],
+        bryndan: ['Bryndan Write', 'cursive'],
         patrick: ['Patrick Hand', 'sans-serif'],
         nunito: ['Nunito', 'sans-serif'],
       },

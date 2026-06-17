@@ -32,7 +32,7 @@ const paragraphKeys = [
           v-for="key in paragraphKeys"
           :key="key"
           class="flex-1 rounded-xl border-2 border-dashed border-gray-300 p-5
-                 font-patrick text-sm leading-relaxed text-gray-700"
+                 font-bryndan text-sm leading-relaxed text-gray-700"
         >
           {{ t(key) }}
         </div>
@@ -48,7 +48,7 @@ const paragraphKeys = [
           <span :class="['font-luckiest text-4xl tracking-wide md:text-5xl', stat.colorClass]">
             {{ stat.value }}
           </span>
-          <span class="mt-1 font-luckiest text-xs uppercase tracking-widest text-gray-500 md:text-sm">
+          <span class="mt-1 font-bryndan text-xs uppercase tracking-widest text-gray-500 md:text-sm">
             {{ t(stat.labelKey) }}
           </span>
         </div>

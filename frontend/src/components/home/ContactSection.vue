@@ -24,7 +24,7 @@ const contactHref = `mailto:${contactEmail}`
       />
 
       <!-- Body text -->
-      <p class="max-w-sm font-patrick text-base leading-relaxed text-gray-700 md:text-lg">
+      <p class="max-w-sm font-bryndan text-base leading-relaxed text-gray-700 md:text-lg">
         {{ t('home.contact.text') }}
       </p>
 

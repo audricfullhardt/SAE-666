@@ -99,7 +99,7 @@ const poles = [
               </span>
 
               <!-- Role -->
-              <span class="text-center font-patrick text-xs text-gray-600">
+              <span class="text-center font-bryndan text-xs text-gray-600">
                 {{ t(member.roleKey) }}
               </span>
             </div>

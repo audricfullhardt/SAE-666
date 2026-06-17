@@ -64,7 +64,7 @@ function selectOutlet(outlet) {
           v-model="searchQuery"
           type="text"
           :placeholder="t('home.pointsAchat.searchPlaceholder')"
-          class="w-full rounded-xl border border-gray-200 py-2.5 pl-10 pr-4 font-patrick
+          class="w-full rounded-xl border border-gray-200 py-2.5 pl-10 pr-4 font-bryndan
                  text-sm text-gray-700 outline-none focus:border-vert focus:ring-1 focus:ring-vert"
         />
       </div>
@@ -97,7 +97,7 @@ function selectOutlet(outlet) {
           <h3 class="mb-3 font-luckiest text-base uppercase tracking-wide text-foret">
             {{ selectedOutlet.name }}
           </h3>
-          <ul class="mb-4 flex flex-col gap-2 font-patrick text-sm text-gray-600">
+          <ul class="mb-4 flex flex-col gap-2 font-bryndan text-sm text-gray-600">
             <li class="flex items-start gap-2">
               <MapPin class="mt-0.5 h-4 w-4 shrink-0 text-vert" />
               {{ selectedOutlet.address }}
