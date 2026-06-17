@@ -59,6 +59,12 @@ const routes = [
     meta: { layout: 'game' },
   },
   {
+    path: '/jeu/test-mini-jeux',
+    name: 'minigame-test',
+    component: () => import('@/views/game/MinigameTestView.vue'),
+    meta: { layout: 'blank' },
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'not-found',
     component: () => import('@/views/NotFoundView.vue'),
