@@ -16,28 +16,24 @@ const paragraphKeys = ['home.concept.p1', 'home.concept.p2', 'home.concept.p3']
   <!-- pt-10 absorbs the hero CTA button that bleeds into this section -->
   <section class="bg-white px-6 pb-14 pt-12">
     <div class="mx-auto max-w-3xl">
-      <h2 class="mb-8 font-luckiest text-3xl uppercase tracking-wide text-jaune md:text-4xl">
+      <h2 class="mb-8 mt-8 font-luckiest text-titre1 uppercase tracking-wide text-noir md:text-titre1-md">
         {{ t('home.concept.title') }}
       </h2>
 
-      <!-- 3 dashed cards: stacked on mobile, row on md+ -->
-      <div class="mb-10 flex flex-col gap-4 md:flex-row">
-        <div
-          v-for="key in paragraphKeys"
-          :key="key"
-          class="flex-1 rounded-xl border-2 border-dashed border-gray-300 p-5 font-bryndan text-sm leading-relaxed text-gray-700"
-        >
+      <!-- Single big dashed card -->
+      <div class="mb-10 rounded-xl border-2 border-dashed border-gray-300 p-6 font-bryndan text-body leading-relaxed text-gray-700 md:text-body-md">
+        <p v-for="key in paragraphKeys" :key="key" class="mb-3 last:mb-0">
           {{ t(key) }}
-        </div>
+        </p>
       </div>
 
       <!-- Stats row -->
       <div class="flex items-center justify-around">
         <div v-for="stat in stats" :key="stat.labelKey" class="flex flex-col items-center gap-1">
-          <span :class="['font-luckiest text-5xl tracking-wide', stat.colorClass]">
+          <span :class="['font-luckiest text-titre1 tracking-wide md:text-titre1-md', stat.colorClass]">
             {{ stat.value }}
           </span>
-          <span class="font-luckiest text-xs uppercase tracking-widest text-gray-500">
+          <span class="font-bryndan text-titre5 uppercase tracking-widest text-gray-500">
             {{ t(stat.labelKey) }}
           </span>
         </div>

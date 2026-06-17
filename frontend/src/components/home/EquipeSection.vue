@@ -40,8 +40,8 @@ const poles = [
     <div class="mx-auto max-w-3xl">
       <!-- Mixed-font title -->
       <h2 class="mb-10 text-center">
-        <span class="font-bryndan text-3xl text-rouge">Notre </span>
-        <span class="font-luckiest text-3xl uppercase tracking-wide text-rouge">Équipe</span>
+        <span class="font-bryndan text-titre1 text-rouge md:text-titre1-md">Notre </span>
+        <span class="font-luckiest text-titre1 uppercase tracking-wide text-rouge md:text-titre1-md">Équipe</span>
       </h2>
 
       <!-- Poles: stacked mobile, 3-col desktop -->
@@ -54,7 +54,7 @@ const poles = [
           <!-- Pole heading -->
           <div class="mb-4 flex items-center gap-2">
             <img :src="dinoImg" alt="" aria-hidden="true" class="h-7 w-7 object-contain" />
-            <h3 :class="['font-luckiest text-base uppercase tracking-wide', poleColorMap[pole.id].titleClass]">
+            <h3 :class="['font-luckiest text-titre3 uppercase tracking-wide md:text-titre3-md', poleColorMap[pole.id].titleClass]">
               {{ t(`home.equipe.poles.${pole.id}`) }}
             </h3>
           </div>
@@ -76,12 +76,12 @@ const poles = [
               />
 
               <!-- Name badge -->
-              <span :class="['rounded-full px-3 py-0.5 font-luckiest text-xs uppercase tracking-wide text-white', poleColorMap[pole.id].badgeClass]">
+              <span :class="['rounded-full px-3 py-0.5 font-luckiest text-titre5 uppercase tracking-wide text-white', poleColorMap[pole.id].badgeClass]">
                 {{ member.name }}
               </span>
 
               <!-- Role -->
-              <span class="text-center font-bryndan text-xs text-gray-600">
+              <span class="text-center font-bryndan text-titre5 text-gray-600">
                 {{ t(member.roleKey) }}
               </span>
             </div>

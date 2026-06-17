@@ -25,7 +25,7 @@ function next() {
 <template>
   <section class="bg-white px-6 py-14">
     <div class="mx-auto max-w-5xl">
-      <h2 class="mb-8 font-luckiest text-3xl uppercase tracking-wide text-foret md:text-4xl">
+      <h2 class="mb-8 font-luckiest text-titre1 uppercase tracking-wide text-foret md:text-titre1-md">
         {{ t('home.actualites.title') }}
       </h2>
 
@@ -44,9 +44,9 @@ function next() {
               </div>
             </div>
             <div class="bg-white p-4">
-              <h3 class="mb-1 font-luckiest text-lg text-foret">{{ t(currentArticle.titleKey) }}</h3>
-              <p class="mb-3 font-bryndan text-sm leading-relaxed text-gray-600">{{ t(currentArticle.excerptKey) }}</p>
-              <a :href="currentArticle.href" class="font-bryndan text-sm text-vert hover:underline">{{ t('home.actualites.readMore') }}</a>
+              <h3 class="mb-1 font-luckiest text-titre3 text-foret">{{ t(currentArticle.titleKey) }}</h3>
+              <p class="mb-3 font-bryndan text-body leading-relaxed text-gray-600">{{ t(currentArticle.excerptKey) }}</p>
+              <a :href="currentArticle.href" class="font-bryndan text-body text-vert hover:underline">{{ t('home.actualites.readMore') }}</a>
             </div>
           </div>
 
@@ -81,9 +81,9 @@ function next() {
             </div>
           </div>
           <div class="bg-white p-4">
-            <h3 class="mb-1 font-luckiest text-lg text-foret">{{ t(article.titleKey) }}</h3>
-            <p class="mb-3 font-bryndan text-sm leading-relaxed text-gray-600">{{ t(article.excerptKey) }}</p>
-            <a :href="article.href" class="font-bryndan text-sm text-vert hover:underline">{{ t('home.actualites.readMore') }}</a>
+            <h3 class="mb-1 font-luckiest text-titre3 text-foret md:text-titre3-md">{{ t(article.titleKey) }}</h3>
+            <p class="mb-3 font-bryndan text-body leading-relaxed text-gray-600 md:text-body-md">{{ t(article.excerptKey) }}</p>
+            <a :href="article.href" class="font-bryndan text-body text-vert hover:underline md:text-body-md">{{ t('home.actualites.readMore') }}</a>
           </div>
         </div>
       </div>

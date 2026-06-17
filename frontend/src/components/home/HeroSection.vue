@@ -9,39 +9,40 @@ const playRoute = '/jeu'
 </script>
 
 <template>
-  <!-- No overflow-hidden here so the CTA button can bleed out at the bottom -->
-  <section class="relative pb-8">
-    <!-- Tiled background in its own layer -->
+  <!-- Mobile: 3/2 landscape ratio — Desktop: 80vh with room for the button -->
+  <section class="relative w-full aspect-[3/2] pb-8 md:aspect-auto md:h-[80vh]">
+    <!-- Background: cover the full section, no tiling -->
     <div
       class="absolute inset-0"
       :style="{
         backgroundImage: `url(${heroImg})`,
-        backgroundRepeat: 'repeat',
-        backgroundSize: '180px',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
       }"
     />
 
-    <!-- Foreground content -->
-    <div class="relative flex min-h-[58vw] flex-col justify-center px-5 py-8 md:min-h-[420px] md:px-16">
-      <!-- Dino sprite: right, vertically centred -->
+    <!-- Foreground content stretches to fill the whole section -->
+    <div class="relative flex h-full flex-col justify-center px-6 py-12 md:px-20">
+      <!-- Dino sprite: right side, vertically centred -->
       <img
         :src="dinoImg"
         alt=""
         aria-hidden="true"
-        class="absolute right-4 top-1/2 h-36 w-auto -translate-y-1/2 drop-shadow-lg md:h-52"
+        class="absolute right-6 top-1/2 h-48 w-auto -translate-y-1/2 drop-shadow-xl md:h-72"
       />
 
-      <!-- Tagline: left 55% so it never overlaps the dino -->
-      <h1 class="w-[55%] font-luckiest text-3xl uppercase leading-tight tracking-wide text-white drop-shadow-md md:text-5xl">
+      <!-- Tagline: left ~55% so it never overlaps dino -->
+      <h1 class="w-[55%] font-luckiest text-titre1 uppercase leading-tight tracking-wide text-white drop-shadow-md md:text-titre1-md">
         {{ t('home.hero.tagline') }}
       </h1>
     </div>
 
-    <!-- CTA: absolutely positioned at bottom-center, half overflowing into next section -->
+    <!-- CTA: centred, half-overflowing into next section -->
     <div class="absolute bottom-0 left-0 right-0 flex translate-y-1/2 justify-center">
       <RouterLink
         :to="playRoute"
-        class="rounded-full bg-jaune px-12 py-3 font-luckiest text-2xl tracking-widest text-white shadow-xl transition hover:brightness-110 active:scale-95"
+        class="rounded-full bg-jaune px-14 py-4 font-luckiest text-btn tracking-widest text-white shadow-xl transition hover:brightness-110 active:scale-95 md:text-titre4-md"
       >
         {{ t('home.hero.cta') }}
       </RouterLink>

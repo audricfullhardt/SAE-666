@@ -24,7 +24,7 @@ const cards = [
 <template>
   <section class="bg-gray-100 px-6 py-16">
     <div class="mx-auto max-w-sm">
-      <h2 class="mb-8 text-center font-luckiest text-3xl uppercase tracking-wide text-foret md:text-4xl">
+      <h2 class="mb-8 text-center font-luckiest text-titre1 uppercase tracking-wide text-foret md:text-titre1-md">
         {{ t('home.contact.title') }}
       </h2>
 
@@ -38,13 +38,13 @@ const cards = [
             </div>
             <!-- Text -->
             <div>
-              <p class="mb-1 font-luckiest text-sm uppercase tracking-wide text-foret">
+              <p class="mb-1 font-luckiest text-titre5 uppercase tracking-wide text-foret">
                 {{ t(card.titleKey) }}
               </p>
-              <p class="mb-2 font-bryndan text-sm leading-relaxed text-gray-600">
+              <p class="mb-2 font-bryndan text-body leading-relaxed text-gray-600 md:text-body-md">
                 {{ t(card.textKey) }}
               </p>
-              <a :href="card.href" class="font-bryndan text-xs font-semibold text-foret underline underline-offset-2 hover:text-vert">
+              <a :href="card.href" class="font-bryndan text-titre5 font-semibold text-foret underline underline-offset-2 hover:text-vert">
                 {{ t(card.linkKey) }}
               </a>
             </div>
@@ -52,7 +52,7 @@ const cards = [
 
           <!-- "ou" divider between cards -->
           <div v-if="i < cards.length - 1" class="flex items-center justify-center py-3">
-            <span class="font-bryndan text-sm text-gray-400">{{ t('home.contact.or') }}</span>
+            <span class="font-bryndan text-body text-gray-400">{{ t('home.contact.or') }}</span>
           </div>
         </template>
       </div>
@@ -61,7 +61,7 @@ const cards = [
       <div class="mt-8 flex justify-center">
         <a
           href="/contact"
-          class="rounded-full bg-rouge px-12 py-3 font-luckiest text-xl uppercase tracking-widest text-white shadow-lg transition hover:brightness-110 active:scale-95"
+          class="rounded-full bg-rouge px-12 py-3 font-luckiest text-btn uppercase tracking-widest text-white shadow-lg transition hover:brightness-110 active:scale-95 md:text-titre3-md"
         >
           {{ t('home.contact.cta') }}
         </a>

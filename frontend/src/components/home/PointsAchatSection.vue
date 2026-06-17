@@ -49,7 +49,7 @@ function selectOutlet(outlet) {
 <template>
   <section class="bg-white px-6 py-14">
     <div class="mx-auto max-w-3xl">
-      <h2 class="mb-8 text-center font-luckiest text-3xl uppercase tracking-wide text-foret md:text-4xl">
+      <h2 class="mb-8 text-center font-luckiest text-titre1 uppercase tracking-wide text-foret md:text-titre1-md">
         {{ t('home.pointsAchat.title') }}
       </h2>
 
@@ -60,7 +60,7 @@ function selectOutlet(outlet) {
           v-model="searchQuery"
           type="text"
           :placeholder="t('home.pointsAchat.searchPlaceholder')"
-          class="w-full rounded-full border border-gray-200 bg-white py-2.5 pl-10 pr-4 font-bryndan text-sm text-gray-700 shadow-sm outline-none focus:border-vert focus:ring-1 focus:ring-vert"
+          class="w-full rounded-full border border-gray-200 bg-white py-2.5 pl-10 pr-4 font-bryndan text-body text-gray-700 shadow-sm outline-none focus:border-vert focus:ring-1 focus:ring-vert"
         />
       </div>
 
@@ -85,10 +85,10 @@ function selectOutlet(outlet) {
       <!-- Outlet detail card: full width on mobile, side-by-side on desktop -->
       <div v-if="selectedOutlet" class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm md:flex md:items-start md:gap-6">
         <div class="flex-1">
-          <h3 class="mb-3 font-luckiest text-base uppercase tracking-wide text-foret">
+          <h3 class="mb-3 font-luckiest text-titre3 uppercase tracking-wide text-foret">
             {{ selectedOutlet.name }}
           </h3>
-          <ul class="mb-4 flex flex-col gap-2 font-bryndan text-sm text-gray-600">
+          <ul class="mb-4 flex flex-col gap-2 font-bryndan text-body text-gray-600">
             <li class="flex items-start gap-2">
               <MapPin class="mt-0.5 h-4 w-4 shrink-0 text-vert" />
               {{ selectedOutlet.address }}
@@ -106,7 +106,7 @@ function selectOutlet(outlet) {
             :href="`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(selectedOutlet.address)}`"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-block rounded-xl bg-vert px-6 py-2 font-luckiest text-sm uppercase tracking-wide text-white transition hover:brightness-110"
+            class="inline-block rounded-xl bg-vert px-6 py-2 font-luckiest text-btn uppercase tracking-wide text-white transition hover:brightness-110"
           >
             {{ t('home.pointsAchat.goBtn') }}
           </a>
