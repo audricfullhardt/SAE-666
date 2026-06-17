@@ -77,8 +77,17 @@
     },
     "contact": {
       "title": "Nous contacter",
-      "text": "Tu es un joueur ? Une entreprise ? Tu souhaites nous faire part d'une idée, d'une suggestion ?",
-      "cta": "DISCUTONS"
+      "or": "ou",
+      "entreprises": {
+        "title": "Pour les entreprises",
+        "text": "Vous souhaitez avoir notre jeu dans votre magasin ?",
+        "link": "Formulaire de contact B2B"
+      },
+      "joueurs": {
+        "title": "Pour les joueurs",
+        "text": "Besoin d'infos ? Envie de partager des idées ?",
+        "link": "Formulaire de contact B2C"
+      }
     },
     "footer": {
       "copy": "©notreAgence - 2025"

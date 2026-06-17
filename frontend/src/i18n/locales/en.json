@@ -77,8 +77,17 @@
     },
     "contact": {
       "title": "Contact us",
-      "text": "Are you a player? A business? Do you want to share an idea or a suggestion?",
-      "cta": "LET'S TALK"
+      "or": "or",
+      "entreprises": {
+        "title": "For businesses",
+        "text": "Would you like to stock our game in your store?",
+        "link": "B2B contact form"
+      },
+      "joueurs": {
+        "title": "For players",
+        "text": "Need info? Want to share ideas?",
+        "link": "B2C contact form"
+      }
     },
     "footer": {
       "copy": "©ourAgency - 2025"
