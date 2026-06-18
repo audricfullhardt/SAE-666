@@ -86,7 +86,7 @@ async function submitRegister() {
 }
 
 const inputClass =
-  'w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 font-nunito text-foret placeholder-gray-400 focus:border-vert focus:outline-none focus:ring-2 focus:ring-vert/40'
+  'w-full rounded-lg border border-gray-200 bg-white px-4 py-3 font-nunito text-foret placeholder-gray-400 focus:border-vert focus:outline-none focus:ring-2 focus:ring-vert/40'
 </script>
 
 <template>
@@ -96,7 +96,7 @@ const inputClass =
     </header>
 
     <div class="flex flex-1 items-start justify-center px-4 pb-8">
-      <div class="w-full max-w-sm rounded-3xl bg-white p-6 shadow-xl">
+      <div class="w-full max-w-sm rounded-xl bg-white p-6 shadow-xl">
         <div class="flex justify-center"><img src="@/assets/dino_green.png" alt="" class="h-20 w-auto [image-rendering:pixelated]" /></div>
 
         <h2 class="mt-3 text-center font-luckiest text-3xl text-foret">{{ title }}</h2>

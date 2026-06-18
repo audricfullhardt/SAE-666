@@ -66,12 +66,12 @@ function selectOutlet(outlet) {
 
       <!--
         Mobile: map above, white card below with vert bottom border
-        Desktop: map left + green card right, combined in one rounded-2xl container
+        Desktop: map left + green card right, combined in one rounded-lg container
       -->
-      <div class="md:flex md:overflow-hidden md:rounded-2xl md:shadow-md">
+      <div class="md:flex md:overflow-hidden md:rounded-lg md:shadow-md">
 
         <!-- Map -->
-        <div class="h-64 w-full overflow-hidden rounded-2xl md:h-80 md:w-[55%] md:rounded-none" style="isolation: isolate;">
+        <div class="h-64 w-full overflow-hidden rounded-lg md:h-80 md:w-[55%] md:rounded-none" style="isolation: isolate;">
           <LMap :center="mapCenter" :zoom="mapZoom" class="h-full w-full">
             <LTileLayer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -91,7 +91,7 @@ function selectOutlet(outlet) {
         <!-- Outlet detail -->
         <div
           v-if="selectedOutlet"
-          class="mt-4 rounded-2xl border-b-4 border-vert bg-white p-5 md:mt-0 md:flex md:w-[45%] md:flex-col md:justify-center md:rounded-none md:border-b-0 md:bg-vert md:p-8"
+          class="mt-4 rounded-lg border-b-4 border-vert bg-white p-5 md:mt-0 md:flex md:w-[45%] md:flex-col md:justify-center md:rounded-none md:border-b-0 md:bg-vert md:p-8"
         >
           <h3 class="mb-4 font-luckiest text-base uppercase tracking-wide text-noir md:text-white">
             {{ selectedOutlet.name }}

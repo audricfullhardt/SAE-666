@@ -3,6 +3,13 @@ import { useI18n } from 'vue-i18n'
 import dinoBleu  from '@/assets/dino_blue.png'
 import dinoJaune from '@/assets/dino_yellow.png'
 import dinoRouge from '@/assets/dino_red.png'
+import photoAudric  from '@/assets/audric.png'
+import photoLucy    from '@/assets/lucy.png'
+import photoTheoL   from '@/assets/theo_laine.png'
+import photoTheoM   from '@/assets/theo_metens.jpg'
+import photoArthur  from '@/assets/arthur.png'
+import photoValou   from '@/assets/valou.png'
+import photoTessa   from '@/assets/tessa.png'
 
 const { t } = useI18n()
 
@@ -16,24 +23,24 @@ const poles = [
   {
     id: 'dev',
     members: [
-      { name: 'Audric', roleKey: 'home.equipe.roles.backend',  photo: null },
-      { name: 'Lucy',   roleKey: 'home.equipe.roles.frontend', photo: null },
+      { name: 'Audric', roleKey: 'home.equipe.roles.backend',  photo: photoAudric },
+      { name: 'Lucy',   roleKey: 'home.equipe.roles.frontend', photo: photoLucy   },
     ],
   },
   {
     id: 'com',
     members: [
-      { name: 'Théo',   roleKey: 'home.equipe.roles.com', photo: null },
-      { name: 'Arthur', roleKey: 'home.equipe.roles.com', photo: null },
-      { name: 'Valou',  roleKey: 'home.equipe.roles.com', photo: null },
-      { name: 'Théo',   roleKey: 'home.equipe.roles.com', photo: null },
+      { name: 'Théo',   roleKey: 'home.equipe.roles.com', photo: photoTheoL  },
+      { name: 'Arthur', roleKey: 'home.equipe.roles.com', photo: photoArthur },
+      { name: 'Valou',  roleKey: 'home.equipe.roles.com', photo: photoValou  },
+      { name: 'Théo',   roleKey: 'home.equipe.roles.com', photo: photoTheoM  },
     ],
   },
   {
     id: 'creation',
     members: [
-      { name: 'Tessa',   roleKey: 'home.equipe.roles.graphiste', photo: null },
-      { name: 'Killian', roleKey: 'home.equipe.roles.graphiste', photo: null },
+      { name: 'Tessa',   roleKey: 'home.equipe.roles.graphiste', photo: photoTessa },
+      { name: 'Killian', roleKey: 'home.equipe.roles.graphiste', photo: null       },
     ],
   },
 ]
@@ -62,14 +69,14 @@ const poles = [
               {{ t('home.equipe.poles.dev') }}
             </h3>
           </div>
-          <div :class="['mt-1 rounded-xl border-2 border-dashed p-4', poleColorMap.dev.borderClass]">
+          <div :class="['mt-1 rounded-md border-2 border-dashed p-4', poleColorMap.dev.borderClass]">
             <div class="grid grid-cols-2 gap-3">
               <div v-for="member in poles[0].members" :key="member.name" class="flex flex-col items-center gap-4">
                 <div class="relative w-full rounded-lg" style="aspect-ratio: 3/4;">
                   <img v-if="member.photo" :src="member.photo" :alt="member.name" class="h-full w-full rounded-lg object-cover object-top" />
                   <div v-else class="h-full w-full rounded-lg bg-gray-200" />
                   <div class="absolute inset-x-0 bottom-0 flex translate-y-1/2 justify-center">
-                    <span :class="['inline-flex items-center px-4 py-1 font-luckiest text-base uppercase leading-none text-white', poleColorMap.dev.badgeClass]">
+                    <span :class="['inline-flex items-center justify-center px-4 py-1 font-luckiest text-base uppercase leading-none text-white', poleColorMap.dev.badgeClass]">
                       {{ member.name }}
                     </span>
                   </div>
@@ -88,14 +95,14 @@ const poles = [
               {{ t('home.equipe.poles.com') }}
             </h3>
           </div>
-          <div :class="['mt-1 flex-1 rounded-xl border-2 border-dashed p-4', poleColorMap.com.borderClass]">
-            <div class="grid grid-cols-2 gap-3">
+          <div :class="['mt-1 flex-1 rounded-md border-2 border-dashed p-4', poleColorMap.com.borderClass]">
+            <div class="grid h-full grid-cols-2 grid-rows-2 content-between gap-x-3 gap-y-12">
               <div v-for="member in poles[1].members" :key="member.name + member.roleKey" class="flex flex-col items-center gap-4">
                 <div class="relative w-full rounded-lg" style="aspect-ratio: 3/4;">
                   <img v-if="member.photo" :src="member.photo" :alt="member.name" class="h-full w-full rounded-lg object-cover object-top" />
                   <div v-else class="h-full w-full rounded-lg bg-gray-200" />
                   <div class="absolute inset-x-0 bottom-0 flex translate-y-1/2 justify-center">
-                    <span :class="['inline-flex items-center px-4 py-1 font-luckiest text-base uppercase leading-none text-white', poleColorMap.com.badgeClass]">
+                    <span :class="['inline-flex items-center justify-center px-4 py-1 font-luckiest text-base uppercase leading-none text-white', poleColorMap.com.badgeClass]">
                       {{ member.name }}
                     </span>
                   </div>
@@ -114,14 +121,14 @@ const poles = [
               {{ t('home.equipe.poles.creation') }}
             </h3>
           </div>
-          <div :class="['mt-1 rounded-xl border-2 border-dashed p-4', poleColorMap.creation.borderClass]">
+          <div :class="['mt-1 rounded-md border-2 border-dashed p-4', poleColorMap.creation.borderClass]">
             <div class="grid grid-cols-2 gap-3">
               <div v-for="member in poles[2].members" :key="member.name" class="flex flex-col items-center gap-4">
                 <div class="relative w-full rounded-lg" style="aspect-ratio: 3/4;">
                   <img v-if="member.photo" :src="member.photo" :alt="member.name" class="h-full w-full rounded-lg object-cover object-top" />
                   <div v-else class="h-full w-full rounded-lg bg-gray-200" />
                   <div class="absolute inset-x-0 bottom-0 flex translate-y-1/2 justify-center">
-                    <span :class="['inline-flex items-center px-4 py-1 font-luckiest text-base uppercase leading-none text-white', poleColorMap.creation.badgeClass]">
+                    <span :class="['inline-flex items-center justify-center px-4 py-1 font-luckiest text-base uppercase leading-none text-white', poleColorMap.creation.badgeClass]">
                       {{ member.name }}
                     </span>
                   </div>

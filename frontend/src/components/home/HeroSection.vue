@@ -77,7 +77,7 @@ const { t } = useI18n()
     </div>
     <!-- Right: hero image card with dino -->
     <div
-      class="relative w-[45%] overflow-hidden rounded-2xl"
+      class="relative w-[45%] overflow-hidden rounded-lg"
       :style="{
         aspectRatio: '16/9',
         backgroundImage: `url(${heroImg})`,
