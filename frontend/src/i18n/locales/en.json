@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "DinoQuest"
+    "name": "DinoMania"
   },
   "nav": {
     "home": "Home",
@@ -14,5 +14,86 @@
   "common": {
     "loading": "Loading…",
     "notFound": "Page not found"
+  },
+  "home": {
+    "hero": {
+      "tagline": "A board game that is also played on your smartphone",
+      "cta": "PLAY!",
+      "rules": "SEE THE RULES"
+    },
+    "concept": {
+      "title": "Our Concept",
+      "p1": "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum.",
+      "p2": "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum.",
+      "p3": "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum.",
+      "stats": {
+        "players": "Players",
+        "age": "Years old",
+        "time": "Per game"
+      }
+    },
+    "valeurs": {
+      "title": "Our Values",
+      "text": "A {kw1} game to learn while having fun, a {kw2} adventure that brings young and old together for a thoroughly {kw3} moment!",
+      "kw1": "educational",
+      "kw2": "inter-generational",
+      "kw3": "fun"
+    },
+    "equipe": {
+      "title": "Our Team",
+      "poles": {
+        "dev": "Development Team",
+        "com": "Communication Team",
+        "creation": "Creation Team"
+      },
+      "roles": {
+        "backend": "Backend Developer",
+        "frontend": "Frontend Developer",
+        "com": "Communication",
+        "graphiste": "Graphic Designer"
+      }
+    },
+    "actualites": {
+      "title": "News",
+      "readMore": "Read →",
+      "articles": [
+        {
+          "title": "Real-life Jurassic Park?",
+          "excerpt": "That's what a team of researchers did 2 days ago in the United States. We haven't heard from them since."
+        },
+        {
+          "title": "DinoMania: new update",
+          "excerpt": "Version 1.2 is available with new mini-games, bug fixes and a redesigned interface."
+        },
+        {
+          "title": "Regional tournament in Troyes",
+          "excerpt": "The first official DinoMania tournament will take place on July 15 in Troyes. Sign up now!"
+        }
+      ]
+    },
+    "pointsAchat": {
+      "title": "Purchase Points",
+      "searchPlaceholder": "Search a city or store…",
+      "goBtn": "GO THERE"
+    },
+    "contact": {
+      "title": "Contact us",
+      "body": "Are you a player? A business? Do you have an idea or suggestion to share?",
+      "or": "or",
+      "cta": "LET'S TALK",
+      "entreprises": {
+        "title": "For businesses",
+        "text": "Would you like to stock our game in your store?",
+        "link": "B2B contact form"
+      },
+      "joueurs": {
+        "title": "For players",
+        "text": "Need info? Want to share ideas?",
+        "link": "B2C contact form"
+      }
+    },
+    "footer": {
+      "copy": "@DinoMania - 2026"
+    }
   }
 }

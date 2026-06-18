@@ -25,8 +25,11 @@ services:
 
   mercure:
     environment:
+      # Dev multi-appareils : on autorise toutes les origines (le front est servi depuis
+      # localhost OU depuis l'IP LAN du PC selon l'appareil). En prod, cors_origins reste
+      # restreint au domaine (docker-compose.yml).
       MERCURE_EXTRA_DIRECTIVES: |
-        cors_origins http://localhost:5173 http://127.0.0.1:5173
+        cors_origins *
         anonymous
     ports:
       - "${MERCURE_PORT:-3000}:80"
@@ -36,7 +39,8 @@ services:
       target: frontend_dev
     environment:
       VITE_API_PROXY: http://web:80
-      VITE_MERCURE_URL: http://localhost:${MERCURE_PORT:-3000}/.well-known/mercure
+      # Cible du proxy Vite pour le hub Mercure (service Docker, port interne 80).
+      VITE_MERCURE_PROXY: http://mercure:80
       CHOKIDAR_USEPOLLING: "true"
     volumes:
       - ./frontend:/app

@@ -1,30 +1,30 @@
 <script setup>
-import { RouterLink } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import HeroSection from '@/components/home/HeroSection.vue'
+import ConceptSection from '@/components/home/ConceptSection.vue'
+import ValeursSection from '@/components/home/ValeursSection.vue'
+import EquipeSection from '@/components/home/EquipeSection.vue'
+import ActualitesSection from '@/components/home/ActualitesSection.vue'
+import PointsAchatSection from '@/components/home/PointsAchatSection.vue'
+import ContactSection from '@/components/home/ContactSection.vue'
 
 const { t } = useI18n()
 </script>
 
 <template>
-  <main class="min-h-svh flex flex-col items-center justify-center gap-6 p-8 text-center">
-    <h1 class="text-5xl font-bold tracking-tight text-primary">{{ t('app.name') }}</h1>
-    <p class="max-w-prose text-muted-foreground">
-      Jeu de plateau physique avec interactions numériques. Lancez les dés,
-      déplacez-vous, scannez un QR code et affrontez vos adversaires en mini-jeux 1v1.
-    </p>
-    <nav class="flex flex-wrap items-center justify-center gap-3">
-      <RouterLink to="/jeu" class="rounded-md bg-primary px-5 py-2.5 font-medium text-primary-foreground hover:opacity-90">
-        {{ t('nav.play') }}
-      </RouterLink>
-      <RouterLink to="/carte" class="rounded-md border px-5 py-2.5 font-medium hover:bg-accent">
-        {{ t('nav.map') }}
-      </RouterLink>
-      <RouterLink to="/projets" class="rounded-md border px-5 py-2.5 font-medium hover:bg-accent">
-        {{ t('nav.projects') }}
-      </RouterLink>
-      <RouterLink to="/inscription" class="rounded-md border px-5 py-2.5 font-medium hover:bg-accent">
-        {{ t('nav.register') }}
-      </RouterLink>
-    </nav>
-  </main>
+  <div>
+    <HeroSection />
+    <ConceptSection />
+    <ValeursSection />
+    <EquipeSection />
+    <ActualitesSection />
+    <PointsAchatSection />
+    <ContactSection />
+
+    <!-- Footer -->
+    <div class="border-t-2 border-dashed border-rouge" />
+    <footer class="bg-vert py-5 text-center">
+      <p class="font-luckiest tracking-wide text-white">{{ t('home.footer.copy') }}</p>
+    </footer>
+  </div>
 </template>

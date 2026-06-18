@@ -2,6 +2,12 @@
 export default {
   darkMode: ['class'],
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+  safelist: [
+    // Brand colour utilities – guaranteed even when dynamically composed
+    { pattern: /^(bg|text|border|ring|fill)-(vert|foret|jaune|bleu|rouge|menthe)$/ },
+    // Font families
+    'font-luckiest', 'font-bryndan', 'font-patrick', 'font-nunito',
+  ],
   theme: {
     container: {
       center: true,
@@ -9,7 +15,19 @@ export default {
       screens: { '2xl': '1400px' },
     },
     extend: {
+      fontFamily: {
+        luckiest: ['Luckiest Guy', 'cursive'],
+        bryndan: ['Bryndan Write', 'cursive'],
+        patrick: ['Patrick Hand', 'sans-serif'],
+        nunito: ['Nunito', 'sans-serif'],
+      },
       colors: {
+        vert: '#01BF63',
+        foret: '#013D22',
+        jaune: '#FFB000',
+        bleu: '#0094FF',
+        rouge: '#FE3B2F',
+        menthe: '#F2FBEF',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

@@ -20,3 +20,4 @@ backend/var/
 logs/
 
 docker/**/data/
+backend/.env

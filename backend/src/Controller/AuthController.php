@@ -42,6 +42,10 @@ class AuthController extends AbstractController
             return new JsonResponse(['error' => 'Cet email est déjà utilisé'], 409);
         }
 
+        if ($userRepository->findOneBy(['username' => $username]) !== null) {
+            return new JsonResponse(['error' => 'Ce nom d\'utilisateur est déjà pris'], 409);
+        }
+
         $user = new User();
         $user->setEmail($email);
         $user->setUsername($username);
