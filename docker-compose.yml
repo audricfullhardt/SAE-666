@@ -61,6 +61,7 @@ services:
       MERCURE_SUBSCRIBER_JWT_KEY: ${MERCURE_JWT_SECRET}
       MERCURE_EXTRA_DIRECTIVES: |
         cors_origins ${MERCURE_CORS_ORIGINS}
+        anonymous 1
     volumes:
       - mercure_data:/data
       - mercure_config:/config
