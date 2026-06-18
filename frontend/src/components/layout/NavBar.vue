@@ -9,16 +9,15 @@ import logoUrl from '@/assets/logo.png'
 
 const auth = useAuthStore()
 const route = useRoute()
-const { locale } = useI18n()
+const { t, locale } = useI18n()
 
 const drawerOpen = ref(false)
 
 const links = [
-  { to: '/', label: 'Accueil' },
-  { to: '/regles', label: 'Règles' },
-  { to: '/classement', label: 'Classement' },
-  { to: '/actualites', label: 'Actualités' },
-  { to: '/contact', label: 'Contact' },
+  { to: '/', labelKey: 'nav.home' },
+  { to: '/regles', labelKey: 'nav.rules' },
+  { to: '/actualites', labelKey: 'nav.news' },
+  { to: '/contact', labelKey: 'nav.contact' },
 ]
 
 function setLocale(l) {
@@ -65,7 +64,7 @@ watch(
             class="font-luckiest tracking-wide text-white transition hover:text-white/80"
             exact-active-class="underline decoration-jaune decoration-2 underline-offset-8"
           >
-            {{ link.label }}
+            {{ t(link.labelKey) }}
           </RouterLink>
         </li>
       </ul>
@@ -90,14 +89,14 @@ watch(
           to="/jeu"
           class="hidden rounded-full bg-jaune px-5 py-2 font-luckiest text-sm tracking-wide text-white shadow-sm transition hover:brightness-105 md:inline-flex"
         >
-          JOUER
+          {{ t('nav.play') }}
         </RouterLink>
         <RouterLink
           v-else
           :to="{ name: 'auth', query: { mode: 'login' } }"
           class="hidden rounded-full bg-jaune px-5 py-2 font-luckiest text-sm tracking-wide text-white shadow-sm transition hover:brightness-105 md:inline-flex"
         >
-          CONNEXION
+          {{ t('nav.login') }}
         </RouterLink>
         <LogoutButton class="hidden md:flex" />
 
@@ -139,7 +138,7 @@ watch(
           <span v-if="auth.isAuthenticated && auth.username" class="font-bryndan text-lg text-white">
             {{ auth.username }}
           </span>
-          <span v-else class="font-bryndan text-lg text-white/70">Invité</span>
+          <span v-else class="font-bryndan text-lg text-white/70">{{ t('nav.guest') }}</span>
         </div>
         <button
           type="button"
@@ -158,7 +157,7 @@ watch(
             class="font-luckiest text-xl tracking-wide text-white transition hover:text-jaune"
             exact-active-class="text-jaune"
           >
-            {{ link.label }}
+            {{ t(link.labelKey) }}
           </RouterLink>
         </li>
       </ul>
@@ -184,14 +183,14 @@ watch(
         to="/jeu"
         class="rounded-full bg-jaune py-3 text-center font-luckiest tracking-wide text-white shadow-sm transition hover:brightness-105"
       >
-        JOUER !
+        {{ t('nav.play') }}
       </RouterLink>
       <RouterLink
         v-else
         :to="{ name: 'auth', query: { mode: 'login' } }"
         class="rounded-full bg-jaune py-3 text-center font-luckiest tracking-wide text-white shadow-sm transition hover:brightness-105"
       >
-        CONNEXION
+        {{ t('nav.login') }}
       </RouterLink>
 
       <div v-if="auth.isAuthenticated" class="mt-auto pt-6">
