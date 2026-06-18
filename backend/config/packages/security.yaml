@@ -34,6 +34,8 @@ security:
         - { path: ^/api/auth/register, roles: PUBLIC_ACCESS }
         - { path: ^/api/game/join, roles: PUBLIC_ACCESS }
         - { path: '^/api/game/[^/]+/ready$', roles: PUBLIC_ACCESS }
+        - { path: '^/api/game/[^/]+/return$', roles: PUBLIC_ACCESS }
+        - { path: '^/api/game/[^/]+/scan$', roles: PUBLIC_ACCESS }
         - { path: '^/api/game/[^/]+/minigame/current$', roles: PUBLIC_ACCESS }
         - { path: '^/api/game/[^/]+/minigame/result$', roles: PUBLIC_ACCESS }
         - { path: ^/api/newsletter/subscribe, roles: PUBLIC_ACCESS }

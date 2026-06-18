@@ -103,6 +103,16 @@ class GameController extends AbstractController
         $this->em->persist($player);
         $this->em->flush();
 
+        // On ne diffuse pas le gameToken (privé au joueur) au reste de la salle.
+        $this->mercure->publishToSession($session->getCode(), 'player_joined', [
+            'id' => $player->getId(),
+            'username' => $player->getUsername(),
+            'position' => $player->getPosition(),
+            'isHost' => $player->isHost(),
+            'isReady' => $player->isReady(),
+            'turnOrder' => $player->getTurnOrder(),
+        ]);
+
         return new JsonResponse([
             'gameToken' => $player->getGameToken(),
             'sessionId' => $session->getId(),
@@ -152,9 +162,61 @@ class GameController extends AbstractController
         $session->setStatus('playing');
         $this->em->flush();
 
+        $this->mercure->publishToSession($session->getCode(), 'game_started', [
+            'code' => $session->getCode(),
+        ]);
+
         return new JsonResponse([
             'status' => 'playing',
             'players' => $this->serializePlayers($session),
+        ], 200);
+    }
+
+    #[Route('/{code}/finish', name: 'api_game_finish', methods: ['POST'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function finish(string $code, Request $request, #[CurrentUser] User $user): JsonResponse
+    {
+        $session = $this->sessions->findOneBy(['code' => strtoupper($code)]);
+        if ($session === null) {
+            return new JsonResponse(['error' => 'Session introuvable'], 404);
+        }
+
+        if ($session->getHost()?->getId() !== $user->getId()) {
+            return new JsonResponse(['error' => 'Seul l\'hôte peut terminer la partie'], 403);
+        }
+
+        if ($session->getStatus() !== 'playing') {
+            return new JsonResponse(['error' => 'La partie n\'est pas en cours'], 409);
+        }
+
+        $data = json_decode($request->getContent(), true) ?? [];
+        $winnerId = $data['winnerId'] ?? null;
+
+        if ($winnerId === null) {
+            return new JsonResponse(['error' => 'winnerId est requis'], 400);
+        }
+
+        $winner = $this->players->findOneBy(['id' => $winnerId, 'session' => $session]);
+        if ($winner === null) {
+            return new JsonResponse(['error' => 'Gagnant introuvable dans cette partie'], 404);
+        }
+
+        $session->setStatus('finished');
+        $this->em->flush();
+
+        $this->mercure->publishToSession($session->getCode(), 'game_finished', [
+            'winnerId' => $winner->getId(),
+            'winnerUsername' => $winner->getUsername(),
+            'players' => $this->serializePlayers($session),
+        ]);
+
+        return new JsonResponse([
+            'status' => 'finished',
+            'winner' => [
+                'id' => $winner->getId(),
+                'username' => $winner->getUsername(),
+                'position' => $winner->getPosition(),
+            ],
         ], 200);
     }
 
@@ -184,27 +246,54 @@ class GameController extends AbstractController
         $player->setIsReady(true);
         $this->em->flush();
 
+        $this->mercure->publishToSession($session->getCode(), 'player_ready', [
+            'id' => $player->getId(),
+            'isReady' => true,
+        ]);
+
         return new JsonResponse([
             'playerId' => $player->getId(),
             'isReady' => true,
         ], 200);
     }
 
-    #[Route('/{code}/scan', name: 'api_game_scan', methods: ['POST'])]
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function scan(string $code, Request $request, #[CurrentUser] User $user): JsonResponse
+    #[Route('/{code}/return', name: 'api_game_return', methods: ['POST'])]
+    public function returnToBoard(string $code, Request $request, #[CurrentUser] ?User $user): JsonResponse
     {
         $session = $this->sessions->findOneBy(['code' => strtoupper($code)]);
         if ($session === null) {
             return new JsonResponse(['error' => 'Session introuvable'], 404);
         }
 
+        if ($this->resolveCurrentPlayer($session, $request, $user) === null) {
+            return new JsonResponse(['error' => 'Authentification requise (JWT ou X-Game-Token)'], 401);
+        }
+
         if ($session->getStatus() !== 'playing') {
             return new JsonResponse(['error' => 'La partie n\'est pas en cours'], 409);
         }
 
-        if ($session->getHost()?->getId() !== $user->getId()) {
-            return new JsonResponse(['error' => 'Seul l\'hôte peut scanner une case'], 403);
+        $this->mercure->publishToSession($session->getCode(), 'return_to_board', []);
+
+        return new JsonResponse(['status' => 'ok'], 200);
+    }
+
+    private const MINIGAME_TYPES = ['quiz', 'reflex', 'memory', 'brasdefer', 'gobelets', 'dinofind'];
+
+    #[Route('/{code}/scan', name: 'api_game_scan', methods: ['POST'])]
+    public function scan(string $code, Request $request, #[CurrentUser] ?User $user): JsonResponse
+    {
+        $session = $this->sessions->findOneBy(['code' => strtoupper($code)]);
+        if ($session === null) {
+            return new JsonResponse(['error' => 'Session introuvable'], 404);
+        }
+
+        if ($this->resolveCurrentPlayer($session, $request, $user) === null) {
+            return new JsonResponse(['error' => 'Authentification requise (JWT ou X-Game-Token)'], 401);
+        }
+
+        if ($session->getStatus() !== 'playing') {
+            return new JsonResponse(['error' => 'La partie n\'est pas en cours'], 409);
         }
 
         if ($this->activeMinigames->findOneBy(['session' => $session]) !== null) {
@@ -212,27 +301,31 @@ class GameController extends AbstractController
         }
 
         $data = json_decode($request->getContent(), true) ?? [];
-        $minigameType = trim((string) ($data['minigameType'] ?? ''));
         $challengerId = $data['challengerId'] ?? null;
-        $caseData = $data['caseData'] ?? null;
+        $opponentId = $data['opponentId'] ?? null;
 
-        if ($minigameType === '' || $challengerId === null) {
-            return new JsonResponse(['error' => 'minigameType et challengerId sont requis'], 400);
+        if ($challengerId === null || $opponentId === null) {
+            return new JsonResponse(['error' => 'challengerId et opponentId sont requis'], 400);
+        }
+
+        if ((string) $challengerId === (string) $opponentId) {
+            return new JsonResponse(['error' => 'Le challenger et l\'adversaire doivent être différents'], 400);
         }
 
         $challenger = $this->players->findOneBy(['id' => $challengerId, 'session' => $session]);
-        if ($challenger === null) {
-            return new JsonResponse(['error' => 'Challenger introuvable dans cette partie'], 404);
+        $opponent = $this->players->findOneBy(['id' => $opponentId, 'session' => $session]);
+        if ($challenger === null || $opponent === null) {
+            return new JsonResponse(['error' => 'Challenger ou adversaire introuvable dans cette partie'], 404);
         }
+
+        $minigameType = self::MINIGAME_TYPES[random_int(0, \count(self::MINIGAME_TYPES) - 1)];
 
         $active = new ActiveMinigame();
         $active->setSession($session);
         $active->setMinigameType($minigameType);
         $active->setChallenger($challenger);
-        $active->setStatus('pending_opponent');
-        if (\is_array($caseData)) {
-            $active->setCaseData($caseData);
-        }
+        $active->setOpponent($opponent);
+        $active->setStatus('in_progress');
 
         $this->em->persist($active);
         $this->em->flush();
@@ -240,7 +333,9 @@ class GameController extends AbstractController
         $this->mercure->publishToSession($session->getCode(), 'minigame_triggered', [
             'minigameType' => $minigameType,
             'challengerId' => $challenger->getId(),
+            'opponentId' => $opponent->getId(),
             'challengerUsername' => $challenger->getUsername(),
+            'opponentUsername' => $opponent->getUsername(),
         ]);
 
         return new JsonResponse([
@@ -249,6 +344,10 @@ class GameController extends AbstractController
             'challenger' => [
                 'id' => $challenger->getId(),
                 'username' => $challenger->getUsername(),
+            ],
+            'opponent' => [
+                'id' => $opponent->getId(),
+                'username' => $opponent->getUsername(),
             ],
         ], 201);
     }
@@ -288,6 +387,11 @@ class GameController extends AbstractController
         $payload = $this->gameService->resolveDuel($winner, $loser, $active, $this->em);
 
         $this->mercure->publishToSession($session->getCode(), 'duel_resolved', $payload);
+
+        $this->mercure->publishToSession($session->getCode(), 'round_finished', [
+            'winner' => $payload['winner'],
+            'loser' => $payload['loser'],
+        ]);
 
         return new JsonResponse($payload, 200);
     }
