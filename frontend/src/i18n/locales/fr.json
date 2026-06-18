@@ -14,5 +14,86 @@
   "common": {
     "loading": "Chargement…",
     "notFound": "Page introuvable"
+  },
+  "home": {
+    "hero": {
+      "tagline": "Un jeu de plateau qui se joue aussi... sur smartphone",
+      "cta": "JOUER !",
+      "rules": "VOIR LES RÈGLES"
+    },
+    "concept": {
+      "title": "Notre Concept",
+      "p1": "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum.",
+      "p2": "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum.",
+      "p3": "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum.",
+      "stats": {
+        "players": "Joueurs",
+        "age": "Ans",
+        "time": "Par partie"
+      }
+    },
+    "valeurs": {
+      "title": "Nos Valeurs",
+      "text": "Un jeu {kw1} pour apprendre en s'amusant, une aventure {kw2} qui rassemble petits et grands autour d'un moment résolument {kw3} !",
+      "kw1": "pédagogique",
+      "kw2": "inter-générationnel",
+      "kw3": "fun"
+    },
+    "equipe": {
+      "title": "Notre Équipe",
+      "poles": {
+        "dev": "Pôle Développement",
+        "com": "Pôle Communication",
+        "creation": "Pôle Création"
+      },
+      "roles": {
+        "backend": "Développeur Backend",
+        "frontend": "Développeuse Frontend",
+        "com": "Communication",
+        "graphiste": "Graphiste"
+      }
+    },
+    "actualites": {
+      "title": "Actualités",
+      "readMore": "Lire →",
+      "articles": [
+        {
+          "title": "Jurassic parc en vrai ?",
+          "excerpt": "C'est ce qu'ont fait il y a 2 jours une équipe de chercheurs aux États-Unis. D'ailleurs on n'a plus de nouvelles d'eux depuis quelques jours."
+        },
+        {
+          "title": "DinoMania : nouvelle mise à jour",
+          "excerpt": "La version 1.2 est disponible avec de nouveaux mini-jeux, des corrections de bugs et une interface repensée."
+        },
+        {
+          "title": "Tournoi régional à Troyes",
+          "excerpt": "Le premier tournoi officiel DinoMania aura lieu le 15 juillet à Troyes. Inscrivez-vous dès maintenant !"
+        }
+      ]
+    },
+    "pointsAchat": {
+      "title": "Points d'achat",
+      "searchPlaceholder": "Rechercher une ville ou un magasin…",
+      "goBtn": "Y ALLER"
+    },
+    "contact": {
+      "title": "Nous contacter",
+      "body": "Tu es un joueur\u00a0? Une entreprise\u00a0? Tu souhaites nous faire part d\u2019une id\u00e9e, d\u2019une suggestion\u00a0?",
+      "or": "ou",
+      "cta": "DISCUTONS",
+      "entreprises": {
+        "title": "Pour les entreprises",
+        "text": "Vous souhaitez avoir notre jeu dans votre magasin ?",
+        "link": "Formulaire de contact B2B"
+      },
+      "joueurs": {
+        "title": "Pour les joueurs",
+        "text": "Besoin d'infos ? Envie de partager des idées ?",
+        "link": "Formulaire de contact B2B"
+      }
+    },
+    "footer": {
+      "copy": "@DinoMania - 2026"
+    }
   }
 }
