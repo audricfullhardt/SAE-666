@@ -5,8 +5,6 @@ export default {
   safelist: [
     // Brand colour utilities – guaranteed even when dynamically composed
     { pattern: /^(bg|text|border|ring|fill)-(vert|foret|jaune|bleu|rouge|menthe)$/ },
-    // Typography scale tokens
-    { pattern: /^text-(titre1|titre2|titre3|titre4|titre5|body|btn)(-(md))?$/ },
     // Font families
     'font-luckiest', 'font-bryndan', 'font-patrick', 'font-nunito',
   ],
@@ -22,24 +20,6 @@ export default {
         bryndan: ['Bryndan Write', 'cursive'],
         patrick: ['Patrick Hand', 'sans-serif'],
         nunito: ['Nunito', 'sans-serif'],
-      },
-      // Design-system typography scale (from Figma)
-      // Mobile: titre1=24 titre2=20 titre3/4=16 body=12/20 btn=14 titre5=10
-      // Desktop: titre1-md=46/121.4% titre2-md=32 titre3-md=20 titre4-md=24 body-md=20/20
-      fontSize: {
-        'titre1':    ['1.5rem',   { lineHeight: 'normal' }],
-        'titre2':    ['1.25rem',  { lineHeight: 'normal' }],
-        'titre3':    ['1rem',     { lineHeight: 'normal' }],
-        'titre4':    ['1rem',     { lineHeight: 'normal' }],
-        'body':      ['0.75rem',  { lineHeight: '1.25rem' }],
-        'btn':       ['0.875rem', { lineHeight: 'normal' }],
-        'titre5':    ['0.625rem', { lineHeight: 'normal' }],
-        // Desktop variants (use with md: prefix)
-        'titre1-md': ['2.875rem', { lineHeight: '1.214' }],
-        'titre2-md': ['2rem',     { lineHeight: 'normal' }],
-        'titre3-md': ['1.25rem',  { lineHeight: 'normal' }],
-        'titre4-md': ['1.5rem',   { lineHeight: 'normal' }],
-        'body-md':   ['1.25rem',  { lineHeight: '1.25rem' }],
       },
       colors: {
         vert: '#01BF63',
