@@ -26,4 +26,5 @@ FROM backend_base AS backend_prod
 ENV APP_ENV=prod
 COPY backend/ /var/www/backend/
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress \
+    --no-scripts \
  && mkdir -p var && chown -R www-data:www-data var
