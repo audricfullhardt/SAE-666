@@ -5,8 +5,7 @@
 
 @font-face {
   font-family: 'Bryndan Write';
-  src: url('/fonts/BryndanWrite.woff2') format('woff2'),
-       url('/fonts/BryndanWrite.ttf') format('truetype');
+  src: url('/fonts/BryndanWrite.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
