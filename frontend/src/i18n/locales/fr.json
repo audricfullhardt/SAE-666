@@ -18,7 +18,8 @@
   "home": {
     "hero": {
       "tagline": "Un jeu de plateau qui se joue aussi... sur smartphone",
-      "cta": "JOUER !"
+      "cta": "JOUER !",
+      "rules": "VOIR LES RÈGLES"
     },
     "concept": {
       "title": "Notre Concept",
@@ -36,7 +37,7 @@
       "text": "Un jeu {kw1} pour apprendre en s'amusant, une aventure {kw2} qui rassemble petits et grands autour d'un moment résolument {kw3} !",
       "kw1": "pédagogique",
       "kw2": "inter-générationnel",
-      "kw3": "fun !"
+      "kw3": "fun"
     },
     "equipe": {
       "title": "Notre Équipe",
@@ -77,6 +78,7 @@
     },
     "contact": {
       "title": "Nous contacter",
+      "body": "Tu es un joueur\u00a0? Une entreprise\u00a0? Tu souhaites nous faire part d\u2019une id\u00e9e, d\u2019une suggestion\u00a0?",
       "or": "ou",
       "cta": "DISCUTONS",
       "entreprises": {
@@ -91,7 +93,7 @@
       }
     },
     "footer": {
-      "copy": "©notreAgence - 2025"
+      "copy": "@DinoMania - 2026"
     }
   }
 }

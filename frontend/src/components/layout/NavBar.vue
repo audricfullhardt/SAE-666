@@ -2,12 +2,14 @@
 import { ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import { Menu, X } from 'lucide-vue-next'
+import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import LogoutButton from '@/components/layout/LogoutButton.vue'
 import logoUrl from '@/assets/logo.png'
 
 const auth = useAuthStore()
 const route = useRoute()
+const { locale } = useI18n()
 
 const drawerOpen = ref(false)
 
@@ -18,6 +20,11 @@ const links = [
   { to: '/actualites', label: 'Actualités' },
   { to: '/contact', label: 'Contact' },
 ]
+
+function setLocale(l) {
+  locale.value = l
+  localStorage.setItem('dinoquest_locale', l)
+}
 
 watch(
   () => route.path,
@@ -65,6 +72,18 @@ watch(
 
       <!-- RIGHT: user icon (mobile) + desktop CTA -->
       <div class="flex items-center gap-3">
+        <!-- Language switcher (desktop) -->
+        <div class="hidden items-center gap-1 md:flex">
+          <button
+            :class="['font-luckiest text-sm tracking-wide transition', locale === 'fr' ? 'text-white' : 'text-white/40 hover:text-white/70']"
+            @click="setLocale('fr')"
+          >FR</button>
+          <span class="text-white/30">|</span>
+          <button
+            :class="['font-luckiest text-sm tracking-wide transition', locale === 'en' ? 'text-white' : 'text-white/40 hover:text-white/70']"
+            @click="setLocale('en')"
+          >EN</button>
+        </div>
         <!-- Desktop: JOUER / CONNEXION -->
         <RouterLink
           v-if="auth.isAuthenticated"
@@ -115,7 +134,7 @@ watch(
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-3">
           <div class="flex h-10 w-10 items-center justify-center rounded-full bg-white/20">
-            <img src="@/assets/dino_green.png" alt="" class="h-8 w-auto" />
+            <img src="@/assets/dino_green.png" alt="" class="h-8 w-auto [image-rendering:pixelated]" />
           </div>
           <span v-if="auth.isAuthenticated && auth.username" class="font-bryndan text-lg text-white">
             {{ auth.username }}
@@ -146,6 +165,20 @@ watch(
 
       <hr class="my-6 border-white/20" />
 
+      <!-- Language switcher (mobile drawer) -->
+      <div class="flex items-center gap-3">
+        <button
+          :class="['font-luckiest text-xl tracking-wide transition', locale === 'fr' ? 'text-white' : 'text-white/40 hover:text-white/70']"
+          @click="setLocale('fr')"
+        >FR</button>
+        <span class="text-white/30">|</span>
+        <button
+          :class="['font-luckiest text-xl tracking-wide transition', locale === 'en' ? 'text-white' : 'text-white/40 hover:text-white/70']"
+          @click="setLocale('en')"
+        >EN</button>
+      </div>
+
+      <hr class="my-6 border-white/20" />
       <RouterLink
         v-if="auth.isAuthenticated"
         to="/jeu"

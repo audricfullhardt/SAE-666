@@ -18,7 +18,8 @@
   "home": {
     "hero": {
       "tagline": "A board game that is also played on your smartphone",
-      "cta": "PLAY!"
+      "cta": "PLAY!",
+      "rules": "SEE THE RULES"
     },
     "concept": {
       "title": "Our Concept",
@@ -36,7 +37,7 @@
       "text": "A {kw1} game to learn while having fun, a {kw2} adventure that brings young and old together for a thoroughly {kw3} moment!",
       "kw1": "educational",
       "kw2": "inter-generational",
-      "kw3": "fun!"
+      "kw3": "fun"
     },
     "equipe": {
       "title": "Our Team",
@@ -77,6 +78,7 @@
     },
     "contact": {
       "title": "Contact us",
+      "body": "Are you a player? A business? Do you have an idea or suggestion to share?",
       "or": "or",
       "cta": "LET'S TALK",
       "entreprises": {
@@ -91,7 +93,7 @@
       }
     },
     "footer": {
-      "copy": "©ourAgency - 2025"
+      "copy": "@DinoMania - 2026"
     }
   }
 }
