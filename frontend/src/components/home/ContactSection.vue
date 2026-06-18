@@ -1,71 +1,39 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
+import dinoSvg    from '@/assets/dino_yellow.png'
+import dinoGreen  from '@/assets/dino_green.png'
+import dinoBleu   from '@/assets/dino_blue.png'
 
 const { t } = useI18n()
-
-const cards = [
-  {
-    icon: '🏢',
-    titleKey: 'home.contact.entreprises.title',
-    textKey:  'home.contact.entreprises.text',
-    linkKey:  'home.contact.entreprises.link',
-    href: '/contact?type=b2b',
-  },
-  {
-    icon: '🎮',
-    titleKey: 'home.contact.joueurs.title',
-    textKey:  'home.contact.joueurs.text',
-    linkKey:  'home.contact.joueurs.link',
-    href: '/contact?type=b2c',
-  },
-]
 </script>
 
 <template>
-  <section class="bg-gray-100 px-6 py-16">
-    <div class="mx-auto max-w-sm">
-      <h2 class="mb-8 text-center font-luckiest text-titre1 uppercase tracking-wide text-foret md:text-titre1-md">
-        {{ t('home.contact.title') }}
-      </h2>
+  <section class="border-t-2 border-dashed border-rouge bg-transparent px-6 py-12">
+    <div class="mx-auto flex max-w-3xl items-center gap-6">
 
-      <!-- Cards + ou divider -->
-      <div class="flex flex-col gap-0">
-        <template v-for="(card, i) in cards" :key="card.titleKey">
-          <div class="flex items-start gap-4 rounded-2xl bg-white p-5 shadow-sm">
-            <!-- Icon -->
-            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gray-100 text-xl">
-              {{ card.icon }}
-            </div>
-            <!-- Text -->
-            <div>
-              <p class="mb-1 font-luckiest text-titre5 uppercase tracking-wide text-foret">
-                {{ t(card.titleKey) }}
-              </p>
-              <p class="mb-2 font-bryndan text-body leading-relaxed text-gray-600 md:text-body-md">
-                {{ t(card.textKey) }}
-              </p>
-              <a :href="card.href" class="font-bryndan text-titre5 font-semibold text-foret underline underline-offset-2 hover:text-vert">
-                {{ t(card.linkKey) }}
-              </a>
-            </div>
-          </div>
-
-          <!-- "ou" divider between cards -->
-          <div v-if="i < cards.length - 1" class="flex items-center justify-center py-3">
-            <span class="font-bryndan text-body text-gray-400">{{ t('home.contact.or') }}</span>
-          </div>
-        </template>
+      <!-- Left: three dinos stacked -->
+      <div class="flex shrink-0 flex-col items-center">
+        <img :src="dinoGreen" alt="" aria-hidden="true" class="h-20 w-auto [image-rendering:pixelated]" />
+        <img :src="dinoBleu"  alt="" aria-hidden="true" class="h-20 w-auto [image-rendering:pixelated]" />
+        <img :src="dinoSvg"   alt="" aria-hidden="true" class="h-20 w-auto [image-rendering:pixelated]" />
       </div>
 
-      <!-- DISCUTONS button -->
-      <div class="mt-8 flex justify-center">
+      <!-- Right: title, body, button — all right-aligned -->
+      <div class="flex flex-1 flex-col items-end gap-4 text-right">
+        <h2 class="inline-block rotate-[4deg] font-luckiest text-xl uppercase tracking-wide text-noir md:text-2xl">
+          {{ t('home.contact.title') }}
+        </h2>
+        <p class="font-bryndan text-xs leading-relaxed text-noir md:text-sm">
+          {{ t('home.contact.body') }}
+        </p>
         <a
           href="/contact"
-          class="rounded-full bg-rouge px-12 py-3 font-luckiest text-btn uppercase tracking-widest text-white shadow-lg transition hover:brightness-110 active:scale-95 md:text-titre3-md"
+          class="inline-flex items-center rounded-full bg-rouge px-6 py-2 font-luckiest text-base uppercase leading-none tracking-wide text-white shadow-[0_4px_0_#C42B20] transition hover:brightness-110 active:scale-95"
         >
-          {{ t('home.contact.cta') }}
+          <span class="translate-y-[3px]">{{ t('home.contact.cta') }}</span>
         </a>
       </div>
+
     </div>
   </section>
 </template>

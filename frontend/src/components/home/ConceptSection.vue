@@ -13,15 +13,14 @@ const paragraphKeys = ['home.concept.p1', 'home.concept.p2', 'home.concept.p3']
 </script>
 
 <template>
-  <!-- pt-10 absorbs the hero CTA button that bleeds into this section -->
-  <section class="bg-white px-6 pb-14 pt-12">
+  <section class="bg-transparent px-6 pb-14 pt-14">
     <div class="mx-auto max-w-3xl">
-      <h2 class="mb-8 mt-8 font-luckiest text-titre1 uppercase tracking-wide text-noir md:text-titre1-md">
+      <h2 class="mb-8 mt-8 inline-block -rotate-[4deg] font-luckiest text-xl uppercase tracking-wide text-noir md:text-2xl">
         {{ t('home.concept.title') }}
       </h2>
 
       <!-- Single big dashed card -->
-      <div class="mb-10 rounded-xl border-2 border-dashed border-gray-300 p-6 font-bryndan text-body leading-relaxed text-gray-700 md:text-body-md">
+      <div class="mb-10 rounded-xl border-2 border-dashed border-gray-300 p-6 font-bryndan text-xs leading-relaxed text-gray-700 md:text-sm">
         <p v-for="key in paragraphKeys" :key="key" class="mb-3 last:mb-0">
           {{ t(key) }}
         </p>
@@ -29,11 +28,11 @@ const paragraphKeys = ['home.concept.p1', 'home.concept.p2', 'home.concept.p3']
 
       <!-- Stats row -->
       <div class="flex items-center justify-around">
-        <div v-for="stat in stats" :key="stat.labelKey" class="flex flex-col items-center gap-1">
-          <span :class="['font-luckiest text-titre1 tracking-wide md:text-titre1-md', stat.colorClass]">
+        <div v-for="stat in stats" :key="stat.labelKey" class="flex flex-col items-center gap-0">
+          <span :class="['font-luckiest text-5xl tracking-wide', stat.colorClass]">
             {{ stat.value }}
           </span>
-          <span class="font-bryndan text-titre5 uppercase tracking-widest text-gray-500">
+          <span class="font-bryndan text-xs uppercase tracking-widest text-noir md:text-sm">
             {{ t(stat.labelKey) }}
           </span>
         </div>

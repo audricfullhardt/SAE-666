@@ -47,70 +47,81 @@ function selectOutlet(outlet) {
 </script>
 
 <template>
-  <section class="bg-white px-6 py-14">
+  <section class="bg-transparent px-6 py-14">
     <div class="mx-auto max-w-3xl">
-      <h2 class="mb-8 text-center font-luckiest text-titre1 uppercase tracking-wide text-foret md:text-titre1-md">
+      <h2 class="mb-8 text-center font-luckiest text-xl uppercase tracking-wide text-noir md:text-2xl">
         {{ t('home.pointsAchat.title') }}
       </h2>
 
       <!-- Search bar -->
-      <div class="relative mb-4">
-        <Search class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+      <div class="relative mb-6">
+        <Search class="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
         <input
           v-model="searchQuery"
           type="text"
           :placeholder="t('home.pointsAchat.searchPlaceholder')"
-          class="w-full rounded-full border border-gray-200 bg-white py-2.5 pl-10 pr-4 font-bryndan text-body text-gray-700 shadow-sm outline-none focus:border-vert focus:ring-1 focus:ring-vert"
+          class="w-full rounded-full border border-gray-200 bg-white py-3 pl-12 pr-5 font-bryndan text-xs text-gray-500 shadow-sm outline-none focus:border-vert focus:ring-1 focus:ring-vert md:text-sm"
         />
       </div>
 
-      <!-- Map: full width on mobile -->
-      <div class="mb-4 h-56 w-full overflow-hidden rounded-2xl border border-gray-200 md:h-80">
-        <LMap :center="mapCenter" :zoom="mapZoom" class="h-full w-full">
-          <LTileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution="© OpenStreetMap contributors"
-          />
-          <LMarker
-            v-for="outlet in filteredOutlets"
-            :key="outlet.id"
-            :lat-lng="[outlet.lat, outlet.lng]"
-            @click="selectOutlet(outlet)"
-          >
-            <LPopup>{{ outlet.name }}</LPopup>
-          </LMarker>
-        </LMap>
-      </div>
+      <!--
+        Mobile: map above, white card below with vert bottom border
+        Desktop: map left + green card right, combined in one rounded-2xl container
+      -->
+      <div class="md:flex md:overflow-hidden md:rounded-2xl md:shadow-md">
 
-      <!-- Outlet detail card: full width on mobile, side-by-side on desktop -->
-      <div v-if="selectedOutlet" class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm md:flex md:items-start md:gap-6">
-        <div class="flex-1">
-          <h3 class="mb-3 font-luckiest text-titre3 uppercase tracking-wide text-foret">
+        <!-- Map -->
+        <div class="h-64 w-full overflow-hidden rounded-2xl md:h-80 md:w-[55%] md:rounded-none" style="isolation: isolate;">
+          <LMap :center="mapCenter" :zoom="mapZoom" class="h-full w-full">
+            <LTileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution="© OpenStreetMap contributors"
+            />
+            <LMarker
+              v-for="outlet in filteredOutlets"
+              :key="outlet.id"
+              :lat-lng="[outlet.lat, outlet.lng]"
+              @click="selectOutlet(outlet)"
+            >
+              <LPopup>{{ outlet.name }}</LPopup>
+            </LMarker>
+          </LMap>
+        </div>
+
+        <!-- Outlet detail -->
+        <div
+          v-if="selectedOutlet"
+          class="mt-4 rounded-2xl border-b-4 border-vert bg-white p-5 md:mt-0 md:flex md:w-[45%] md:flex-col md:justify-center md:rounded-none md:border-b-0 md:bg-vert md:p-8"
+        >
+          <h3 class="mb-4 font-luckiest text-base uppercase tracking-wide text-noir md:text-white">
             {{ selectedOutlet.name }}
           </h3>
-          <ul class="mb-4 flex flex-col gap-2 font-bryndan text-body text-gray-600">
-            <li class="flex items-start gap-2">
-              <MapPin class="mt-0.5 h-4 w-4 shrink-0 text-vert" />
+          <ul class="mb-5 flex flex-col gap-2 font-bryndan text-xs md:text-sm">
+            <li class="flex items-start gap-2 text-gray-700 md:text-white">
+              <MapPin class="mt-0.5 h-4 w-4 shrink-0 text-vert md:text-white" />
               {{ selectedOutlet.address }}
             </li>
-            <li class="flex items-center gap-2">
-              <Clock class="h-4 w-4 shrink-0 text-vert" />
+            <li class="flex items-center gap-2 text-gray-700 md:text-white">
+              <Clock class="h-4 w-4 shrink-0 text-vert md:text-white" />
               {{ selectedOutlet.hours }}
             </li>
-            <li class="flex items-center gap-2">
-              <Globe class="h-4 w-4 shrink-0 text-vert" />
+            <li class="flex items-center gap-2 text-gray-700 md:text-white">
+              <Globe class="h-4 w-4 shrink-0 text-vert md:text-white" />
               {{ selectedOutlet.website }}
             </li>
           </ul>
-          <a
-            :href="`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(selectedOutlet.address)}`"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-block rounded-xl bg-vert px-6 py-2 font-luckiest text-btn uppercase tracking-wide text-white transition hover:brightness-110"
-          >
-            {{ t('home.pointsAchat.goBtn') }}
-          </a>
+          <div>
+            <a
+              :href="`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(selectedOutlet.address)}`"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center rounded-full bg-bleu px-6 py-2 font-luckiest text-base uppercase leading-none tracking-wide text-white shadow-[0_4px_0_#0070BF] transition hover:brightness-110 active:scale-95"
+            >
+              <span class="translate-y-[3px]">{{ t('home.pointsAchat.goBtn') }}</span>
+            </a>
+          </div>
         </div>
+
       </div>
     </div>
   </section>
