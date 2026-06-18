@@ -25,6 +25,7 @@ class ActiveMinigame
     private ?GamePlayer $challenger = null;
 
     #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
     private ?GamePlayer $opponent = null;
 
     #[ORM\Column(length: 20)]

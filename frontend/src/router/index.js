@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useGameStore } from '@/stores/game'
 
 const routes = [
   {
@@ -40,23 +41,40 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
-    path: '/jeu',
+    path: '/game',
     name: 'lobby',
     component: () => import('@/views/game/LobbyView.vue'),
     meta: { layout: 'game' },
   },
   {
-    path: '/jeu/plateau',
-    name: 'board',
-    component: () => import('@/views/game/BoardView.vue'),
-    meta: { layout: 'game' },
+    path: '/game/waiting/:code',
+    name: 'game-waiting',
+    component: () => import('@/views/game/WaitingView.vue'),
+    meta: { layout: 'game', requiresSession: true },
   },
   {
-    path: '/jeu/mini-jeu/:game',
-    name: 'mini-game',
+    path: '/game/minigame/:code',
+    name: 'game-minigame',
     component: () => import('@/views/game/MiniGameView.vue'),
-    props: true,
-    meta: { layout: 'game' },
+    meta: { layout: 'game', requiresSession: true },
+  },
+  {
+    path: '/game/result/:code',
+    name: 'game-result',
+    component: () => import('@/views/game/ResultView.vue'),
+    meta: { layout: 'game', requiresSession: true },
+  },
+  {
+    path: '/game/end/:code',
+    name: 'game-end',
+    component: () => import('@/views/game/EndView.vue'),
+    meta: { layout: 'game', requiresSession: true },
+  },
+  {
+    path: '/jeu/test-mini-jeux',
+    name: 'minigame-test',
+    component: () => import('@/views/game/MinigameTestView.vue'),
+    meta: { layout: 'blank' },
   },
   {
     path: '/:pathMatch(.*)*',
@@ -80,6 +98,15 @@ router.beforeEach((to) => {
   }
   if (to.meta.guestOnly && auth.isAuthenticated) {
     return { name: 'account' }
+  }
+  if (to.meta.requiresSession) {
+    const game = useGameStore()
+    // L'accès est autorisé dès qu'une session est présente dans le store (restaurée depuis
+    // localStorage au refresh). Un invité est identifié par son gameToken, pas par un JWT :
+    // sessionCode et gameToken étant persistés ensemble, l'invité reste admis après refresh.
+    if (!game.sessionCode && !game.gameToken) {
+      return { name: 'lobby' }
+    }
   }
 })
 

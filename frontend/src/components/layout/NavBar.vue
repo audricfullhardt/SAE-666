@@ -181,7 +181,7 @@ watch(
       <hr class="my-6 border-white/20" />
       <RouterLink
         v-if="auth.isAuthenticated"
-        to="/jeu"
+        to="/game"
         class="rounded-full bg-jaune py-3 text-center font-luckiest tracking-wide text-white shadow-sm transition hover:brightness-105"
       >
         JOUER !
