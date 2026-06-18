@@ -39,7 +39,7 @@ const { t } = useI18n()
     <!-- Buttons: half overflowing into next section -->
     <div class="absolute bottom-0 left-0 right-0 z-10 flex translate-y-1/2 justify-center gap-4 px-6">
       <RouterLink
-        to="/jeu"
+        to="/game"
         class="inline-flex items-center rounded-full bg-jaune px-6 py-2 font-luckiest text-base uppercase leading-none tracking-wide text-white shadow-[0_4px_0_#CC8C00] transition hover:brightness-110 active:scale-95"
       >
         <span class="translate-y-[3px]">{{ t('home.hero.cta') }}</span>
@@ -62,7 +62,7 @@ const { t } = useI18n()
       </h1>
       <div class="flex gap-4">
         <RouterLink
-          to="/jeu"
+          to="/game"
           class="inline-flex items-center rounded-full bg-jaune px-6 py-2 font-luckiest text-base uppercase leading-none tracking-wide text-white shadow-[0_4px_0_#CC8C00] transition hover:brightness-110 active:scale-95"
         >
           <span class="translate-y-[3px]">{{ t('home.hero.cta') }}</span>

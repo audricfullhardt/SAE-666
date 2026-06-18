@@ -87,7 +87,7 @@ watch(
         <!-- Desktop: JOUER / CONNEXION -->
         <RouterLink
           v-if="auth.isAuthenticated"
-          to="/jeu"
+          to="/game"
           class="hidden rounded-full bg-jaune px-5 py-2 font-luckiest text-sm tracking-wide text-white shadow-sm transition hover:brightness-105 md:inline-flex"
         >
           JOUER
