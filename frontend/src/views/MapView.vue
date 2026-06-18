@@ -7,38 +7,22 @@ import 'leaflet/dist/leaflet.css'
 const stores = [
   {
     id: 1,
-    name: 'E.Leclerc Metz',
-    address: '94 Rue aux Arènes, 57000 Metz',
+    name: 'E.Leclerc Rosières-près-Troyes',
+    address: 'Avenue du Général de Gaulle, 10410 Saint-Parres-aux-Tertres',
     hours: 'Lun-Sam 08:30-20:30 · Dim fermé',
-    lat: 49.1039,
-    lng: 6.1797,
+    lat: 48.3033,
+    lng: 4.1189,
   },
   {
     id: 2,
-    name: 'E.Leclerc Thionville',
-    address: '11 Route d’Arlon, 57100 Thionville',
-    hours: 'Lun-Sam 08:30-20:00 · Dim fermé',
-    lat: 49.3606,
-    lng: 6.1508,
+    name: 'Fnac Strasbourg',
+    address: '22 Place Kléber, 67000 Strasbourg',
+    hours: 'Lun-Sam 10:00-19:30 · Dim fermé',
+    lat: 48.5846,
+    lng: 7.7458,
   },
   {
     id: 3,
-    name: 'E.Leclerc Nancy',
-    address: '5 Rue de la Sapinière, 54520 Laxou',
-    hours: 'Lun-Sam 08:30-20:30 · Dim fermé',
-    lat: 48.6954,
-    lng: 6.1252,
-  },
-  {
-    id: 4,
-    name: 'E.Leclerc Strasbourg',
-    address: '45 Route du Rhin, 67100 Strasbourg',
-    hours: 'Lun-Sam 08:30-20:30 · Dim fermé',
-    lat: 48.5719,
-    lng: 7.7875,
-  },
-  {
-    id: 5,
     name: 'Cultura Metz',
     address: 'Voie Romaine, 57280 Semécourt',
     hours: 'Lun-Sam 10:00-20:00 · Dim fermé',
@@ -46,23 +30,7 @@ const stores = [
     lng: 6.1417,
   },
   {
-    id: 6,
-    name: 'Cultura Nancy',
-    address: '2 Rue du Bois Briand, 54320 Nancy',
-    hours: 'Lun-Sam 10:00-20:00 · Dim fermé',
-    lat: 48.6786,
-    lng: 6.2097,
-  },
-  {
-    id: 7,
-    name: 'Fnac Metz',
-    address: 'Centre Saint-Jacques, 11 Place du Forum, 57000 Metz',
-    hours: 'Lun-Sam 10:00-19:30 · Dim fermé',
-    lat: 49.1189,
-    lng: 6.1753,
-  },
-  {
-    id: 8,
+    id: 4,
     name: 'Fnac Nancy',
     address: '2 Rue Saint-Jean, 54000 Nancy',
     hours: 'Lun-Sam 10:00-19:30 · Dim fermé',
@@ -70,20 +38,52 @@ const stores = [
     lng: 6.1818,
   },
   {
+    id: 5,
+    name: 'King Jouet Vendenheim',
+    address: '1 Boulevard des Enseignes, 67550 Vendenheim',
+    hours: 'Lun-Sam 10:00-19:00 · Dim fermé',
+    lat: 48.6638,
+    lng: 7.7123,
+  },
+  {
+    id: 6,
+    name: 'Cultura Bordeaux Bègles',
+    address: 'Centre Rives d’Arcins, Rocade Sortie 20, 33130 Bègles',
+    hours: 'Lun-Sam 10:00-20:00 · Dim fermé',
+    lat: 44.8047,
+    lng: -0.5455,
+  },
+  {
+    id: 7,
+    name: 'Fnac Lyon Bellecour',
+    address: '85 Rue de la République, 69002 Lyon',
+    hours: 'Lun-Sam 10:00-19:30 · Dim fermé',
+    lat: 45.7597,
+    lng: 4.8359,
+  },
+  {
+    id: 8,
+    name: 'E.Leclerc Blagnac',
+    address: '2 Allée Emile Zola, 31700 Blagnac',
+    hours: 'Lun-Sam 08:30-20:30 · Dim fermé',
+    lat: 43.6385,
+    lng: 1.3901,
+  },
+  {
     id: 9,
-    name: 'JouéClub Metz',
-    address: 'Zone Actisud, 57130 Jouy-aux-Arches',
-    hours: 'Lun-Sam 09:30-19:00 · Dim fermé',
-    lat: 49.0604,
-    lng: 6.0837,
+    name: 'Fnac Lille',
+    address: '20 Rue Saint-Nicolas, 59800 Lille',
+    hours: 'Lun-Sam 10:00-19:30 · Dim fermé',
+    lat: 50.6369,
+    lng: 3.0625,
   },
   {
     id: 10,
-    name: 'King Jouet Strasbourg',
-    address: 'Rue du Commerce, 67550 Vendenheim',
-    hours: 'Lun-Sam 10:00-19:00 · Dim fermé',
-    lat: 48.6616,
-    lng: 7.7184,
+    name: 'Cultura Nantes Atlantis',
+    address: '6 Place Océane, 44800 Saint-Herblain',
+    hours: 'Lun-Sam 10:00-20:00 · Dim fermé',
+    lat: 47.2184,
+    lng: -1.6267,
   },
 ]
 
@@ -124,19 +124,45 @@ const rankedStores = computed(() => {
   return scored
 })
 
-watch(rankedStores, (results) => {
-  if (!results.length) return
+const displayedStores = computed(() => {
+  if (!query.value.trim()) {
+    return stores
+  }
+  return rankedStores.value
+})
 
-  const best = results[0]
-  selectedStore.value = best
+const bestMatch = computed(() => rankedStores.value[0] ?? null)
 
-  const map = mapRef.value?.leafletObject
-  if (map) {
-    map.setView([best.lat, best.lng], 13, { animate: true })
+watch(query, () => {
+  if (!query.value.trim()) {
+    selectedStore.value = stores[0]
+    return
+  }
+
+  if (bestMatch.value) {
+    selectStore(bestMatch.value)
+  } else {
+    selectedStore.value = null
   }
 }, { immediate: true })
 
+watch(rankedStores, (results) => {
+  if (!query.value.trim()) {
+    return
+  }
+
+  if (!results.length) {
+    selectedStore.value = null
+    return
+  }
+
+  if (selectedStore.value?.id !== results[0].id) {
+    selectStore(results[0])
+  }
+})
+
 function selectStore(store) {
+  if (!store) return
   selectedStore.value = store
   const map = mapRef.value?.leafletObject
   if (map) {
@@ -151,10 +177,11 @@ function goToMaps(store) {
 
 function markerFor(store) {
   const isActive = selectedStore.value?.id === store.id
-  const size = isActive ? 22 : 16
+  const size = isActive ? 28 : 22
+  const color = isActive ? '#FE3B2F' : '#01BF63'
   return divIcon({
     className: 'custom-pin',
-    html: `<span style="display:block;width:${size}px;height:${size}px;border-radius:999px;background:#01BF63;border:2px solid white;box-shadow:0 0 0 2px rgba(0,0,0,0.25)"></span>`,
+    html: `<span style="display:block;width:${size}px;height:${size}px;border-radius:999px;background:${color};border:2px solid white;box-shadow:0 0 0 2px rgba(0,0,0,0.25)"></span>`,
     iconSize: [size, size],
     iconAnchor: [size / 2, size / 2],
   })
@@ -191,7 +218,7 @@ function markerFor(store) {
 
           <div class="mt-4 space-y-2">
             <button
-              v-for="store in rankedStores"
+              v-for="store in displayedStores"
               :key="store.id"
               class="w-full rounded-md border border-gray-200 bg-white p-3 text-left transition hover:border-vert"
               :class="selectedStore?.id === store.id ? 'border-vert bg-vert/5' : ''"
@@ -201,7 +228,7 @@ function markerFor(store) {
               <p class="mt-1 font-bryndan text-xs text-gray-600">{{ store.address }}</p>
             </button>
 
-            <p v-if="rankedStores.length === 0" class="font-bryndan text-sm text-gray-500">
+            <p v-if="displayedStores.length === 0" class="font-bryndan text-sm text-gray-500">
               Aucun résultat pour cette recherche.
             </p>
           </div>
@@ -221,7 +248,7 @@ function markerFor(store) {
             attribution="&copy; OpenStreetMap contributors"
           />
           <l-marker
-            v-for="store in stores"
+            v-for="store in displayedStores"
             :key="store.id"
             :lat-lng="[store.lat, store.lng]"
             :icon="markerFor(store)"
