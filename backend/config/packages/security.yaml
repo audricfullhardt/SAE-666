@@ -38,6 +38,7 @@ security:
         - { path: '^/api/game/[^/]+/scan$', roles: PUBLIC_ACCESS }
         - { path: '^/api/game/[^/]+/minigame/current$', roles: PUBLIC_ACCESS }
         - { path: '^/api/game/[^/]+/minigame/result$', roles: PUBLIC_ACCESS }
+        - { path: '^/api/game/[^/]+/minigame/tap$', roles: PUBLIC_ACCESS }
         - { path: ^/api/newsletter/subscribe, roles: PUBLIC_ACCESS }
         - { path: ^/api/outlets, roles: PUBLIC_ACCESS }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }

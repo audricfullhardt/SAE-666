@@ -198,6 +198,16 @@ export const useGameStore = defineStore('game', () => {
     status.value = 'finished'
   }
 
+  // Diffuse le nombre de taps courant du joueur (mini-jeu Bras de fer) via Mercure.
+  async function sendTap(code, playerId, taps) {
+    const res = await fetch(`/api/game/${code}/minigame/tap`, {
+      method: 'POST',
+      headers: authHeaders(true),
+      body: JSON.stringify({ playerId, taps }),
+    })
+    return res.ok
+  }
+
   // Demande le retour au plateau pour toute la session (broadcast Mercure return_to_board).
   async function returnToBoard(code) {
     const res = await fetch(`/api/game/${code}/return`, {
@@ -302,6 +312,7 @@ export const useGameStore = defineStore('game', () => {
     startGame,
     finishGame,
     returnToBoard,
+    sendTap,
     triggerDuel,
     addPlayer,
     setPlayerReady,

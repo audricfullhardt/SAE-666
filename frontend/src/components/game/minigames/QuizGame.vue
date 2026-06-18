@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onUnmounted } from 'vue'
-import { Check, Zap } from 'lucide-vue-next'
+import { Check } from 'lucide-vue-next'
 import CountdownOverlay from '@/components/game/CountdownOverlay.vue'
 
 const props = defineProps({
@@ -41,82 +41,69 @@ const questions = [
 const shapes = ['◆', '●', '▲', '■']
 const colors = ['bg-rouge', 'bg-vert', 'bg-jaune', 'bg-[#8B5CF6]']
 
+const TOTAL = 5
+
+function shuffle(arr) {
+  const a = [...arr]
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
+
+// 5 questions tirées aléatoirement dans le pool.
+const quiz = shuffle(questions).slice(0, TOTAL)
+const total = quiz.length
+
 const showCountdown = ref(true)
-const startTime = ref(0)
 const index = ref(0)
+const score = ref(0)
 const selected = ref(null) // index chosen by player
-const locked = ref(false) // answer revealed, waiting next
+const locked = ref(false) // answer revealed
 const timer = ref(10)
-const playerScore = ref(0)
-const opponentScore = ref(0)
-const playerAnswered = ref(false)
-const opponentAnswered = ref(false)
-const answeredCount = ref(0)
 
 let countdownId = null
-let opponentId = null
 let nextId = null
 
-const current = computed(() => questions[index.value])
-const total = questions.length
+const current = computed(() => quiz[index.value])
 
 function clearTimers() {
   clearInterval(countdownId)
-  clearTimeout(opponentId)
   clearTimeout(nextId)
-}
-
-function scheduleOpponent() {
-  // L'adversaire répond après un délai aléatoire de 2 à 4s (70% de réussite)
-  const delay = 2000 + Math.random() * 2000
-  opponentId = setTimeout(() => {
-    opponentAnswered.value = true
-    answeredCount.value++
-    if (Math.random() < 0.7) opponentScore.value++
-    maybeAdvance()
-  }, delay)
 }
 
 function startQuestion() {
   selected.value = null
   locked.value = false
   timer.value = 10
-  playerAnswered.value = false
-  opponentAnswered.value = false
-  answeredCount.value = 0
 
   countdownId = setInterval(() => {
     timer.value--
     if (timer.value <= 0) {
       clearInterval(countdownId)
-      if (!playerAnswered.value) handleTimeout()
+      handleTimeout()
     }
   }, 1000)
-
-  scheduleOpponent()
 }
 
 function handleTimeout() {
-  locked.value = true
-  playerAnswered.value = true
-  answeredCount.value++
-  maybeAdvance()
+  if (locked.value) return
+  locked.value = true // +0 point, on enchaîne
+  scheduleNext()
 }
 
 function choose(i) {
-  if (locked.value || playerAnswered.value) return
+  if (locked.value) return
   clearInterval(countdownId)
   selected.value = i
   locked.value = true
-  playerAnswered.value = true
-  answeredCount.value++
-  if (i === current.value.correct) playerScore.value++
-  maybeAdvance()
+  if (i === current.value.correct) score.value++
+  scheduleNext()
 }
 
-function maybeAdvance() {
-  // On attend que les deux aient répondu pour passer à la suite
-  if (!playerAnswered.value || !opponentAnswered.value) return
+// Affiche le feedback 1 s puis passe à la question suivante (ou termine).
+function scheduleNext() {
   nextId = setTimeout(() => {
     if (index.value < total - 1) {
       index.value++
@@ -124,13 +111,13 @@ function maybeAdvance() {
     } else {
       finish()
     }
-  }, 1500)
+  }, 1000)
 }
 
 function finish() {
   clearTimers()
-  const winner = playerScore.value >= opponentScore.value ? 'local' : 'opponent'
-  emit('result', { winner, timeMs: Date.now() - startTime.value })
+  // timeMs transporte le score (0-5) : le backend comparera les deux joueurs.
+  emit('result', { winner: 'local', timeMs: score.value })
 }
 
 function answerClass(i) {
@@ -142,7 +129,6 @@ function answerClass(i) {
 
 function startGame() {
   showCountdown.value = false
-  startTime.value = Date.now()
   startQuestion()
 }
 
@@ -150,7 +136,7 @@ onUnmounted(clearTimers)
 </script>
 
 <template>
-  <div class="h-screen w-screen overflow-hidden bg-bleu flex flex-col p-4 select-none relative">
+  <div class="h-[100dvh] w-screen overflow-hidden bg-bleu flex flex-col p-4 select-none relative">
     <CountdownOverlay v-if="showCountdown" bg-class="bg-bleu" @done="startGame" />
 
     <!-- Header -->
@@ -191,11 +177,5 @@ onUnmounted(clearTimers)
         />
       </button>
     </div>
-
-    <!-- Footer -->
-    <footer class="flex items-center justify-center gap-2 text-center text-white font-nunito mt-6">
-      <Zap class="h-5 w-5" />
-      {{ answeredCount }} joueur{{ answeredCount > 1 ? 's' : '' }} {{ answeredCount > 1 ? 'ont' : 'a' }} répondu
-    </footer>
   </div>
 </template>

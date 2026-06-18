@@ -26,11 +26,9 @@ const cards = ref([]) // { id, symbol, flipped, matched, bonus }
 const flippedIds = ref([])
 const lock = ref(true) // verrouillé tant que le décompte n'est pas fini
 const playerPairs = ref(0)
-const opponentPairs = ref(0)
 const cardRefs = ref({})
 
 let startTime = 0
-let opponentId = null
 let flipBackId = null
 
 function setCardRef(el, id) {
@@ -46,22 +44,26 @@ function shuffle(arr) {
 }
 
 function buildBoard() {
-  const deck = [...pairSymbols, ...pairSymbols].map((symbol, i) => ({
-    id: i,
-    symbol,
-    flipped: false,
-    matched: false,
-    bonus: false,
-  }))
-  // Carte bonus : révélée dès le départ, ne compte pas dans les paires
-  deck.push({
-    id: deck.length,
+  // 8 cartes des 4 paires, mélangées
+  const deck = shuffle(
+    [...pairSymbols, ...pairSymbols].map((symbol, i) => ({
+      id: i,
+      symbol,
+      flipped: false,
+      matched: false,
+      bonus: false,
+    })),
+  )
+  // Carte bonus : révélée dès le départ, ne compte pas dans les paires,
+  // placée à l'index 4 = centre exact de la grille 3x3.
+  deck.splice(4, 0, {
+    id: 8,
     symbol: bonusSymbol,
     flipped: true,
     matched: true,
     bonus: true,
   })
-  cards.value = shuffle(deck)
+  cards.value = deck
 }
 
 function flipAnim(id) {
@@ -96,34 +98,17 @@ function flip(card) {
   }
 }
 
-function opponentTurn() {
-  if (playerPairs.value + opponentPairs.value >= TOTAL_PAIRS) return
-  opponentPairs.value++
-  checkEnd()
-  if (playerPairs.value + opponentPairs.value < TOTAL_PAIRS) {
-    opponentId = setTimeout(opponentTurn, 3000 + Math.random() * 2000)
-  }
-}
-
 function checkEnd() {
-  const half = TOTAL_PAIRS / 2 // 2
-  if (
-    playerPairs.value + opponentPairs.value >= TOTAL_PAIRS ||
-    playerPairs.value > half ||
-    opponentPairs.value > half
-  ) {
-    finish()
-  }
+  // Toutes les paires trouvées → victoire ; le backend tranchera face à l'autre joueur.
+  if (playerPairs.value >= TOTAL_PAIRS) finish()
 }
 
 function finish() {
   clearTimers()
-  const winner = playerPairs.value >= opponentPairs.value ? 'local' : 'opponent'
-  emit('result', { winner, timeMs: Date.now() - startTime })
+  emit('result', { winner: 'local', timeMs: Date.now() - startTime })
 }
 
 function clearTimers() {
-  clearTimeout(opponentId)
   clearTimeout(flipBackId)
 }
 
@@ -131,7 +116,6 @@ function startGame() {
   showCountdown.value = false
   lock.value = false
   startTime = Date.now()
-  opponentId = setTimeout(opponentTurn, 3000 + Math.random() * 2000)
 }
 
 onMounted(buildBoard)
@@ -139,7 +123,7 @@ onUnmounted(clearTimers)
 </script>
 
 <template>
-  <div class="h-screen w-screen overflow-hidden bg-vert flex flex-col p-4 select-none relative">
+  <div class="h-[100dvh] w-screen overflow-hidden bg-vert flex flex-col p-4 select-none relative">
     <CountdownOverlay v-if="showCountdown" bg-class="bg-vert" @done="startGame" />
 
     <!-- Header -->
@@ -150,9 +134,6 @@ onUnmounted(clearTimers)
           paires trouvées : {{ playerPairs }}/{{ TOTAL_PAIRS }}
         </p>
       </div>
-      <span class="font-nunito text-white/90 text-sm bg-foret/40 rounded-full px-3 py-1">
-        {{ opponentName }} : {{ opponentPairs }}
-      </span>
     </header>
 
     <!-- Grille 3x3 -->

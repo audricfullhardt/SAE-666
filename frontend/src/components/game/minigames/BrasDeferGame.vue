@@ -1,63 +1,71 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onUnmounted } from 'vue'
 import gsap from 'gsap'
 import CountdownOverlay from '@/components/game/CountdownOverlay.vue'
+import { useGameStore } from '@/stores/game'
+import { useMercure } from '@/composables/useMercure'
 import dinoSprite from '@/assets/dino_green.png'
 import dinoSprite2 from '@/assets/dino_blue.png'
 
 const props = defineProps({
   playerName: { type: String, default: 'REX' },
   opponentName: { type: String, default: 'TIA' },
+  playerId: { type: Number, default: null },
+  opponentId: { type: Number, default: null },
+  sessionCode: { type: String, default: '' },
 })
 
 const emit = defineEmits(['result'])
 
+const game = useGameStore()
+
 const DURATION = 15
+const MAX_TAPS = 100
 
 const showCountdown = ref(true)
-const playerScore = ref(0)
-const opponentScore = ref(0)
+const playerTaps = ref(0)
+const opponentTaps = ref(0)
 const timer = ref(DURATION)
 const finished = ref(false)
 const playerDino = ref(null)
 const opponentDino = ref(null)
 const timerEl = ref(null)
 
-let startTime = 0
 let timerId = null
-let opponentId = null
+let tapThrottle = null
 
-// Pourcentage de la barre côté joueur (0-100)
+// Jauge tug-of-war : la frontière bleu/rouge dépend de l'écart de taps (les deux réactives).
+// 50/50 au départ ; le bleu (joueur) gagne du terrain à droite, le rouge (adversaire) à gauche.
 const playerPercent = computed(() => {
-  const total = playerScore.value + opponentScore.value
-  if (total === 0) return 50
-  return Math.round((playerScore.value / total) * 100)
+  const p = 50 + 50 * ((playerTaps.value - opponentTaps.value) / MAX_TAPS)
+  return Math.max(0, Math.min(100, p))
 })
+const opponentPercent = computed(() => 100 - playerPercent.value)
 
 const lowTime = computed(() => timer.value <= 5)
 
 function moveDinos() {
-  // Le ratio décale les dinos horizontalement
   const ratio = (playerPercent.value - 50) / 50 // -1 .. 1
   if (playerDino.value) gsap.to(playerDino.value, { x: ratio * 40, duration: 0.2 })
   if (opponentDino.value) gsap.to(opponentDino.value, { x: ratio * 40, duration: 0.2 })
 }
 
-function tap() {
-  if (finished.value || showCountdown.value) return
-  playerScore.value++
-  if (navigator.vibrate) navigator.vibrate(15)
-  moveDinos()
+// Envoi des taps via Mercure, throttlé à un POST toutes les 100 ms maximum.
+function broadcastTap() {
+  if (!props.sessionCode || props.playerId == null) return
+  if (tapThrottle) return
+  tapThrottle = setTimeout(() => {
+    tapThrottle = null
+    game.sendTap(props.sessionCode, props.playerId, playerTaps.value)
+  }, 100)
 }
 
-function scheduleOpponent() {
-  const delay = 300 + Math.random() * 500 // 0.3 à 0.8s
-  opponentId = setTimeout(() => {
-    if (finished.value) return
-    opponentScore.value++
-    moveDinos()
-    scheduleOpponent()
-  }, delay)
+function tap() {
+  if (finished.value || showCountdown.value) return
+  playerTaps.value++
+  if (navigator.vibrate) navigator.vibrate(15)
+  moveDinos()
+  broadcastTap()
 }
 
 function pulseTimer() {
@@ -73,30 +81,48 @@ function tick() {
 }
 
 function finish() {
+  if (finished.value) return
   finished.value = true
   clearTimers()
-  const winner = playerScore.value >= opponentScore.value ? 'local' : 'opponent'
-  emit('result', { winner, timeMs: Date.now() - startTime })
+  // Dernier envoi pour synchroniser le score final, puis on tranche.
+  if (props.sessionCode && props.playerId != null) {
+    game.sendTap(props.sessionCode, props.playerId, playerTaps.value)
+  }
+  emit('result', {
+    winner: playerTaps.value > opponentTaps.value ? 'local' : 'opponent',
+    timeMs: playerTaps.value,
+  })
 }
 
 function clearTimers() {
   clearInterval(timerId)
-  clearTimeout(opponentId)
+  clearTimeout(tapThrottle)
+  tapThrottle = null
 }
 
 function startGame() {
   showCountdown.value = false
-  startTime = Date.now()
-  scheduleOpponent()
   timerId = setInterval(tick, 1000)
 }
 
-onUnmounted(clearTimers)
+// Taps de l'adversaire en temps réel.
+function onMercure({ event, data }) {
+  if (event === 'player_tap' && data.playerId === props.opponentId) {
+    opponentTaps.value = data.taps
+  }
+}
+const { subscribe, unsubscribe } = useMercure(`game/${props.sessionCode}`, onMercure)
+if (props.sessionCode) subscribe()
+
+onUnmounted(() => {
+  clearTimers()
+  unsubscribe()
+})
 </script>
 
 <template>
   <div
-    class="h-screen w-screen overflow-hidden bg-gradient-to-b from-blue-400 to-blue-700 flex flex-col p-4 select-none relative"
+    class="h-[100dvh] w-screen overflow-hidden bg-gradient-to-b from-blue-400 to-blue-700 flex flex-col p-4 select-none relative"
   >
     <CountdownOverlay v-if="showCountdown" bg-class="bg-gradient-to-b from-blue-400 to-blue-700" @done="startGame" />
 
@@ -126,16 +152,20 @@ onUnmounted(clearTimers)
       <div ref="opponentDino" class="text-7xl -scale-x-100"><img :src="dinoSprite2" alt="" class="relative h-28 w-auto drop-shadow-xl [image-rendering:pixelated]" /></div>
     </div>
 
-    <!-- Barre de progression -->
+    <!-- Jauge d'opposition temps réel : bleu (joueur) vs rouge (adversaire), frontière mobile -->
     <div class="mb-4 shrink-0">
-      <div class="flex justify-between font-nunito text-white text-sm font-bold mb-1.5">
-        <span>{{ playerName }} {{ playerPercent }}%</span>
-        <span>{{ 100 - playerPercent }}% {{ opponentName }}</span>
+      <div class="flex justify-between font-luckiest text-white text-sm mb-1.5">
+        <span>{{ playerName }} <span class="text-bleu">{{ playerTaps }}</span></span>
+        <span><span class="text-rouge">{{ opponentTaps }}</span> {{ opponentName }}</span>
       </div>
-      <div class="h-4 rounded-full overflow-hidden flex bg-rouge">
+      <div class="h-6 rounded-full overflow-hidden flex">
         <div
-          class="bg-vert h-full transition-all duration-200 ease-out"
+          class="h-full bg-bleu transition-all duration-100 ease-out"
           :style="{ width: playerPercent + '%' }"
+        />
+        <div
+          class="h-full bg-rouge transition-all duration-100 ease-out"
+          :style="{ width: opponentPercent + '%' }"
         />
       </div>
     </div>

@@ -3,20 +3,29 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import gsap from 'gsap'
 import { Egg, PartyPopper } from 'lucide-vue-next'
 import CountdownOverlay from '@/components/game/CountdownOverlay.vue'
+import { useGameStore } from '@/stores/game'
+import { useMercure } from '@/composables/useMercure'
 import dinoGreen from '@/assets/dino_green.png'
 
 const props = defineProps({
   playerName: { type: String, default: 'Toi' },
   opponentName: { type: String, default: 'Adversaire' },
+  playerId: { type: Number, default: null },
+  opponentId: { type: Number, default: null },
+  sessionCode: { type: String, default: '' },
 })
 
 const emit = defineEmits(['result'])
+
+const game = useGameStore()
 
 // phases: idle | reveal | shuffle | choose | done
 const showCountdown = ref(true)
 const phase = ref('idle')
 const result = ref(null) // 'win' | 'lose'
 const eggVisible = ref(false)
+const choiceMade = ref(false) // empêche le double choix / bloque si l'adversaire a choisi
+const oppChoseFirst = ref(false)
 
 // Les 3 gobelets ont la MÊME couleur (jaune). id fixe + slot courant (0,1,2)
 const cups = ref([
@@ -101,30 +110,49 @@ function startShuffle() {
   }, t)
 }
 
+function sendChoice(index) {
+  if (props.sessionCode && props.playerId != null) {
+    game.sendTap(props.sessionCode, props.playerId, index)
+  }
+}
+
 function chooseCup(cup) {
-  if (phase.value !== 'choose') return
+  if (phase.value !== 'choose' || choiceMade.value) return
+  choiceMade.value = true
   phase.value = 'done'
   const playerWin = cup.id === eggCupId.value
   eggVisible.value = true
   liftCup(cup.id, true)
   if (!playerWin) liftCup(eggCupId.value, true)
 
-  // L'adversaire répond 500ms après, bon 60% du temps
-  const opponentWin = Math.random() < 0.6
+  result.value = playerWin ? 'win' : 'lose'
+  if (playerWin) {
+    gsap.to(cupEls.value[cup.id], { y: -90, rotation: 8, duration: 0.5, yoyo: true, repeat: 1 })
+  }
 
+  // On diffuse notre choix, puis on laisse 300 ms à l'adversaire pour le recevoir
+  // (et se bloquer) avant de résoudre le duel côté backend.
+  sendChoice(cup.id)
   later(() => {
-    let winner
-    if (playerWin && !opponentWin) winner = 'local'
-    else if (!playerWin && opponentWin) winner = 'opponent'
-    else winner = playerWin ? 'local' : 'opponent' // égalité → résultat du joueur tranche
-    result.value = playerWin ? 'win' : 'lose'
-
-    if (playerWin) {
-      gsap.to(cupEls.value[cup.id], { y: -90, rotation: 8, duration: 0.5, yoyo: true, repeat: 1 })
-    }
-    later(() => emit('result', { winner, timeMs: Date.now() - startTime }), 800)
-  }, 500)
+    emit('result', { winner: playerWin ? 'local' : 'opponent', timeMs: Date.now() - startTime })
+  }, 300)
 }
+
+// L'adversaire a choisi en premier → on bloque, on révèle son gobelet, et on attend
+// le résultat officiel (duel_resolved, résolu par le premier joueur). On n'émet pas
+// pour ne pas prendre l'ascendant sur le vrai premier joueur.
+function onMercure({ event, data }) {
+  if (event !== 'player_tap' || data.playerId !== props.opponentId) return
+  if (choiceMade.value) return
+  choiceMade.value = true
+  oppChoseFirst.value = true
+  phase.value = 'done'
+  eggVisible.value = true
+  liftCup(data.taps, true)
+  liftCup(eggCupId.value, true)
+}
+const { subscribe, unsubscribe } = useMercure(`game/${props.sessionCode}`, onMercure)
+if (props.sessionCode) subscribe()
 
 function startGame() {
   showCountdown.value = false
@@ -145,11 +173,12 @@ onMounted(() => {
 onUnmounted(() => {
   timeoutIds.forEach(clearTimeout)
   gsap.killTweensOf(Object.values(cupEls.value))
+  unsubscribe()
 })
 </script>
 
 <template>
-  <div class="h-screen w-screen overflow-hidden bg-foret flex flex-col items-center p-4 select-none relative">
+  <div class="h-[100dvh] w-screen overflow-hidden bg-foret flex flex-col items-center p-4 select-none relative">
     <CountdownOverlay v-if="showCountdown" bg-class="bg-foret" @done="startGame" />
 
     <!-- Titre -->
@@ -164,7 +193,8 @@ onUnmounted(() => {
 
     <!-- Statut de phase -->
     <p class="font-patrick text-vert text-base mt-3 h-6 shrink-0">
-      <span v-if="phase === 'reveal'">Regarde bien où est l'œuf !</span>
+      <span v-if="oppChoseFirst" class="text-jaune">L'adversaire a choisi en premier !</span>
+      <span v-else-if="phase === 'reveal'">Regarde bien où est l'œuf !</span>
       <span v-else-if="phase === 'shuffle'">Ça mélange...</span>
       <span v-else-if="phase === 'choose'">À toi ! Choisis un gobelet</span>
       <span v-else-if="result === 'win'" class="inline-flex items-center gap-1 text-jaune">
@@ -195,11 +225,9 @@ onUnmounted(() => {
             </div>
             <!-- Gobelet (toujours au-dessus de l'œuf) -->
             <div
-              class="relative z-10 rounded-b-lg rounded-t-2xl shadow-lg flex items-start justify-center pt-3 bg-jaune"
+              class="relative z-10 rounded-b-lg rounded-t-2xl shadow-lg bg-jaune"
               style="width: min(22vw, 5rem); height: min(30vw, 7rem)"
-            >
-              <span class="font-luckiest text-white text-xl">{{ cup.id + 1 }}</span>
-            </div>
+            />
           </div>
         </div>
       </div>

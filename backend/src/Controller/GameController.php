@@ -396,6 +396,34 @@ class GameController extends AbstractController
         return new JsonResponse($payload, 200);
     }
 
+    #[Route('/{code}/minigame/tap', name: 'api_game_tap', methods: ['POST'])]
+    public function minigameTap(string $code, Request $request, #[CurrentUser] ?User $user): JsonResponse
+    {
+        $session = $this->sessions->findOneBy(['code' => strtoupper($code)]);
+        if ($session === null) {
+            return new JsonResponse(['error' => 'Session introuvable'], 404);
+        }
+
+        if ($this->resolveCurrentPlayer($session, $request, $user) === null) {
+            return new JsonResponse(['error' => 'Authentification requise (JWT ou X-Game-Token)'], 401);
+        }
+
+        $data = json_decode($request->getContent(), true) ?? [];
+        $playerId = $data['playerId'] ?? null;
+        $taps = $data['taps'] ?? null;
+
+        if ($playerId === null || $taps === null) {
+            return new JsonResponse(['error' => 'playerId et taps sont requis'], 400);
+        }
+
+        $this->mercure->publishToSession($session->getCode(), 'player_tap', [
+            'playerId' => (int) $playerId,
+            'taps' => (int) $taps,
+        ]);
+
+        return new JsonResponse(['ok' => true], 200);
+    }
+
     #[Route('/{code}/minigame/current', name: 'api_game_minigame_current', methods: ['GET'])]
     public function minigameCurrent(string $code, Request $request, #[CurrentUser] ?User $user): JsonResponse
     {

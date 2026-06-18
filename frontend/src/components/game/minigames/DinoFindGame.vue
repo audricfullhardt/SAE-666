@@ -16,23 +16,25 @@ const props = defineProps({
 const emit = defineEmits(['result'])
 
 const DURATION = 30
-const COUNT = 28
+const COUNT = 80 // foule dense type Mario DS
 
 const showCountdown = ref(true)
-const dinos = ref([]) // { id, sprite, isTarget, top, left, size }
+const dinos = ref([]) // { id, sprite, isTarget, top, left, sizeClass }
 const timer = ref(DURATION)
 const found = ref(false)
 const wrongFlash = ref(false)
 const circleEl = ref(null)
+const zoneEl = ref(null)
 const dinoEls = ref({})
 
 // La cible = le dino rouge ; les distracteurs = les autres couleurs (jamais rouge).
 const targetSprite = dinoRed
 const distractorSprites = [dinoGreen, dinoBlue, dinoYellow]
 
+const MIN_DIST_PX = 25 // distance minimale entre dinos (en pixels)
+
 let startTime = 0
 let timerId = null
-let opponentId = null
 let flashId = null
 
 function setDinoEl(el, id) {
@@ -43,44 +45,55 @@ function rand(min, max) {
   return min + Math.random() * (max - min)
 }
 
-// Placement sans superposition : on rejette toute position trop proche d'un dino déjà placé
-function placeWithoutOverlap(placed, minDist) {
-  for (let attempt = 0; attempt < 60; attempt++) {
-    const top = rand(13, 92)
-    const left = rand(5, 93)
+// Placement sans superposition dans une zone de dimensions réelles (px), positions en %.
+function placeWithoutOverlap(placed, width, height) {
+  for (let attempt = 0; attempt < 150; attempt++) {
+    const top = rand(4, 96)
+    const left = rand(4, 96)
     const ok = placed.every((p) => {
-      const dx = p.left - left
-      const dy = p.top - top
-      return Math.sqrt(dx * dx + dy * dy) >= minDist
+      const dx = ((p.left - left) / 100) * width
+      const dy = ((p.top - top) / 100) * height
+      return Math.sqrt(dx * dx + dy * dy) >= MIN_DIST_PX
     })
     if (ok) return { top, left }
   }
   // En dernier recours, on place quand même (densité élevée)
-  return { top: rand(13, 92), left: rand(5, 93) }
+  return { top: rand(4, 96), left: rand(4, 96) }
+}
+
+// Tailles variées pour la profondeur : 50% petits, 35% moyens, 15% grands.
+function pickSizeClass() {
+  const r = Math.random()
+  if (r < 0.5) return 'h-4'
+  if (r < 0.85) return 'h-5'
+  return 'h-6'
 }
 
 function buildDinos() {
+  const rect = zoneEl.value?.getBoundingClientRect()
+  const width = rect?.width || window.innerWidth
+  const height = rect?.height || window.innerHeight
+
   const list = []
-  const minDist = 11
-  // dino cible : le dino rouge
-  const targetPos = placeWithoutOverlap(list, minDist)
+  // dino cible : le dino rouge (taille moyenne h-5)
+  const targetPos = placeWithoutOverlap(list, width, height)
   list.push({
     id: 0,
     sprite: targetSprite,
     isTarget: true,
     top: targetPos.top,
     left: targetPos.left,
-    size: rand(2.4, 2.9),
+    sizeClass: 'h-5',
   })
   for (let i = 1; i < COUNT; i++) {
-    const pos = placeWithoutOverlap(list, minDist)
+    const pos = placeWithoutOverlap(list, width, height)
     list.push({
       id: i,
       sprite: distractorSprites[Math.floor(Math.random() * distractorSprites.length)],
       isTarget: false,
       top: pos.top,
       left: pos.left,
-      size: rand(1.9, 2.6),
+      sizeClass: pickSizeClass(),
     })
   }
   dinos.value = list
@@ -132,35 +145,35 @@ function loseByTimeout() {
 
 function clearTimers() {
   clearInterval(timerId)
-  clearTimeout(opponentId)
   clearTimeout(flashId)
 }
 
 function startGame() {
   showCountdown.value = false
   startTime = Date.now()
-  // L'adversaire trouve entre 5 et 20s
-  opponentId = setTimeout(loseByTimeout, rand(5000, 20000))
   timerId = setInterval(() => {
     timer.value--
     if (timer.value <= 0) loseByTimeout()
   }, 1000)
 }
 
-onMounted(buildDinos)
+onMounted(() => {
+  // Après le rendu : on connaît les dimensions réelles de la zone pour le placement.
+  nextTick(buildDinos)
+})
 onUnmounted(clearTimers)
 </script>
 
 <template>
   <div
-    class="h-screen w-screen overflow-hidden bg-foret flex flex-col p-4 select-none relative"
+    class="h-[100dvh] w-screen overflow-hidden bg-foret select-none relative flex flex-col"
     :class="{ 'ring-4 ring-rouge ring-inset': wrongFlash }"
     style="background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.03) 0 12px, transparent 12px 24px)"
   >
     <CountdownOverlay v-if="showCountdown" bg-class="bg-foret" @done="startGame" />
 
     <!-- Header -->
-    <header class="flex items-center justify-between z-10 shrink-0">
+    <header class="flex items-center justify-between p-4 z-10 shrink-0">
       <div class="flex items-center gap-2">
         <img :src="dinoRed" alt="" class="h-8 w-auto [image-rendering:pixelated]" />
         <span class="font-luckiest text-white text-sm leading-tight">TROUVE LE<br />DINO ROUGE</span>
@@ -170,8 +183,8 @@ onUnmounted(clearTimers)
       </span>
     </header>
 
-    <!-- Terrain de jeu -->
-    <div class="flex-1 min-h-0 relative">
+    <!-- Terrain de jeu : tout dans l'espace visible, sans scroll -->
+    <div ref="zoneEl" class="flex-1 min-h-0 relative overflow-hidden">
       <button
         v-for="d in dinos"
         :key="d.id"
@@ -183,8 +196,8 @@ onUnmounted(clearTimers)
         <img
           :src="d.sprite"
           alt=""
+          :class="d.sizeClass"
           class="w-auto [image-rendering:pixelated]"
-          :style="{ height: d.size + 'rem' }"
         />
       </button>
 
@@ -196,7 +209,7 @@ onUnmounted(clearTimers)
     </div>
 
     <!-- Footer -->
-    <footer class="flex items-center justify-center gap-2 text-center text-vert font-nunito z-10 shrink-0">
+    <footer class="flex items-center justify-center gap-2 p-4 text-center text-vert font-nunito z-10 shrink-0">
       <MousePointerClick class="h-5 w-5" />
       Touche le bon dino pour gagner
     </footer>

@@ -2,9 +2,13 @@
 import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import gsap from 'gsap'
-import { Swords, Flag } from 'lucide-vue-next'
+import { Swords, Flag, Check } from 'lucide-vue-next'
 import { useGameStore } from '@/stores/game'
 import { useMercure } from '@/composables/useMercure'
+import dinoRed from '@/assets/dino_red.png'
+import dinoYellow from '@/assets/dino_yellow.png'
+import dinoBlue from '@/assets/dino_blue.png'
+import dinoGreen from '@/assets/dino_green.png'
 import QuizGame from '@/components/game/minigames/QuizGame.vue'
 import ReflexGame from '@/components/game/minigames/ReflexGame.vue'
 import MemoryGame from '@/components/game/minigames/MemoryGame.vue'
@@ -39,7 +43,14 @@ const MINIGAME_LABELS = {
 const error = ref('')
 const spinnerRef = ref(null)
 const showDuelModal = ref(false)
+const selectedDuelId = ref(null)
 const showEndModal = ref(false)
+
+// Sprite par joueur, alterné selon l'index dans la liste.
+const DUEL_SPRITES = [dinoRed, dinoYellow, dinoBlue, dinoGreen]
+function duelSprite(i) {
+  return DUEL_SPRITES[i % DUEL_SPRITES.length]
+}
 const selectedWinnerId = ref(null)
 const endingGame = ref(false)
 const specAvatar1 = ref(null)
@@ -74,6 +85,10 @@ const playerName = computed(() => game.currentPlayer?.username ?? 'Toi')
 const opponentName = computed(() =>
   isChallenger.value ? opponentUsername.value : challengerUsername.value,
 )
+// Id de l'autre duelliste (l'adversaire réel de ce joueur).
+const duelOpponentId = computed(() =>
+  isChallenger.value ? opponentId.value : challengerId.value,
+)
 
 const opponents = computed(() =>
   game.players.filter((p) => p.id !== game.currentPlayer?.id),
@@ -83,15 +98,36 @@ function initial(name) {
   return (name || '?').charAt(0).toUpperCase()
 }
 
-async function selectOpponent(player) {
+function selectOpponent(player) {
+  if (selectedDuelId.value) return
   error.value = ''
-  try {
-    await game.triggerDuel(code, player.id)
-    showDuelModal.value = false
-    // Mercure (minigame_triggered) bascule tout le monde vers l'état 2.
-  } catch (e) {
-    error.value = e.message || 'Impossible de lancer le duel'
-  }
+  // Surbrillance immédiate, puis on lance le duel après un court délai visuel.
+  selectedDuelId.value = player.id
+  setTimeout(async () => {
+    try {
+      await game.triggerDuel(code, player.id)
+      showDuelModal.value = false
+      // Mercure (minigame_triggered) bascule tout le monde vers l'état 2.
+    } catch (e) {
+      error.value = e.message || 'Impossible de lancer le duel'
+      selectedDuelId.value = null
+    }
+  }, 300)
+}
+
+// Animations GSAP d'ouverture/fermeture de la modale (hooks de <Transition>).
+function onDuelEnter(el, done) {
+  selectedDuelId.value = null
+  const card = el.querySelector('[data-duel-card]')
+  gsap.fromTo(
+    card,
+    { scale: 0.8, opacity: 0 },
+    { scale: 1, opacity: 1, duration: 0.2, ease: 'back.out(1.7)', onComplete: done },
+  )
+}
+function onDuelLeave(el, done) {
+  const card = el.querySelector('[data-duel-card]')
+  gsap.to(card, { scale: 0.9, opacity: 0, duration: 0.15, onComplete: done })
 }
 
 function openEndModal() {
@@ -139,6 +175,7 @@ async function onResult({ winner, timeMs }) {
 function onMercure({ event, data }) {
   if (event === 'minigame_triggered') {
     resultSent = false
+    resetSpectatorState()
     game.setActiveMinigame(data)
   } else if (event === 'duel_resolved') {
     game.setLastResult({ ...data, minigameType: activeType.value })
@@ -146,6 +183,48 @@ function onMercure({ event, data }) {
   } else if (event === 'game_finished') {
     game.setEndResult(data)
     router.push(`/game/end/${code}`)
+  } else if (event === 'player_tap') {
+    if (isSpectator.value) handleSpectatorTap(data)
+  }
+}
+
+// --- Prévisualisation spectateur (alimentée par les events player_tap) ---
+const specChallengerTaps = ref(0)
+const specOpponentTaps = ref(0)
+const specChallengerWins = ref(0)
+const specOpponentWins = ref(0)
+let specReflexPending = {}
+
+// Jauge tug-of-war en lecture seule (Bras de fer).
+const specGaugePercent = computed(() => {
+  const p = 50 + 50 * ((specChallengerTaps.value - specOpponentTaps.value) / 100)
+  return Math.max(0, Math.min(100, p))
+})
+
+function resetSpectatorState() {
+  specChallengerTaps.value = 0
+  specOpponentTaps.value = 0
+  specChallengerWins.value = 0
+  specOpponentWins.value = 0
+  specReflexPending = {}
+}
+
+function handleSpectatorTap(data) {
+  const cId = challengerId.value
+  const oId = opponentId.value
+  if (data.playerId !== cId && data.playerId !== oId) return
+
+  if (activeType.value === 'brasdefer') {
+    if (data.playerId === cId) specChallengerTaps.value = data.taps
+    else specOpponentTaps.value = data.taps
+  } else if (activeType.value === 'reflex') {
+    // Deux taps (un par joueur) = une manche jouée → le temps le plus bas gagne.
+    specReflexPending[data.playerId] = data.taps
+    if (specReflexPending[cId] != null && specReflexPending[oId] != null) {
+      if (specReflexPending[cId] <= specReflexPending[oId]) specChallengerWins.value++
+      else specOpponentWins.value++
+      specReflexPending = {}
+    }
   }
 }
 
@@ -218,6 +297,9 @@ onUnmounted(() => {
       v-if="activeComponent && isDuelist"
       :player-name="playerName"
       :opponent-name="opponentName"
+      :player-id="myId"
+      :opponent-id="duelOpponentId"
+      :session-code="code"
       @result="onResult"
     />
 
@@ -234,6 +316,30 @@ onUnmounted(() => {
       <span class="rounded-full bg-vert px-5 py-2 font-luckiest tracking-wide text-white">
         {{ minigameLabel }}
       </span>
+
+      <!-- Bras de fer : jauge tug-of-war en direct (lecture seule) -->
+      <div v-if="activeType === 'brasdefer'" class="w-full max-w-md">
+        <div class="flex justify-between font-luckiest text-white text-sm mb-1.5">
+          <span>{{ challengerUsername }} <span class="text-bleu">{{ specChallengerTaps }}</span></span>
+          <span><span class="text-rouge">{{ specOpponentTaps }}</span> {{ opponentUsername }}</span>
+        </div>
+        <div class="h-6 rounded-full overflow-hidden flex">
+          <div
+            class="h-full bg-bleu transition-all duration-100 ease-out"
+            :style="{ width: specGaugePercent + '%' }"
+          />
+          <div
+            class="h-full bg-rouge transition-all duration-100 ease-out"
+            :style="{ width: 100 - specGaugePercent + '%' }"
+          />
+        </div>
+      </div>
+
+      <!-- Réflexe : score de manches en direct -->
+      <p v-else-if="activeType === 'reflex'" class="font-luckiest text-3xl text-white">
+        <span class="text-vert">{{ specChallengerWins }}</span> -
+        <span class="text-rouge">{{ specOpponentWins }}</span>
+      </p>
 
       <div class="mt-2 flex w-full max-w-md items-center justify-center gap-6">
         <div class="flex flex-1 flex-col items-center gap-2">
@@ -292,41 +398,44 @@ onUnmounted(() => {
     </div>
 
     <!-- Modale de sélection d'adversaire -->
-    <div
-      v-if="showDuelModal"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-6"
-      @click.self="showDuelModal = false"
-    >
-      <div class="w-full max-w-sm rounded-3xl bg-foret p-6 shadow-2xl ring-1 ring-white/10">
-        <p class="text-center font-luckiest text-xl text-white">Choisis ton adversaire</p>
+    <Transition :css="false" @enter="onDuelEnter" @leave="onDuelLeave">
+      <div
+        v-if="showDuelModal"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-6"
+        @click.self="showDuelModal = false"
+      >
+        <div data-duel-card class="w-full max-w-sm rounded-3xl bg-menthe p-7 shadow-2xl">
+          <p class="text-center font-luckiest text-xl text-foret">ADVERSAIRE ?</p>
 
-        <ul class="mt-4 flex flex-col gap-2">
-          <li v-for="p in opponents" :key="p.id">
-            <button
-              type="button"
-              class="flex w-full items-center gap-3 rounded-2xl bg-black/25 px-3 py-3 text-left transition hover:bg-black/40"
-              @click="selectOpponent(p)"
-            >
-              <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-vert/80 font-luckiest text-white">
-                {{ initial(p.username) }}
-              </span>
-              <span class="flex-1 font-luckiest text-white">{{ p.username }}</span>
-            </button>
-          </li>
-          <li v-if="!opponents.length" class="py-4 text-center font-nunito text-sm text-white/50">
-            Aucun autre joueur dans la partie.
-          </li>
-        </ul>
-
-        <button
-          type="button"
-          class="mt-4 w-full rounded-full bg-white/10 px-6 py-2.5 font-nunito text-sm text-white transition hover:bg-white/20"
-          @click="showDuelModal = false"
-        >
-          Annuler
-        </button>
+          <ul class="mt-5 flex flex-col gap-3">
+            <li v-for="(p, i) in opponents" :key="p.id">
+              <button
+                type="button"
+                class="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left shadow-sm transition"
+                :class="selectedDuelId === p.id ? 'bg-vert' : 'bg-white hover:brightness-95'"
+                @click="selectOpponent(p)"
+              >
+                <img
+                  :src="duelSprite(i)"
+                  alt=""
+                  class="h-10 w-auto [image-rendering:pixelated]"
+                />
+                <span
+                  class="flex-1 font-luckiest text-lg"
+                  :class="selectedDuelId === p.id ? 'text-white' : 'text-foret'"
+                >
+                  {{ p.username }}
+                </span>
+                <Check v-if="selectedDuelId === p.id" class="h-6 w-6 text-white" />
+              </button>
+            </li>
+            <li v-if="!opponents.length" class="py-4 text-center font-nunito text-sm text-foret/50">
+              Aucun autre joueur dans la partie.
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
+    </Transition>
 
     <!-- Modale "Fin de jeu" — déclaration du gagnant (hôte) -->
     <div
