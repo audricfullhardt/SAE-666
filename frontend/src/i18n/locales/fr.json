@@ -38,7 +38,7 @@
     },
     "valeurs": {
       "title": "Nos Valeurs",
-      "text": "Un jeu {kw1} pour apprendre en s'amusant, une aventure {kw2} qui rassemble petits et grands autour d'un moment résolument {kw3} !",
+      "text": "Un jeu {kw1} pour apprendre en s''amusant, une aventure {kw2} qui rassemble petits et grands autour d''un moment résolument {kw3} !",
       "kw1": "pédagogique",
       "kw2": "inter-générationnel",
       "kw3": "fun"
@@ -127,7 +127,7 @@
       }
     },
     "footer": {
-      "copy": "@DinoMania - 2026"
+      "copy": "{'@'}DinoMania - 2026"
     }
   },
   "pages": {
@@ -140,7 +140,7 @@
         "sentSub": "On te répond très vite !",
         "desc": "Une question sur le jeu ? Une idée ? Un bug à signaler ? On est là !",
         "namePlaceholder": "Ton pseudo",
-        "emailPlaceholder": "ton@email.com",
+        "emailPlaceholder": "ton{'@'}email.com",
         "messagePlaceholder": "Ton message…",
         "submit": "Envoyer"
       },
@@ -151,7 +151,7 @@
         "companyPlaceholder": "Nom de l’entreprise",
         "namePlaceholder": "Votre nom",
         "phonePlaceholder": "Téléphone",
-        "emailPlaceholder": "email@societe.com",
+        "emailPlaceholder": "email{'@'}societe.com",
         "messagePlaceholder": "Décrivez votre projet ou votre demande…",
         "submit": "Envoyer"
       },

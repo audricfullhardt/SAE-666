@@ -128,7 +128,7 @@
       }
     },
     "footer": {
-      "copy": "@DinoMania - 2026"
+      "copy": "{'@'}DinoMania - 2026"
     }
   },
   "pages": {
@@ -141,7 +141,7 @@
         "sentSub": "We’ll get back to you very soon!",
         "desc": "A question about the game? An idea? A bug to report? We’re here!",
         "namePlaceholder": "Your username",
-        "emailPlaceholder": "you@email.com",
+        "emailPlaceholder": "you{'@'}email.com",
         "messagePlaceholder": "Your message…",
         "submit": "Send"
       },
@@ -152,7 +152,7 @@
         "companyPlaceholder": "Company name",
         "namePlaceholder": "Your name",
         "phonePlaceholder": "Phone",
-        "emailPlaceholder": "email@company.com",
+        "emailPlaceholder": "email{'@'}company.com",
         "messagePlaceholder": "Describe your project or request…",
         "submit": "Send"
       },
