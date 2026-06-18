@@ -6,10 +6,15 @@
     "home": "Home",
     "map": "Map",
     "projects": "Citizen projects",
+    "rules": "Rules",
+    "ranking": "Leaderboard",
+    "news": "News",
+    "contact": "Contact",
     "register": "Sign up",
     "login": "Log in",
     "account": "My account",
-    "play": "Play"
+    "play": "Play",
+    "guest": "Guest"
   },
   "common": {
     "loading": "Loading…",
@@ -59,15 +64,45 @@
       "articles": [
         {
           "title": "Real-life Jurassic Park?",
-          "excerpt": "That's what a team of researchers did 2 days ago in the United States. We haven't heard from them since."
+          "tag": "Science",
+          "date": "June 12, 2026",
+          "excerpt": "That’s what a team of researchers did 2 days ago in the United States. We haven’t heard from them since.",
+          "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed porttitor nisi in commodo ultrices, nulla arcu finibus libero.\n\nUt volutpat libero vel lorem vestibulum, vel elementum magna posuere. Integer finibus, nisl vel egestas tincidunt, nibh lectus malesuada turpis, at aliquam velit mi eu neque.\n\nAenean sagittis leo vel eros faucibus feugiat. Cras imperdiet pulvinar massa, nec hendrerit turpis vulputate et."
         },
         {
           "title": "DinoMania: new update",
-          "excerpt": "Version 1.2 is available with new mini-games, bug fixes and a redesigned interface."
+          "tag": "Update",
+          "date": "June 8, 2026",
+          "excerpt": "Version 1.2 is available with new mini-games, bug fixes and a redesigned interface.",
+          "body": "DinoMania version 1.2 is officially available! Three new real-time mini-games, a complete overhaul of the game interface and many stability fixes are included.\n\nAmong the highlights is the new \"Dino Sprint\" mode allowing up to 6 players to compete simultaneously. Animations have been entirely reworked for smoother mobile performance.\n\nThe full patch notes are available on our Discord. Feel free to send us your feedback!"
         },
         {
           "title": "Regional tournament in Troyes",
-          "excerpt": "The first official DinoMania tournament will take place on July 15 in Troyes. Sign up now!"
+          "tag": "Event",
+          "date": "June 1, 2026",
+          "excerpt": "The first official DinoMania tournament will take place on July 15 in Troyes. Sign up now!",
+          "body": "It’s official: the first regional DinoMania tournament will be held on July 15, 2026 in Troyes. Registrations are open until July 10.\n\nA total of 32 teams of 2 to 4 players will compete in group stages followed by direct elimination. The top three receive exclusive DinoMania prizes and an invitation to the national tournament in September.\n\nFree entry for spectators. Food and drinks available all day."
+        },
+        {
+          "title": "Interview: the creators speak",
+          "tag": "Interview",
+          "date": "May 25, 2026",
+          "excerpt": "Meet the team behind DinoMania: how the game was born, technical challenges and the vision for the future.",
+          "body": "We met with Audric, backend developer, and Lucy, frontend developer, for an interview about the genesis of DinoMania. The game was born as a student project but quickly took on a life of its own.\n\n“We wanted to create something that brings generations together, accessible to everyone but with real strategic depth,” explains Lucy.\n\nThe next step? A physical version of the board with collectible figurines."
+        },
+        {
+          "title": "Dinos arrive in stores",
+          "tag": "Shop",
+          "date": "May 18, 2026",
+          "excerpt": "DinoMania is now available in over 40 retail locations across France. Find the nearest one!",
+          "body": "After months of negotiation, DinoMania is finally available in major retail chains! Over 40 partner stores across France now carry the game.\n\nPartners include Intermarché, Carrefour, Cultura and several independent specialty shops. Use the Purchase Points map on the site to find the nearest store.\n\nA limited collector edition with a metal box will be available online exclusively from July 1."
+        },
+        {
+          "title": "Partnership with national education",
+          "tag": "Education",
+          "date": "May 10, 2026",
+          "excerpt": "DinoMania joins the curriculum of 12 primary schools this school year. A playful tool for learning.",
+          "body": "DinoMania has been selected for the national education \"Games & Learning\" program. 12 primary schools in the Grand Est region will experiment with the game as a teaching tool from September.\n\nThe game will be used to teach cooperation, strategy and even biology through the dinosaur cards. A \"Classroom Edition\" with a pedagogical guide is under development.\n\nWe are proud of this recognition and hope to make learning more enjoyable for children."
         }
       ]
     },
@@ -94,6 +129,71 @@
     },
     "footer": {
       "copy": "@DinoMania - 2026"
+    }
+  },
+  "pages": {
+    "contact": {
+      "title": "Contact us",
+      "toggleJoueurs": "Players",
+      "toggleEntreprises": "Businesses",
+      "joueurs": {
+        "sent": "Message sent!",
+        "sentSub": "We’ll get back to you very soon!",
+        "desc": "A question about the game? An idea? A bug to report? We’re here!",
+        "namePlaceholder": "Your username",
+        "emailPlaceholder": "you@email.com",
+        "messagePlaceholder": "Your message…",
+        "submit": "Send"
+      },
+      "entreprises": {
+        "sent": "Request sent!",
+        "sentSub": "Our commercial team will get back to you shortly.",
+        "desc": "Would you like to distribute DinoMania or establish a partnership? Let’s talk!",
+        "companyPlaceholder": "Company name",
+        "namePlaceholder": "Your name",
+        "phonePlaceholder": "Phone",
+        "emailPlaceholder": "email@company.com",
+        "messagePlaceholder": "Describe your project or request…",
+        "submit": "Send"
+      },
+      "subtitle": "A question, a partnership or just want to say hi?"
+    },
+    "classement": {
+      "title": "Leaderboard",
+      "pts": "pts"
+    },
+    "regles": {
+      "title": "Game Rules",
+      "players": "Players",
+      "time": "Min",
+      "age": "Years old",
+      "intro": "Be the first to bring your Dino to the top of the volcano! DinoMania is for 2 to 4 players. You'll need: 1 game board, 4 dino pawns, 1 die and your smartphones.",
+      "chapters": [
+        {
+          "num": "01",
+          "title": "Goal & Equipment",
+          "body": "The goal is simple: be the first to bring your dino to the top of the volcano! The game is for 2 to 4 players. Equipment needed: 1 game board, 4 dino pawns, 1 die and your smartphones for the duels."
+        },
+        {
+          "num": "02",
+          "title": "How to play?",
+          "body": "Roll the die and move your pawn the indicated number of squares. If you land on a special square, take out your phone, select \"Duel\" and choose your opponent. Challenge them to a random mini-game! The winner moves forward, the loser moves back."
+        },
+        {
+          "num": "03",
+          "title": "Special squares",
+          "body": "Tail Whip: an opponent goes back 3 squares. Mud Slide: you go back 3 squares. Quicksand: swap places with the nearest player ahead of you. Tornado: skip your next turn. Re-roll: roll again for free. Geyser: advance 2 squares. Challenge: face an opponent in a random mini-game!"
+        },
+        {
+          "num": "04",
+          "title": "The 6 mini-games",
+          "body": "Dino Flash: quick dinosaur MCQ, first to answer wins! Question for a Dino: press the right answer first. Dino Sumo: tap faster than your opponent to knock them down. Memosaure: find as many pairs as possible. Where's the Dino?: spot the right dino in the crowd. Mystery Egg: follow the egg under the cups and point to the right one!"
+        }
+      ]
+    },
+    "actualites": {
+      "subtitle": "Discover the latest DinoMania news: updates, tournaments, partnerships and behind-the-scenes!",
+      "backBtn": "All news"
     }
   }
 }

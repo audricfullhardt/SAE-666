@@ -6,10 +6,15 @@
     "home": "Accueil",
     "map": "Carte",
     "projects": "Projets citoyens",
+    "rules": "Règles",
+    "ranking": "Classement",
+    "news": "Actualités",
+    "contact": "Contact",
     "register": "Inscription",
     "login": "Connexion",
     "account": "Mon compte",
-    "play": "Jouer"
+    "play": "Jouer",
+    "guest": "Invité"
   },
   "common": {
     "loading": "Chargement…",
@@ -23,9 +28,8 @@
     },
     "concept": {
       "title": "Notre Concept",
-      "p1": "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum.",
-      "p2": "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum.",
-      "p3": "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum.",
+      "p1": "Dino Mania, c'est un jeu de plateau où chaque case spéciale déclenche un défi numérique sur téléphone. Deux joueurs s'affrontent en 1v1 dans un mini-jeu — quiz, rapidité, mémoire, vitesse de clic. Le gagnant avance, le perdant recule. Premier à atteindre le sommet du volcan avant la météorite : tu gagnes.",
+      "p2": "Le jeu est conçu pour être joué en famille ou entre amis. Les mini-jeux sont accessibles à tous, et les parties sont rapides et dynamiques. Dino Mania est un jeu intergénérationnel qui favorise la coopération et la compétition saine.",
       "stats": {
         "players": "Joueurs",
         "age": "Ans",
@@ -58,16 +62,46 @@
       "readMore": "Lire →",
       "articles": [
         {
-          "title": "Jurassic parc en vrai ?",
-          "excerpt": "C'est ce qu'ont fait il y a 2 jours une équipe de chercheurs aux États-Unis. D'ailleurs on n'a plus de nouvelles d'eux depuis quelques jours."
+          "title": "Jurassic parc en vrai ?",
+          "tag": "Science",
+          "date": "12 juin 2026",
+          "excerpt": "C’est ce qu’ont fait il y a 2 jours une équipe de chercheurs aux États-Unis. D’ailleurs on n’a plus de nouvelles d’eux depuis quelques jours.",
+          "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed porttitor nisi in commodo ultrices, nulla arcu finibus libero, in feugiat lacus nulla in massa.\n\nUt volutpat libero vel lorem vestibulum, vel elementum magna posuere. Integer finibus, nisl vel egestas tincidunt, nibh lectus malesuada turpis, at aliquam velit mi eu neque. Curabitur laoreet massa vel justo fermentum, id tristique est luctus.\n\nAenean sagittis leo vel eros faucibus feugiat. Cras imperdiet pulvinar massa, nec hendrerit turpis vulputate et. Donec feugiat odio vel faucibus tristique. Nullam velit mi, dapibus et pellentesque id, varius ut mi."
         },
         {
-          "title": "DinoMania : nouvelle mise à jour",
-          "excerpt": "La version 1.2 est disponible avec de nouveaux mini-jeux, des corrections de bugs et une interface repensée."
+          "title": "DinoMania : nouvelle mise à jour",
+          "tag": "Mise à jour",
+          "date": "8 juin 2026",
+          "excerpt": "La version 1.2 est disponible avec de nouveaux mini-jeux, des corrections de bugs et une interface repensée.",
+          "body": "La version 1.2 de DinoMania est officiellement disponible ! Au programme : trois nouveaux mini-jeux en temps réel, une refonte complète de l’interface de jeu et de nombreuses corrections de stabilité.\n\nParmi les nouveautés, on notera le mode \"Sprint du Dino\" qui permet jusqu’à 6 joueurs de s’affronter simultanément. Les animations ont été entièrement revues pour un rendu plus fluide sur mobile.\n\nLe patch note complet est disponible sur notre Discord. N’hésitez pas à nous faire vos retours !"
         },
         {
           "title": "Tournoi régional à Troyes",
-          "excerpt": "Le premier tournoi officiel DinoMania aura lieu le 15 juillet à Troyes. Inscrivez-vous dès maintenant !"
+          "tag": "Événement",
+          "date": "1 juin 2026",
+          "excerpt": "Le premier tournoi officiel DinoMania aura lieu le 15 juillet à Troyes. Inscrivez-vous dès maintenant !",
+          "body": "C’est officiel : le premier tournoi régional DinoMania se tiendra le 15 juillet 2026 à Troyes, dans la salle des fêtes du centre-ville. Les inscriptions sont ouvertes jusqu’au 10 juillet.\n\nAu total, 32 équipes de 2 à 4 joueurs s’affronteront en phases de poules puis en élimination directe. Les trois premiers reçoivent des lots exclusifs DinoMania et une invitation au tournoi national prévu en septembre.\n\nEntrée libre pour les spectateurs. Buvette et restauration sur place toute la journée."
+        },
+        {
+          "title": "Interview : les créateurs parlent",
+          "tag": "Interview",
+          "date": "25 mai 2026",
+          "excerpt": "Rencontre avec l’équipe derrière DinoMania : comment est né le jeu, les défis techniques et la vision pour l’avenir.",
+          "body": "Nous avons rencontré Audric, développeur backend, et Lucy, développeuse frontend, pour une interview sur la genèse du projet DinoMania. Le jeu est né dans le cadre d’un projet étudiant mais a rapidement pris de l’ampleur.\n\n« On voulait créer quelque chose qui rassemble les générations, accessible à tous mais avec une vraie profondeur stratégique », explique Lucy. Audric ajoute : « Le défi technique était de synchroniser les parties en temps réel avec Mercure et Symfony, tout en garantissant une expérience fluide sur mobile.»\n\nLa prochaine étape ? Une version physique du plateau avec des figurines collectibles."
+        },
+        {
+          "title": "Les dinos arrivent en boutique",
+          "tag": "Boutique",
+          "date": "18 mai 2026",
+          "excerpt": "DinoMania est désormais disponible dans plus de 40 points de vente en France. Trouvez le plus proche de chez vous !",
+          "body": "Après des mois de négociation, DinoMania est enfin disponible dans la grande distribution ! Plus de 40 enseignes partenaires à travers la France proposent désormais le jeu en rayon.\n\nParmi les partenaires : Intermarché, Carrefour, Cultura et plusieurs boutiques spécialisées indépendantes. Utilisez la carte \"Points d’achat\" sur le site pour trouver le magasin le plus proche.\n\nUne version collector limite avec boîte métallique sera disponible en exclusivité en ligne dès le 1er juillet."
+        },
+        {
+          "title": "Partenariat avec l’éducation nationale",
+          "tag": "Éducation",
+          "date": "10 mai 2026",
+          "excerpt": "DinoMania intègre le programme pédagogique de 12 écoles primaires cette année scolaire. Un outil ludique pour apprendre.",
+          "body": "DinoMania a été retenu dans le cadre du programme \"Jeux et Apprentissage\" de l’éducation nationale. 12 écoles primaires de la région Grand Est expérimenteront le jeu comme support pédagogique dès septembre.\n\nLe jeu sera utilisé pour enseigner des notions de coopération, de stratégie et même de biologie à travers les cartes dinosaures. Une version \"Edition Classe\" avec guide pédagogique est en cours de développement.\n\nNous sommes fiers de cette reconnaissance et esprons contribuer à rendre l’apprentissage plus ludique pour les enfants."
         }
       ]
     },
@@ -78,7 +112,7 @@
     },
     "contact": {
       "title": "Nous contacter",
-      "body": "Tu es un joueur\u00a0? Une entreprise\u00a0? Tu souhaites nous faire part d\u2019une id\u00e9e, d\u2019une suggestion\u00a0?",
+      "body": "Tu es un joueur ? Une entreprise ? Tu souhaites nous faire part d’une idée, d’une suggestion ?",
       "or": "ou",
       "cta": "DISCUTONS",
       "entreprises": {
@@ -94,6 +128,71 @@
     },
     "footer": {
       "copy": "@DinoMania - 2026"
+    }
+  },
+  "pages": {
+    "contact": {
+      "title": "Nous contacter",
+      "toggleJoueurs": "Joueurs",
+      "toggleEntreprises": "Entreprises",
+      "joueurs": {
+        "sent": "Message envoyé !",
+        "sentSub": "On te répond très vite !",
+        "desc": "Une question sur le jeu ? Une idée ? Un bug à signaler ? On est là !",
+        "namePlaceholder": "Ton pseudo",
+        "emailPlaceholder": "ton@email.com",
+        "messagePlaceholder": "Ton message…",
+        "submit": "Envoyer"
+      },
+      "entreprises": {
+        "sent": "Demande envoyée !",
+        "sentSub": "Notre équipe commerciale revient vers vous rapidement.",
+        "desc": "Vous souhaitez distribuer DinoMania ou nouer un partenariat ? Parlons-en !",
+        "companyPlaceholder": "Nom de l’entreprise",
+        "namePlaceholder": "Votre nom",
+        "phonePlaceholder": "Téléphone",
+        "emailPlaceholder": "email@societe.com",
+        "messagePlaceholder": "Décrivez votre projet ou votre demande…",
+        "submit": "Envoyer"
+      },
+      "subtitle": "Une question, un partenariat ou juste envie de dire bonjour ?"
+    },
+    "classement": {
+      "title": "Classement",
+      "pts": "pts"
+    },
+    "regles": {
+      "title": "Règles du jeu",
+      "players": "Joueurs",
+      "time": "Min",
+      "age": "Ans",
+      "intro": "Sois le premier à amener ton Dino au sommet du volcan ! DinoMania se joue à 2–4 joueurs. Il te faut : 1 plateau de jeu, 4 pions dino, 1 dé et vos smartphones.",
+      "chapters": [
+        {
+          "num": "01",
+          "title": "But & Matériel",
+          "body": "Le but du jeu est simple : sois le premier à amener ton dino au sommet du volcan ! La partie se joue à 2 à 4 joueurs. Matériel nécessaire : 1 plateau de jeu, 4 pions dino, 1 dé et vos smartphones pour les duels."
+        },
+        {
+          "num": "02",
+          "title": "Comment jouer ?",
+          "body": "Lance le dé et avance ton pion du nombre de cases indiqué. Si tu tombes sur une case spéciale, prends ton téléphone, sélectionne « Duel » et choisis ton adversaire. Défie-le sur un mini-jeu aléatoire ! Le gagnant avance, le perdant recule."
+        },
+        {
+          "num": "03",
+          "title": "Les cases spéciales",
+          "body": "Coup de queue : un adversaire recule de 3 cases. Glissade de boue : toi-même recule de 3 cases. Sables mouvants : échange de place avec le joueur devant toi. Tornade : passe ton prochain tour. Relance : rejoue le dé gratuitement. Geyser : avance de 2 cases. Défi : affronte un adversaire sur un mini-jeu aléatoire !"
+        },
+        {
+          "num": "04",
+          "title": "Les 6 mini-jeux",
+          "body": "Dino Flash : QCM rapide sur les dinosaures, le premier à répondre gagne ! Question pour un Dino : appuie en premier sur la bonne réponse. Dino Sumo : tape plus vite que ton adversaire pour le faire tomber. Mémosaure : retrouve un maximum de paires. Où est le Dino ? : repère le bon dino dans la foule. Œuf mystère : suis l'œuf sous les gobelets et désigne le bon !"
+        }
+      ]
+    },
+    "actualites": {
+      "subtitle": "Découvrez les dernières nouvelles de DinoMania : mises à jour, tournois, partenariats et coulisses du projet !",
+      "backBtn": "Toutes les actualités"
     }
   }
 }

@@ -9,7 +9,7 @@ const stats = [
   { value: "20'",  labelKey: 'home.concept.stats.time',    colorClass: 'text-vert'  },
 ]
 
-const paragraphKeys = ['home.concept.p1', 'home.concept.p2', 'home.concept.p3']
+const paragraphKeys = ['home.concept.p1', 'home.concept.p2']
 </script>
 
 <template>
@@ -20,7 +20,7 @@ const paragraphKeys = ['home.concept.p1', 'home.concept.p2', 'home.concept.p3']
       </h2>
 
       <!-- Single big dashed card -->
-      <div class="mb-10 rounded-xl border-2 border-dashed border-gray-300 p-6 font-bryndan text-xs leading-relaxed text-gray-700 md:text-sm">
+      <div class="mb-10 rounded-md border-2 border-dashed border-gray-300 p-6 font-bryndan text-xs leading-relaxed text-gray-700 md:text-sm">
         <p v-for="key in paragraphKeys" :key="key" class="mb-3 last:mb-0">
           {{ t(key) }}
         </p>

@@ -18,4 +18,8 @@ done
 
 php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration || true
 
+# Le cache est warmé au démarrage car le build prod utilise --no-scripts.
+php bin/console cache:clear --no-interaction
+php bin/console cache:warmup --no-interaction
+
 exec "$@"
