@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import gsap from 'gsap'
+import { RotateCcw, House } from 'lucide-vue-next'
 import { useGameStore } from '@/stores/game'
 import { useMercure } from '@/composables/useMercure'
 import dinoSprite from '@/assets/dino_green.png'
@@ -91,7 +92,7 @@ function goHome() {
 
     <div ref="haloRef" class="relative flex items-center justify-center">
       <span class="absolute h-32 w-32 rounded-full bg-jaune/60 blur-2xl" />
-      <img :src="dinoSprite" alt="" class="relative h-28 w-auto drop-shadow-xl" />
+      <img :src="dinoSprite" alt="" class="relative h-28 w-auto drop-shadow-xl [image-rendering:pixelated]" />
     </div>
 
     <ul class="mt-2 flex w-full max-w-md flex-col gap-2">
@@ -129,17 +130,17 @@ function goHome() {
     <div class="mt-4 flex w-full max-w-md flex-col gap-3">
       <button
         type="button"
-        class="w-full rounded-full bg-jaune px-8 py-3.5 font-luckiest text-lg tracking-wide text-white shadow-lg transition hover:brightness-105"
+        class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-jaune px-8 py-3.5 font-luckiest text-lg tracking-wide text-white shadow-lg transition hover:brightness-105"
         @click="replay"
       >
-        ↻ Rejouer
+        <RotateCcw class="h-5 w-5" /> Rejouer
       </button>
       <button
         type="button"
-        class="w-full rounded-full bg-white px-8 py-3.5 font-luckiest text-lg tracking-wide text-foret shadow-lg transition hover:brightness-95"
+        class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-8 py-3.5 font-luckiest text-lg tracking-wide text-foret shadow-lg transition hover:brightness-95"
         @click="goHome"
       >
-        🏠 Accueil
+        <House class="h-5 w-5" /> Accueil
       </button>
     </div>
   </main>

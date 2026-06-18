@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, onUnmounted } from 'vue'
+import { Check, Zap } from 'lucide-vue-next'
 import CountdownOverlay from '@/components/game/CountdownOverlay.vue'
 
 const props = defineProps({
@@ -184,16 +185,17 @@ onUnmounted(clearTimers)
       >
         <span class="absolute top-2 left-3 text-sm opacity-80">{{ shapes[i] }}</span>
         <span>{{ answer }}</span>
-        <span
+        <Check
           v-if="locked && i === current.correct"
-          class="absolute top-2 right-3 text-lg"
-        >✓</span>
+          class="absolute top-2 right-3 h-5 w-5"
+        />
       </button>
     </div>
 
     <!-- Footer -->
-    <footer class="text-center text-white font-nunito mt-6">
-      ⚡ {{ answeredCount }} joueur{{ answeredCount > 1 ? 's' : '' }} {{ answeredCount > 1 ? 'ont' : 'a' }} répondu
+    <footer class="flex items-center justify-center gap-2 text-center text-white font-nunito mt-6">
+      <Zap class="h-5 w-5" />
+      {{ answeredCount }} joueur{{ answeredCount > 1 ? 's' : '' }} {{ answeredCount > 1 ? 'ont' : 'a' }} répondu
     </footer>
   </div>
 </template>

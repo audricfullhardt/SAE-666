@@ -93,11 +93,9 @@ async function joinRoom() {
   }
 }
 
-// Si on a déjà saisi le code et qu'on est invité, on révèle le champ pseudo.
 const needsName = computed(() => !auth.isAuthenticated && codeComplete.value)
 watch(codeComplete, (done) => {
   if (done && needsName.value) {
-    // léger délai pour laisser le DOM afficher l'input
     requestAnimationFrame(() => document.getElementById('guest-name')?.focus())
   }
 })
@@ -109,7 +107,7 @@ watch(codeComplete, (done) => {
 
     <p class="font-patrick text-xl text-vert">Prêt pour un duel ?</p>
 
-    <img ref="dinoRef" :src="dinoSprite" alt="" class="h-24 w-auto drop-shadow-lg" />
+    <img ref="dinoRef" :src="dinoSprite" alt="" class="h-24 w-auto drop-shadow-lg [image-rendering:pixelated]" />
 
     <div class="flex w-full max-w-sm flex-col gap-4">
       <button

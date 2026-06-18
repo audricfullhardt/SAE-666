@@ -1,7 +1,9 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import gsap from 'gsap'
+import { Egg, PartyPopper } from 'lucide-vue-next'
 import CountdownOverlay from '@/components/game/CountdownOverlay.vue'
+import dinoGreen from '@/assets/dino_green.png'
 
 const props = defineProps({
   playerName: { type: String, default: 'Toi' },
@@ -156,7 +158,7 @@ onUnmounted(() => {
 
     <!-- Maman dino -->
     <div class="flex flex-col items-center mt-4 shrink-0">
-      <div class="text-5xl">🦖</div>
+      <img :src="dinoGreen" alt="" class="h-12 w-auto [image-rendering:pixelated]" />
       <p class="font-nunito text-white text-sm mt-2">la maman dino a pondu...</p>
     </div>
 
@@ -165,7 +167,9 @@ onUnmounted(() => {
       <span v-if="phase === 'reveal'">Regarde bien où est l'œuf !</span>
       <span v-else-if="phase === 'shuffle'">Ça mélange...</span>
       <span v-else-if="phase === 'choose'">À toi ! Choisis un gobelet</span>
-      <span v-else-if="result === 'win'" class="text-jaune">Gagné ! 🎉</span>
+      <span v-else-if="result === 'win'" class="inline-flex items-center gap-1 text-jaune">
+        Gagné ! <PartyPopper class="h-5 w-5" />
+      </span>
       <span v-else-if="result === 'lose'" class="text-rouge">Perdu...</span>
     </p>
 
@@ -185,9 +189,9 @@ onUnmounted(() => {
             <div
               v-if="cup.id === eggCupId"
               v-show="eggVisible"
-              class="absolute bottom-2 text-4xl z-0"
+              class="absolute bottom-2 z-0"
             >
-              🥚
+              <Egg class="h-9 w-9 fill-menthe text-foret" />
             </div>
             <!-- Gobelet (toujours au-dessus de l'œuf) -->
             <div

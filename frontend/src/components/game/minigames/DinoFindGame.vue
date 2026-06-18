@@ -1,7 +1,12 @@
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import gsap from 'gsap'
+import { MousePointerClick } from 'lucide-vue-next'
 import CountdownOverlay from '@/components/game/CountdownOverlay.vue'
+import dinoGreen from '@/assets/dino_green.png'
+import dinoBlue from '@/assets/dino_blue.png'
+import dinoRed from '@/assets/dino_red.png'
+import dinoYellow from '@/assets/dino_yellow.png'
 
 const props = defineProps({
   playerName: { type: String, default: 'Toi' },
@@ -14,15 +19,16 @@ const DURATION = 30
 const COUNT = 28
 
 const showCountdown = ref(true)
-const dinos = ref([]) // { id, emoji, isTarget, top, left, size, hue }
+const dinos = ref([]) // { id, sprite, isTarget, top, left, size }
 const timer = ref(DURATION)
 const found = ref(false)
 const wrongFlash = ref(false)
 const circleEl = ref(null)
 const dinoEls = ref({})
 
-const distractorEmojis = ['🦕', '🦖']
-const distractorHues = [120, 200, 280, 40, 320] // teintes variées (jamais rouge)
+// La cible = le dino rouge ; les distracteurs = les autres couleurs (jamais rouge).
+const targetSprite = dinoRed
+const distractorSprites = [dinoGreen, dinoBlue, dinoYellow]
 
 let startTime = 0
 let timerId = null
@@ -56,42 +62,34 @@ function placeWithoutOverlap(placed, minDist) {
 function buildDinos() {
   const list = []
   const minDist = 11
-  // dino cible : T-Rex rouge
+  // dino cible : le dino rouge
   const targetPos = placeWithoutOverlap(list, minDist)
   list.push({
     id: 0,
-    emoji: '🦖',
+    sprite: targetSprite,
     isTarget: true,
     top: targetPos.top,
     left: targetPos.left,
-    size: rand(1.4, 1.7),
-    hue: 0,
+    size: rand(2.4, 2.9),
   })
   for (let i = 1; i < COUNT; i++) {
     const pos = placeWithoutOverlap(list, minDist)
     list.push({
       id: i,
-      emoji: distractorEmojis[Math.floor(Math.random() * distractorEmojis.length)],
+      sprite: distractorSprites[Math.floor(Math.random() * distractorSprites.length)],
       isTarget: false,
       top: pos.top,
       left: pos.left,
-      size: rand(1.1, 1.5),
-      hue: distractorHues[Math.floor(Math.random() * distractorHues.length)],
+      size: rand(1.9, 2.6),
     })
   }
   dinos.value = list
 }
 
 function dinoStyle(d) {
-  // Le T-Rex cible est rouge ; les distracteurs reçoivent une rotation de teinte
-  const filter = d.isTarget
-    ? 'sepia(1) saturate(8) hue-rotate(-20deg) brightness(1.05)'
-    : `sepia(1) saturate(5) hue-rotate(${d.hue}deg)`
   return {
     top: d.top + '%',
     left: d.left + '%',
-    fontSize: d.size + 'rem',
-    filter,
   }
 }
 
@@ -164,8 +162,8 @@ onUnmounted(clearTimers)
     <!-- Header -->
     <header class="flex items-center justify-between z-10 shrink-0">
       <div class="flex items-center gap-2">
-        <span class="text-2xl" style="filter: sepia(1) saturate(8) hue-rotate(-20deg)">🦖</span>
-        <span class="font-luckiest text-white text-sm leading-tight">TROUVE LE<br />T-REX ROUGE</span>
+        <img :src="dinoRed" alt="" class="h-8 w-auto [image-rendering:pixelated]" />
+        <span class="font-luckiest text-white text-sm leading-tight">TROUVE LE<br />DINO ROUGE</span>
       </div>
       <span class="w-12 h-12 rounded-full bg-jaune flex items-center justify-center font-luckiest text-xl text-foret">
         {{ String(Math.max(timer, 0)).padStart(2, '0') }}
@@ -182,7 +180,12 @@ onUnmounted(clearTimers)
         class="absolute -translate-x-1/2 -translate-y-1/2 leading-none active:scale-90 transition-transform"
         :style="dinoStyle(d)"
       >
-        {{ d.emoji }}
+        <img
+          :src="d.sprite"
+          alt=""
+          class="w-auto [image-rendering:pixelated]"
+          :style="{ height: d.size + 'rem' }"
+        />
       </button>
 
       <!-- Cercle de validation -->
@@ -193,8 +196,9 @@ onUnmounted(clearTimers)
     </div>
 
     <!-- Footer -->
-    <footer class="text-center text-vert font-nunito z-10 shrink-0">
-      👆 Touche le bon dino pour gagner
+    <footer class="flex items-center justify-center gap-2 text-center text-vert font-nunito z-10 shrink-0">
+      <MousePointerClick class="h-5 w-5" />
+      Touche le bon dino pour gagner
     </footer>
   </div>
 </template>

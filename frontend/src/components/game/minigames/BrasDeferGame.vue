@@ -2,6 +2,8 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import gsap from 'gsap'
 import CountdownOverlay from '@/components/game/CountdownOverlay.vue'
+import dinoSprite from '@/assets/dino_green.png'
+import dinoSprite2 from '@/assets/dino_blue.png'
 
 const props = defineProps({
   playerName: { type: String, default: 'REX' },
@@ -119,9 +121,9 @@ onUnmounted(clearTimers)
 
     <!-- Arène -->
     <div class="flex-1 min-h-0 flex items-center justify-center gap-4">
-      <div ref="playerDino" class="text-7xl">🦖</div>
+      <div ref="playerDino" class="text-7xl"><img :src="dinoSprite" alt="" class="relative h-28 w-auto drop-shadow-xl [image-rendering:pixelated]" /></div>
       <span class="font-luckiest text-white text-2xl">VS</span>
-      <div ref="opponentDino" class="text-7xl -scale-x-100">🦖</div>
+      <div ref="opponentDino" class="text-7xl -scale-x-100"><img :src="dinoSprite2" alt="" class="relative h-28 w-auto drop-shadow-xl [image-rendering:pixelated]" /></div>
     </div>
 
     <!-- Barre de progression -->

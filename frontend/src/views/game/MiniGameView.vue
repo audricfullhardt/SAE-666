@@ -2,6 +2,7 @@
 import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import gsap from 'gsap'
+import { Swords, Flag } from 'lucide-vue-next'
 import { useGameStore } from '@/stores/game'
 import { useMercure } from '@/composables/useMercure'
 import QuizGame from '@/components/game/minigames/QuizGame.vue'
@@ -50,7 +51,6 @@ const activeType = computed(() => game.activeMinigame?.minigameType ?? null)
 const activeComponent = computed(() => COMPONENTS[activeType.value] ?? null)
 const minigameLabel = computed(() => MINIGAME_LABELS[activeType.value] ?? activeType.value ?? '')
 
-// activeMinigame peut arriver à plat (Mercure) ou imbriqué (triggerDuel / fetchCurrentMinigame).
 const challengerId = computed(
   () => game.activeMinigame?.challenger?.id ?? game.activeMinigame?.challengerId ?? null,
 )
@@ -71,12 +71,10 @@ const isDuelist = computed(() => isChallenger.value || isOpponent.value)
 const isSpectator = computed(() => !!activeComponent.value && !isDuelist.value)
 
 const playerName = computed(() => game.currentPlayer?.username ?? 'Toi')
-// L'adversaire affiché au duelliste est l'autre duelliste (pas un spectateur).
 const opponentName = computed(() =>
   isChallenger.value ? opponentUsername.value : challengerUsername.value,
 )
 
-// Adversaires possibles = tous les joueurs sauf moi.
 const opponents = computed(() =>
   game.players.filter((p) => p.id !== game.currentPlayer?.id),
 )
@@ -100,7 +98,6 @@ function openEndModal() {
   error.value = ''
   selectedWinnerId.value = null
   showEndModal.value = true
-  // Rafraîchit les positions des joueurs (l'hôte a un JWT, le GET fonctionne).
   game.fetchSession(code)
 }
 
@@ -276,19 +273,19 @@ onUnmounted(() => {
 
       <button
         type="button"
-        class="rounded-full bg-jaune px-8 py-4 font-luckiest text-xl tracking-wide text-white shadow-lg transition hover:brightness-105"
+        class="inline-flex items-center justify-center gap-2 rounded-full bg-jaune px-8 py-4 font-luckiest text-xl tracking-wide text-white shadow-lg transition hover:brightness-105"
         @click="showDuelModal = true"
       >
-        ⚔ Duel !
+        <Swords class="h-6 w-6" /> Duel !
       </button>
 
       <button
         v-if="game.isHost"
         type="button"
-        class="rounded-full bg-rouge px-6 py-2.5 font-luckiest tracking-wide text-white shadow-md transition hover:brightness-105"
+        class="inline-flex items-center justify-center gap-2 rounded-full bg-rouge px-6 py-2.5 font-luckiest tracking-wide text-white shadow-md transition hover:brightness-105"
         @click="openEndModal"
       >
-        🏁 Fin de jeu
+        <Flag class="h-5 w-5" /> Fin de jeu
       </button>
 
       <p v-if="error" class="font-nunito text-sm text-rouge">{{ error }}</p>

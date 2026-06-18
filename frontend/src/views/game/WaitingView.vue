@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import gsap from 'gsap'
+import { Copy, Check, Play } from 'lucide-vue-next'
 import { useGameStore } from '@/stores/game'
 import { useMercure } from '@/composables/useMercure'
 
@@ -109,10 +110,10 @@ onUnmounted(() => {
       <p class="font-luckiest text-5xl tracking-[0.2em] text-white">{{ code }}</p>
       <button
         type="button"
-        class="mt-2 rounded-full bg-black/30 px-4 py-1.5 font-nunito text-sm text-white/90 transition hover:bg-black/40"
+        class="mt-2 inline-flex items-center gap-1.5 rounded-full bg-black/30 px-4 py-1.5 font-nunito text-sm text-white/90 transition hover:bg-black/40"
         @click="copyCode"
       >
-        📋 {{ copied ? 'Copié !' : 'Copier & partager' }}
+        <Copy class="h-4 w-4" /> {{ copied ? 'Copié !' : 'Copier & partager' }}
       </button>
     </header>
 
@@ -166,7 +167,10 @@ onUnmounted(() => {
         :disabled="meReady"
         @click="markReady"
       >
-        {{ meReady ? 'PRÊT ✓' : 'JE SUIS PRÊT' }}
+        <span class="inline-flex items-center justify-center gap-1.5">
+          <template v-if="meReady">PRÊT <Check class="h-5 w-5" /></template>
+          <template v-else>JE SUIS PRÊT</template>
+        </span>
       </button>
 
       <button
@@ -176,7 +180,10 @@ onUnmounted(() => {
         :disabled="!allReady"
         @click="launch"
       >
-        ▶ {{ allReady ? 'Lancer la partie' : `${notReadyCount} joueur(s) pas prêt(s)` }}
+        <span class="inline-flex items-center justify-center gap-1.5">
+          <Play class="h-5 w-5" />
+          {{ allReady ? 'Lancer la partie' : `${notReadyCount} joueur(s) pas prêt(s)` }}
+        </span>
       </button>
       <p v-if="game.isHost" class="text-center font-nunito text-xs text-white/50">
         Seul l'hôte peut démarrer · 2 joueurs minimum

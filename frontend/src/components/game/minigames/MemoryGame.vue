@@ -2,6 +2,11 @@
 import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import gsap from 'gsap'
 import CountdownOverlay from '@/components/game/CountdownOverlay.vue'
+import dinoGreen from '@/assets/dino_green.png'
+import dinoBlue from '@/assets/dino_blue.png'
+import dinoRed from '@/assets/dino_red.png'
+import dinoYellow from '@/assets/dino_yellow.png'
+import logo from '@/assets/logo.png'
 
 const props = defineProps({
   playerName: { type: String, default: 'Toi' },
@@ -10,9 +15,10 @@ const props = defineProps({
 
 const emit = defineEmits(['result'])
 
-// 4 paires (8 cartes) + 1 carte bonus révélée gratuitement = grille 3x3
-const pairSymbols = ['🦖', '🦕', '🥚', '🦴']
-const bonusSymbol = '🌋'
+// 4 paires (8 cartes) + 1 carte bonus révélée gratuitement = grille 3x3.
+// Chaque paire = un sprite dino distinct ; la carte bonus = le logo (visuellement à part).
+const pairSymbols = [dinoGreen, dinoBlue, dinoRed, dinoYellow]
+const bonusSymbol = logo
 const TOTAL_PAIRS = pairSymbols.length // 4
 
 const showCountdown = ref(true)
@@ -168,7 +174,12 @@ onUnmounted(clearTimers)
                   : 'bg-foret text-jaune'
           "
         >
-          <span v-if="card.flipped || card.matched">{{ card.symbol }}</span>
+          <img
+            v-if="card.flipped || card.matched"
+            :src="card.symbol"
+            alt=""
+            class="h-12 w-auto [image-rendering:pixelated]"
+          />
           <span v-else>?</span>
         </button>
       </div>

@@ -2,6 +2,7 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import gsap from 'gsap'
 import CountdownOverlay from '@/components/game/CountdownOverlay.vue'
+import dinoGreen from '@/assets/dino_green.png'
 
 const props = defineProps({
   playerName: { type: String, default: 'Toi' },
@@ -140,7 +141,9 @@ onUnmounted(clearAll)
         <div v-else-if="tooEarly" class="font-luckiest text-rouge text-4xl">
           TROP TÔT !
         </div>
-        <div v-else-if="phase === 'active' || phase === 'done'" ref="dinoEl" class="text-8xl">🦖</div>
+        <div v-else-if="phase === 'active' || phase === 'done'" ref="dinoEl">
+          <img :src="dinoGreen" alt="" class="h-28 w-auto [image-rendering:pixelated]" />
+        </div>
       </div>
     </div>
 

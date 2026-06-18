@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import gsap from 'gsap'
+import { CornerDownLeft } from 'lucide-vue-next'
 import { useGameStore } from '@/stores/game'
 import { useMercure } from '@/composables/useMercure'
 import dinoSprite from '@/assets/dino_green.png'
@@ -94,7 +95,7 @@ onUnmounted(() => {
         class="absolute h-32 w-32 rounded-full blur-2xl"
         :class="iWon ? 'bg-vert/60' : 'bg-rouge/50'"
       />
-      <img :src="dinoSprite" alt="" class="relative h-28 w-auto drop-shadow-xl" />
+      <img :src="dinoSprite" alt="" class="relative h-28 w-auto drop-shadow-xl [image-rendering:pixelated]" />
     </div>
 
     <p v-if="winner" class="font-patrick text-2xl text-white">
@@ -130,10 +131,10 @@ onUnmounted(() => {
 
     <button
       type="button"
-      class="mt-4 rounded-full bg-white px-8 py-3.5 font-luckiest text-lg tracking-wide text-foret shadow-lg transition hover:brightness-95"
+      class="mt-4 inline-flex items-center justify-center gap-2 rounded-full bg-white px-8 py-3.5 font-luckiest text-lg tracking-wide text-foret shadow-lg transition hover:brightness-95"
       @click="backToBoard"
     >
-      ↩ Retour au plateau
+      <CornerDownLeft class="h-5 w-5" /> Retour au plateau
     </button>
   </main>
 </template>
