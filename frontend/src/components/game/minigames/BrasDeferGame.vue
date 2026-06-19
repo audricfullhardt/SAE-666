@@ -34,8 +34,6 @@ const timerEl = ref(null)
 let timerId = null
 let tapThrottle = null
 
-// Jauge tug-of-war : la frontière bleu/rouge dépend de l'écart de taps (les deux réactives).
-// 50/50 au départ ; le bleu (joueur) gagne du terrain à droite, le rouge (adversaire) à gauche.
 const playerPercent = computed(() => {
   const p = 50 + 50 * ((playerTaps.value - opponentTaps.value) / MAX_TAPS)
   return Math.max(0, Math.min(100, p))
@@ -45,12 +43,11 @@ const opponentPercent = computed(() => 100 - playerPercent.value)
 const lowTime = computed(() => timer.value <= 5)
 
 function moveDinos() {
-  const ratio = (playerPercent.value - 50) / 50 // -1 .. 1
+  const ratio = (playerPercent.value - 50) / 50
   if (playerDino.value) gsap.to(playerDino.value, { x: ratio * 40, duration: 0.2 })
   if (opponentDino.value) gsap.to(opponentDino.value, { x: ratio * 40, duration: 0.2 })
 }
 
-// Envoi des taps via Mercure, throttlé à un POST toutes les 100 ms maximum.
 function broadcastTap() {
   if (!props.sessionCode || props.playerId == null) return
   if (tapThrottle) return
@@ -84,7 +81,6 @@ function finish() {
   if (finished.value) return
   finished.value = true
   clearTimers()
-  // Dernier envoi pour synchroniser le score final, puis on tranche.
   if (props.sessionCode && props.playerId != null) {
     game.sendTap(props.sessionCode, props.playerId, playerTaps.value)
   }
@@ -105,7 +101,6 @@ function startGame() {
   timerId = setInterval(tick, 1000)
 }
 
-// Taps de l'adversaire en temps réel.
 function onMercure({ event, data }) {
   if (event === 'player_tap' && data.playerId === props.opponentId) {
     opponentTaps.value = data.taps
@@ -126,10 +121,8 @@ onUnmounted(() => {
   >
     <CountdownOverlay v-if="showCountdown" bg-class="bg-gradient-to-b from-blue-400 to-blue-700" @done="startGame" />
 
-    <!-- Titre -->
     <h1 class="font-luckiest text-white text-2xl text-center shrink-0">BRAS DE FER</h1>
 
-    <!-- Timer central -->
     <div class="flex justify-center my-3 shrink-0">
       <div
         ref="timerEl"
@@ -145,14 +138,12 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <!-- Arène -->
     <div class="flex-1 min-h-0 flex items-center justify-center gap-4">
       <div ref="playerDino" class="text-7xl"><img :src="dinoSprite" alt="" class="relative h-28 w-auto drop-shadow-xl [image-rendering:pixelated]" /></div>
       <span class="font-luckiest text-white text-2xl">VS</span>
       <div ref="opponentDino" class="text-7xl -scale-x-100"><img :src="dinoSprite2" alt="" class="relative h-28 w-auto drop-shadow-xl [image-rendering:pixelated]" /></div>
     </div>
 
-    <!-- Jauge d'opposition temps réel : bleu (joueur) vs rouge (adversaire), frontière mobile -->
     <div class="mb-4 shrink-0">
       <div class="flex justify-between font-luckiest text-white text-sm mb-1.5">
         <span>{{ playerName }} <span class="text-bleu">{{ playerTaps }}</span></span>
@@ -170,7 +161,6 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <!-- Bouton TAPE -->
     <button
       @pointerdown="tap"
       :disabled="finished"

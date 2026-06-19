@@ -46,7 +46,6 @@ const showDuelModal = ref(false)
 const selectedDuelId = ref(null)
 const showEndModal = ref(false)
 
-// Sprite par joueur, alterné selon l'index dans la liste.
 const DUEL_SPRITES = [dinoRed, dinoYellow, dinoBlue, dinoGreen]
 function duelSprite(i) {
   return DUEL_SPRITES[i % DUEL_SPRITES.length]
@@ -85,7 +84,6 @@ const playerName = computed(() => game.currentPlayer?.username ?? 'Toi')
 const opponentName = computed(() =>
   isChallenger.value ? opponentUsername.value : challengerUsername.value,
 )
-// Id de l'autre duelliste (l'adversaire réel de ce joueur).
 const duelOpponentId = computed(() =>
   isChallenger.value ? opponentId.value : challengerId.value,
 )
@@ -101,13 +99,11 @@ function initial(name) {
 function selectOpponent(player) {
   if (selectedDuelId.value) return
   error.value = ''
-  // Surbrillance immédiate, puis on lance le duel après un court délai visuel.
   selectedDuelId.value = player.id
   setTimeout(async () => {
     try {
       await game.triggerDuel(code, player.id)
       showDuelModal.value = false
-      // Mercure (minigame_triggered) bascule tout le monde vers l'état 2.
     } catch (e) {
       error.value = e.message || 'Impossible de lancer le duel'
       selectedDuelId.value = null
@@ -115,7 +111,6 @@ function selectOpponent(player) {
   }, 300)
 }
 
-// Animations GSAP d'ouverture/fermeture de la modale (hooks de <Transition>).
 function onDuelEnter(el, done) {
   selectedDuelId.value = null
   const card = el.querySelector('[data-duel-card]')
@@ -144,7 +139,6 @@ async function confirmEnd() {
   try {
     await game.finishGame(code, selectedWinnerId.value)
     showEndModal.value = false
-    // Mercure (game_finished) redirige aussi les autres joueurs.
     router.push(`/game/end/${code}`)
   } catch (e) {
     error.value = e.message || 'Impossible de terminer la partie'
@@ -157,7 +151,6 @@ async function onResult({ winner, timeMs }) {
   if (resultSent) return
   resultSent = true
   const meId = myId.value
-  // L'adversaire du duel = l'autre duelliste (challenger ou opponent).
   const otherId = isChallenger.value ? opponentId.value : challengerId.value
   const winnerId = winner === 'local' ? meId : otherId
   const loserId = winner === 'local' ? otherId : meId
@@ -166,9 +159,7 @@ async function onResult({ winner, timeMs }) {
   try {
     const payload = await game.submitResult(winnerId, loserId)
     game.setLastResult({ ...payload, minigameType, timeMs })
-  } catch {
-    // Un autre client a peut-être déjà résolu le duel : on suit l'event Mercure duel_resolved.
-  }
+  } catch {}
   router.push(`/game/result/${code}`)
 }
 
@@ -188,14 +179,12 @@ function onMercure({ event, data }) {
   }
 }
 
-// --- Prévisualisation spectateur (alimentée par les events player_tap) ---
 const specChallengerTaps = ref(0)
 const specOpponentTaps = ref(0)
 const specChallengerWins = ref(0)
 const specOpponentWins = ref(0)
 let specReflexPending = {}
 
-// Jauge tug-of-war en lecture seule (Bras de fer).
 const specGaugePercent = computed(() => {
   const p = 50 + 50 * ((specChallengerTaps.value - specOpponentTaps.value) / 100)
   return Math.max(0, Math.min(100, p))
@@ -218,7 +207,6 @@ function handleSpectatorTap(data) {
     if (data.playerId === cId) specChallengerTaps.value = data.taps
     else specOpponentTaps.value = data.taps
   } else if (activeType.value === 'reflex') {
-    // Deux taps (un par joueur) = une manche jouée → le temps le plus bas gagne.
     specReflexPending[data.playerId] = data.taps
     if (specReflexPending[cId] != null && specReflexPending[oId] != null) {
       if (specReflexPending[cId] <= specReflexPending[oId]) specChallengerWins.value++
@@ -230,7 +218,6 @@ function handleSpectatorTap(data) {
 
 const { subscribe, unsubscribe } = useMercure(`game/${code}`, onMercure)
 
-// Pulse GSAP alterné des deux avatars de l'écran spectateur.
 function stopSpecPulse() {
   specTweens.forEach((t) => t.kill())
   specTweens = []
@@ -259,17 +246,14 @@ watch(isSpectator, (spectating) => {
   })
 })
 
-// Polling fallback si Mercure ne répond pas : récupère le mini-jeu courant.
 let pollTimer = null
 function poll() {
   game.fetchCurrentMinigame()
 }
 
 onMounted(async () => {
-  // Resynchronise les joueurs depuis l'API après un éventuel refresh.
   const data = await game.fetchSession(code)
   if (data?.notFound) {
-    // Session expirée / introuvable → on nettoie et on renvoie au lobby.
     game.reset()
     router.push('/game')
     return
@@ -291,7 +275,6 @@ onUnmounted(() => {
 
 <template>
   <main class="flex min-h-svh flex-col bg-foret">
-    <!-- ÉTAT 2 — mini-jeu en cours (challenger / opponent uniquement) -->
     <component
       :is="activeComponent"
       v-if="activeComponent && isDuelist"
@@ -303,7 +286,6 @@ onUnmounted(() => {
       @result="onResult"
     />
 
-    <!-- ÉTAT 2 bis — écran spectateur -->
     <div
       v-else-if="isSpectator"
       class="flex flex-1 flex-col items-center justify-center gap-5 px-6 py-10 text-center"
@@ -317,7 +299,6 @@ onUnmounted(() => {
         {{ minigameLabel }}
       </span>
 
-      <!-- Bras de fer : jauge tug-of-war en direct (lecture seule) -->
       <div v-if="activeType === 'brasdefer'" class="w-full max-w-md">
         <div class="flex justify-between font-luckiest text-white text-sm mb-1.5">
           <span>{{ challengerUsername }} <span class="text-bleu">{{ specChallengerTaps }}</span></span>
@@ -335,7 +316,6 @@ onUnmounted(() => {
         </div>
       </div>
 
-      <!-- Réflexe : score de manches en direct -->
       <p v-else-if="activeType === 'reflex'" class="font-luckiest text-3xl text-white">
         <span class="text-vert">{{ specChallengerWins }}</span> -
         <span class="text-rouge">{{ specOpponentWins }}</span>
@@ -371,7 +351,6 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <!-- ÉTAT 1 — en attente de duel -->
     <div v-else class="flex flex-1 flex-col items-center justify-center gap-6 px-6 text-center">
       <p class="font-luckiest text-2xl text-white">En attente d'un duel…</p>
 
@@ -397,7 +376,6 @@ onUnmounted(() => {
       <p v-if="error" class="font-nunito text-sm text-rouge">{{ error }}</p>
     </div>
 
-    <!-- Modale de sélection d'adversaire -->
     <Transition :css="false" @enter="onDuelEnter" @leave="onDuelLeave">
       <div
         v-if="showDuelModal"
@@ -437,7 +415,6 @@ onUnmounted(() => {
       </div>
     </Transition>
 
-    <!-- Modale "Fin de jeu" — déclaration du gagnant (hôte) -->
     <div
       v-if="showEndModal"
       class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-6"

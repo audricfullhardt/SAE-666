@@ -160,7 +160,6 @@ function selectOutlet(outlet) {
         {{ t('home.pointsAchat.title') }}
       </h2>
 
-      <!-- Search bar -->
       <div class="relative mb-6">
         <Search class="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
         <input
@@ -171,13 +170,8 @@ function selectOutlet(outlet) {
         />
       </div>
 
-      <!--
-        Mobile: map above, white card below with vert bottom border
-        Desktop: map left + green card right, combined in one rounded-lg container
-      -->
       <div class="md:flex md:overflow-hidden md:rounded-lg md:shadow-md">
 
-        <!-- Map -->
         <div class="h-64 w-full overflow-hidden rounded-lg md:h-80 md:w-[55%] md:rounded-none" style="isolation: isolate;">
           <LMap :center="mapCenter" :zoom="mapZoom" class="h-full w-full">
             <LTileLayer
@@ -195,7 +189,6 @@ function selectOutlet(outlet) {
           </LMap>
         </div>
 
-        <!-- Outlet detail -->
         <div
           v-if="selectedOutlet"
           class="mt-4 rounded-lg border-b-4 border-vert bg-white p-5 md:mt-0 md:flex md:w-[45%] md:flex-col md:justify-center md:rounded-none md:border-b-0 md:bg-vert md:p-8"

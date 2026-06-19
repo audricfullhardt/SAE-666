@@ -16,10 +16,10 @@ const props = defineProps({
 const emit = defineEmits(['result'])
 
 const DURATION = 30
-const COUNT = 80 // foule dense type Mario DS
+const COUNT = 80
 
 const showCountdown = ref(true)
-const dinos = ref([]) // { id, sprite, isTarget, top, left, sizeClass }
+const dinos = ref([])
 const timer = ref(DURATION)
 const found = ref(false)
 const wrongFlash = ref(false)
@@ -27,11 +27,10 @@ const circleEl = ref(null)
 const zoneEl = ref(null)
 const dinoEls = ref({})
 
-// La cible = le dino rouge ; les distracteurs = les autres couleurs (jamais rouge).
 const targetSprite = dinoRed
 const distractorSprites = [dinoGreen, dinoBlue, dinoYellow]
 
-const MIN_DIST_PX = 25 // distance minimale entre dinos (en pixels)
+const MIN_DIST_PX = 25
 
 let startTime = 0
 let timerId = null
@@ -45,7 +44,6 @@ function rand(min, max) {
   return min + Math.random() * (max - min)
 }
 
-// Placement sans superposition dans une zone de dimensions réelles (px), positions en %.
 function placeWithoutOverlap(placed, width, height) {
   for (let attempt = 0; attempt < 150; attempt++) {
     const top = rand(4, 96)
@@ -57,11 +55,9 @@ function placeWithoutOverlap(placed, width, height) {
     })
     if (ok) return { top, left }
   }
-  // En dernier recours, on place quand même (densité élevée)
   return { top: rand(4, 96), left: rand(4, 96) }
 }
 
-// Tailles variées pour la profondeur : 50% petits, 35% moyens, 15% grands.
 function pickSizeClass() {
   const r = Math.random()
   if (r < 0.5) return 'h-4'
@@ -75,7 +71,6 @@ function buildDinos() {
   const height = rect?.height || window.innerHeight
 
   const list = []
-  // dino cible : le dino rouge (taille moyenne h-5)
   const targetPos = placeWithoutOverlap(list, width, height)
   list.push({
     id: 0,
@@ -158,7 +153,6 @@ function startGame() {
 }
 
 onMounted(() => {
-  // Après le rendu : on connaît les dimensions réelles de la zone pour le placement.
   nextTick(buildDinos)
 })
 onUnmounted(clearTimers)
@@ -172,7 +166,6 @@ onUnmounted(clearTimers)
   >
     <CountdownOverlay v-if="showCountdown" bg-class="bg-foret" @done="startGame" />
 
-    <!-- Header -->
     <header class="flex items-center justify-between p-4 z-10 shrink-0">
       <div class="flex items-center gap-2">
         <img :src="dinoRed" alt="" class="h-8 w-auto [image-rendering:pixelated]" />
@@ -183,7 +176,6 @@ onUnmounted(clearTimers)
       </span>
     </header>
 
-    <!-- Terrain de jeu : tout dans l'espace visible, sans scroll -->
     <div ref="zoneEl" class="flex-1 min-h-0 relative overflow-hidden">
       <button
         v-for="d in dinos"
@@ -201,14 +193,12 @@ onUnmounted(clearTimers)
         />
       </button>
 
-      <!-- Cercle de validation -->
       <div
         ref="circleEl"
         class="absolute w-16 h-16 rounded-full border-4 border-jaune -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-0"
       />
     </div>
 
-    <!-- Footer -->
     <footer class="flex items-center justify-center gap-2 p-4 text-center text-vert font-nunito z-10 shrink-0">
       <MousePointerClick class="h-5 w-5" />
       Touche le bon dino pour gagner

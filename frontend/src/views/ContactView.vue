@@ -28,7 +28,6 @@ const inputClass = 'w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-
 <template>
   <main class="min-h-svh bg-menthe">
 
-    <!-- Page header -->
     <div class="border-b-2 border-dashed border-black bg-white">
       <div class="mx-auto max-w-4xl px-6 py-10">
         <div class="border-l-4 border-bleu pl-4">
@@ -40,10 +39,8 @@ const inputClass = 'w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-
 
     <div class="mx-auto max-w-lg px-6 py-10">
 
-      <!-- Card -->
       <div class="rounded-lg border border-dashed border-black bg-white p-6">
 
-        <!-- Dino + subtitle -->
         <div class="mb-5 flex justify-center">
           <img
             :src="mode === 'joueurs' ? dinoGreen : dinoBleu"
@@ -52,7 +49,6 @@ const inputClass = 'w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-
           />
         </div>
 
-        <!-- Toggle -->
         <div class="mb-6 flex gap-1 rounded-full bg-gray-100 p-1">
           <button
             type="button"
@@ -72,7 +68,6 @@ const inputClass = 'w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-
           </button>
         </div>
 
-        <!-- JOUEURS FORM -->
         <div v-if="mode === 'joueurs'">
           <div v-if="sentJ" class="py-6 text-center">
             <p class="font-luckiest text-lg uppercase tracking-wide text-vert">{{ t('pages.contact.joueurs.sent') }}</p>
@@ -98,7 +93,6 @@ const inputClass = 'w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-
           </div>
         </div>
 
-        <!-- ENTREPRISES FORM -->
         <div v-else>
           <div v-if="sentB" class="py-6 text-center">
             <p class="font-luckiest text-lg uppercase tracking-wide text-bleu">{{ t('pages.contact.entreprises.sent') }}</p>

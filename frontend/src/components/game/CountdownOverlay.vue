@@ -3,7 +3,6 @@ import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import gsap from 'gsap'
 
 const props = defineProps({
-  // Fond identique au mini-jeu pour masquer le jeu pendant le décompte
   bgClass: { type: String, default: 'bg-foret' },
 })
 

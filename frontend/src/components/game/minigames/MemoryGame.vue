@@ -15,16 +15,14 @@ const props = defineProps({
 
 const emit = defineEmits(['result'])
 
-// 4 paires (8 cartes) + 1 carte bonus révélée gratuitement = grille 3x3.
-// Chaque paire = un sprite dino distinct ; la carte bonus = le logo (visuellement à part).
 const pairSymbols = [dinoGreen, dinoBlue, dinoRed, dinoYellow]
 const bonusSymbol = logo
-const TOTAL_PAIRS = pairSymbols.length // 4
+const TOTAL_PAIRS = pairSymbols.length
 
 const showCountdown = ref(true)
-const cards = ref([]) // { id, symbol, flipped, matched, bonus }
+const cards = ref([])
 const flippedIds = ref([])
-const lock = ref(true) // verrouillé tant que le décompte n'est pas fini
+const lock = ref(true)
 const playerPairs = ref(0)
 const cardRefs = ref({})
 
@@ -44,7 +42,6 @@ function shuffle(arr) {
 }
 
 function buildBoard() {
-  // 8 cartes des 4 paires, mélangées
   const deck = shuffle(
     [...pairSymbols, ...pairSymbols].map((symbol, i) => ({
       id: i,
@@ -54,8 +51,6 @@ function buildBoard() {
       bonus: false,
     })),
   )
-  // Carte bonus : révélée dès le départ, ne compte pas dans les paires,
-  // placée à l'index 4 = centre exact de la grille 3x3.
   deck.splice(4, 0, {
     id: 8,
     symbol: bonusSymbol,
@@ -99,7 +94,6 @@ function flip(card) {
 }
 
 function checkEnd() {
-  // Toutes les paires trouvées → victoire ; le backend tranchera face à l'autre joueur.
   if (playerPairs.value >= TOTAL_PAIRS) finish()
 }
 
@@ -126,7 +120,6 @@ onUnmounted(clearTimers)
   <div class="h-[100dvh] w-screen overflow-hidden bg-vert flex flex-col p-4 select-none relative">
     <CountdownOverlay v-if="showCountdown" bg-class="bg-vert" @done="startGame" />
 
-    <!-- Header -->
     <header class="flex items-start justify-between shrink-0">
       <div>
         <h1 class="font-luckiest text-white text-2xl">Mémoire</h1>
@@ -136,7 +129,6 @@ onUnmounted(clearTimers)
       </div>
     </header>
 
-    <!-- Grille 3x3 -->
     <div class="flex-1 min-h-0 flex items-center justify-center py-4">
       <div class="grid grid-cols-3 gap-3 w-full max-w-sm aspect-square">
         <button
@@ -166,7 +158,6 @@ onUnmounted(clearTimers)
       </div>
     </div>
 
-    <!-- Footer -->
     <footer class="text-center text-white font-nunito shrink-0">
       À toi de jouer, {{ playerName }} !
     </footer>

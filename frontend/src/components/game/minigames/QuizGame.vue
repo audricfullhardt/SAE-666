@@ -52,15 +52,14 @@ function shuffle(arr) {
   return a
 }
 
-// 5 questions tirées aléatoirement dans le pool.
 const quiz = shuffle(questions).slice(0, TOTAL)
 const total = quiz.length
 
 const showCountdown = ref(true)
 const index = ref(0)
 const score = ref(0)
-const selected = ref(null) // index chosen by player
-const locked = ref(false) // answer revealed
+const selected = ref(null)
+const locked = ref(false)
 const timer = ref(10)
 
 let countdownId = null
@@ -89,7 +88,7 @@ function startQuestion() {
 
 function handleTimeout() {
   if (locked.value) return
-  locked.value = true // +0 point, on enchaîne
+  locked.value = true
   scheduleNext()
 }
 
@@ -102,7 +101,6 @@ function choose(i) {
   scheduleNext()
 }
 
-// Affiche le feedback 1 s puis passe à la question suivante (ou termine).
 function scheduleNext() {
   nextId = setTimeout(() => {
     if (index.value < total - 1) {
@@ -116,7 +114,6 @@ function scheduleNext() {
 
 function finish() {
   clearTimers()
-  // timeMs transporte le score (0-5) : le backend comparera les deux joueurs.
   emit('result', { winner: 'local', timeMs: score.value })
 }
 
@@ -139,7 +136,6 @@ onUnmounted(clearTimers)
   <div class="h-[100dvh] w-screen overflow-hidden bg-bleu flex flex-col p-4 select-none relative">
     <CountdownOverlay v-if="showCountdown" bg-class="bg-bleu" @done="startGame" />
 
-    <!-- Header -->
     <header class="flex items-center justify-between">
       <span class="bg-white text-bleu font-nunito font-bold px-4 py-1.5 rounded-full text-sm">
         Question {{ index + 1 }}/{{ total }}
@@ -152,14 +148,12 @@ onUnmounted(clearTimers)
       </span>
     </header>
 
-    <!-- Question -->
     <div class="bg-white rounded-2xl shadow-lg p-6 my-6">
       <p class="font-luckiest text-foret text-xl text-center leading-snug">
         {{ current.text }}
       </p>
     </div>
 
-    <!-- Answers -->
     <div class="grid grid-cols-2 gap-3 flex-1 content-center">
       <button
         v-for="(answer, i) in current.answers"

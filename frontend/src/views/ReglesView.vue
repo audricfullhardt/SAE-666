@@ -26,7 +26,6 @@ const stats = [
 <template>
   <main class="min-h-svh bg-menthe">
 
-    <!-- Page header -->
     <div class="border-b-2 border-dashed border-black bg-white">
       <div class="mx-auto max-w-4xl px-6 py-10">
         <div class="border-l-4 border-vert pl-4">
@@ -35,7 +34,6 @@ const stats = [
         <p class="mt-4 font-bryndan text-sm leading-relaxed text-gray-500 md:max-w-xl">
           {{ t('pages.regles.intro') }}
         </p>
-        <!-- Stats pills -->
         <div class="mt-5 flex flex-wrap gap-2">
           <div
             v-for="stat in stats"
@@ -49,7 +47,6 @@ const stats = [
       </div>
     </div>
 
-    <!-- Chapters -->
     <div class="mx-auto max-w-4xl px-6 py-10">
       <div class="flex flex-col gap-4">
         <div

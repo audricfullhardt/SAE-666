@@ -32,9 +32,7 @@ async function copyCode() {
     await navigator.clipboard.writeText(code)
     copied.value = true
     setTimeout(() => (copied.value = false), 1500)
-  } catch {
-    /* presse-papier indisponible */
-  }
+  } catch {}
 }
 
 async function markReady() {
@@ -73,14 +71,10 @@ function onMercure({ event, data }) {
 
 const { subscribe, unsubscribe } = useMercure(`game/${code}`, onMercure)
 
-// Fallback : le backend ne publie pas encore les events de lobby sur Mercure.
-// L'hôte (et les joueurs connectés) rafraîchissent l'état via GET ; un invité s'appuie
-// sur les données initiales de /join et sur Mercure quand il sera branché.
 let pollTimer = null
 async function poll() {
   const data = await game.fetchSession(code)
   if (data?.notFound) {
-    // Session expirée / introuvable → on nettoie et on renvoie au lobby.
     game.reset()
     router.push('/game')
     return
@@ -92,7 +86,6 @@ async function poll() {
 
 onMounted(() => {
   subscribe()
-  // Resynchronise les joueurs après un refresh (no-op silencieux pour un invité sans JWT).
   poll()
   pollTimer = setInterval(poll, 2000)
 })

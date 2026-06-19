@@ -19,14 +19,12 @@ const paragraphKeys = ['home.concept.p1', 'home.concept.p2']
         {{ t('home.concept.title') }}
       </h2>
 
-      <!-- Single big dashed card -->
       <div class="mb-10 rounded-md border-2 border-dashed border-gray-300 p-6 font-bryndan text-xs leading-relaxed text-gray-700 md:text-sm">
         <p v-for="key in paragraphKeys" :key="key" class="mb-3 last:mb-0">
           {{ t(key) }}
         </p>
       </div>
 
-      <!-- Stats row -->
       <div class="flex items-center justify-around">
         <div v-for="stat in stats" :key="stat.labelKey" class="flex flex-col items-center gap-0">
           <span :class="['font-luckiest text-5xl tracking-wide', stat.colorClass]">

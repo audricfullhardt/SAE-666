@@ -30,10 +30,17 @@ services:
       database:
         condition: service_healthy
     environment:
+      # Toutes les variables sont fournies ici par compose : il n'y a pas de
+      # fichier .env (gitignoré + exclu du build). On désactive donc la lecture
+      # des fichiers .env par le runtime Symfony, sinon le boot échoue faute de .env.
+      APP_RUNTIME_OPTIONS: '{"disable_dotenv":true}'
       APP_ENV: ${APP_ENV:-prod}
       APP_SECRET: ${APP_SECRET}
       DATABASE_URL: "mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@database:3306/${MYSQL_DATABASE}?serverVersion=8.0&charset=utf8mb4"
+      DEFAULT_URI: ${DEFAULT_URI:-http://localhost}
       CORS_ALLOW_ORIGIN: ${CORS_ALLOW_ORIGIN}
+      JWT_SECRET_KEY: '%kernel.project_dir%/config/jwt/private.pem'
+      JWT_PUBLIC_KEY: '%kernel.project_dir%/config/jwt/public.pem'
       JWT_PASSPHRASE: ${JWT_PASSPHRASE}
       MERCURE_URL: http://mercure/.well-known/mercure
       MERCURE_PUBLIC_URL: ${MERCURE_PUBLIC_URL}

@@ -159,7 +159,26 @@
     },
     "classement": {
       "title": "Classement",
-      "pts": "pts"
+      "pts": "pts",
+      "subtitle": "Les meilleurs dresseurs de dinos",
+      "error": "Impossible de charger le classement.",
+      "retry": "Réessayer",
+      "empty": "Aucune partie jouée pour l'instant !",
+      "allPlayers": "Tous les joueurs",
+      "victories": "victoires",
+      "games": "parties",
+      "winsShort": "V",
+      "lossesShort": "D",
+      "table": {
+        "rank": "Rang",
+        "player": "Joueur",
+        "wins": "Victoires",
+        "losses": "Défaites",
+        "games": "Parties",
+        "winrate": "Winrate"
+      },
+      "ctaTitle": "Prêt à grimper dans le classement ?",
+      "ctaButton": "Jouer !"
     },
     "regles": {
       "title": "Règles du jeu",

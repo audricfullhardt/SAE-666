@@ -16,6 +16,7 @@ const drawerOpen = ref(false)
 const links = [
   { to: '/', labelKey: 'nav.home' },
   { to: '/regles', labelKey: 'nav.rules' },
+  { to: '/classement', labelKey: 'nav.ranking' },
   { to: '/actualites', labelKey: 'nav.news' },
   { to: '/contact', labelKey: 'nav.contact' },
 ]
@@ -35,10 +36,8 @@ watch(
 
 <template>
   <header class="sticky top-0 z-40 h-16 bg-vert">
-    <!-- Mobile: [hamburger | logo centered | user icon]  Desktop: [logo | nav links | JOUER] -->
     <nav class="relative mx-auto flex h-full max-w-6xl items-center justify-between px-4">
 
-      <!-- LEFT: hamburger (mobile only) -->
       <button
         type="button"
         class="flex items-center justify-center rounded-lg p-1.5 text-white transition hover:bg-white/15 md:hidden"
@@ -48,7 +47,6 @@ watch(
         <Menu class="h-7 w-7" />
       </button>
 
-      <!-- Logo: absolute-centered on mobile, normal flow first on desktop -->
       <RouterLink
         to="/"
         class="absolute left-1/2 -translate-x-1/2 flex shrink-0 items-center md:static md:translate-x-0 md:order-first"
@@ -56,7 +54,6 @@ watch(
         <img :src="logoUrl" alt="DinoMania" class="h-12 w-auto" />
       </RouterLink>
 
-      <!-- Desktop nav links (hidden on mobile) -->
       <ul class="hidden items-center gap-6 md:flex">
         <li v-for="link in links" :key="link.to">
           <RouterLink
@@ -69,9 +66,7 @@ watch(
         </li>
       </ul>
 
-      <!-- RIGHT: user icon (mobile) + desktop CTA -->
       <div class="flex items-center gap-3">
-        <!-- Language switcher (desktop) -->
         <div class="hidden items-center gap-1 md:flex">
           <button
             :class="['font-luckiest text-sm tracking-wide transition', locale === 'fr' ? 'text-white' : 'text-white/40 hover:text-white/70']"
@@ -83,7 +78,6 @@ watch(
             @click="setLocale('en')"
           >EN</button>
         </div>
-        <!-- Desktop: JOUER / CONNEXION -->
         <RouterLink
           v-if="auth.isAuthenticated"
           to="/game"
@@ -100,7 +94,6 @@ watch(
         </RouterLink>
         <LogoutButton class="hidden md:flex" />
 
-        <!-- Mobile: account circle icon (person silhouette in circle) -->
         <RouterLink
           :to="auth.isAuthenticated ? '/compte' : { name: 'auth', query: { mode: 'login' } }"
           class="flex h-9 w-9 items-center justify-center rounded-full border-2 border-white/80 text-white transition hover:bg-white/15 md:hidden"
@@ -115,7 +108,6 @@ watch(
     </nav>
   </header>
 
-  <!-- Mobile slide-in drawer -->
   <div
     class="fixed inset-0 z-50 md:hidden"
     :class="drawerOpen ? '' : 'pointer-events-none'"
@@ -164,7 +156,6 @@ watch(
 
       <hr class="my-6 border-white/20" />
 
-      <!-- Language switcher (mobile drawer) -->
       <div class="flex items-center gap-3">
         <button
           :class="['font-luckiest text-xl tracking-wide transition', locale === 'fr' ? 'text-white' : 'text-white/40 hover:text-white/70']"

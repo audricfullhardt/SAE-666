@@ -18,7 +18,6 @@ const games = [
 
 const current = ref(null)
 const lastResult = ref(null)
-// On force le remontage du composant via une clé pour pouvoir rejouer
 const playKey = ref(0)
 
 function play(key) {
@@ -43,7 +42,6 @@ function back() {
 </script>
 
 <template>
-  <!-- Menu de sélection -->
   <div v-if="!current" class="min-h-screen w-full bg-menthe flex flex-col items-center justify-center gap-4 p-8">
     <h1 class="font-luckiest text-foret text-4xl">DinoQuest — Mini-jeux</h1>
     <p class="font-nunito text-foret/70">Joueur : Rex · Adversaire : Tia</p>
@@ -59,7 +57,6 @@ function back() {
     </div>
   </div>
 
-  <!-- Jeu en cours -->
   <div v-else class="relative">
     <component
       :is="games.find((g) => g.key === current).component"
@@ -69,7 +66,6 @@ function back() {
       @result="onResult"
     />
 
-    <!-- Barre de contrôle de test -->
     <div class="fixed top-2 left-1/2 -translate-x-1/2 z-50 flex gap-2">
       <button @click="back" class="bg-black/70 text-white font-nunito text-xs px-3 py-1.5 rounded-full">
         ← Menu
@@ -79,7 +75,6 @@ function back() {
       </button>
     </div>
 
-    <!-- Overlay résultat -->
     <div
       v-if="lastResult"
       class="fixed inset-0 z-40 bg-black/60 flex items-center justify-center"

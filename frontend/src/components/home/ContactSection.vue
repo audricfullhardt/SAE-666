@@ -11,14 +11,12 @@ const { t } = useI18n()
   <section class="border-t-2 border-dashed border-rouge bg-transparent px-6 py-12">
     <div class="mx-auto flex max-w-3xl items-center gap-6">
 
-      <!-- Left: three dinos stacked -->
       <div class="flex shrink-0 flex-col items-center">
         <img :src="dinoGreen" alt="" aria-hidden="true" class="h-20 w-auto [image-rendering:pixelated]" />
         <img :src="dinoBleu"  alt="" aria-hidden="true" class="h-20 w-auto [image-rendering:pixelated]" />
         <img :src="dinoSvg"   alt="" aria-hidden="true" class="h-20 w-auto [image-rendering:pixelated]" />
       </div>
 
-      <!-- Right: title, body, button — all right-aligned -->
       <div class="flex flex-1 flex-col items-end gap-4 text-right">
         <h2 class="inline-block rotate-[4deg] font-luckiest text-xl uppercase tracking-wide text-noir md:text-2xl">
           {{ t('home.contact.title') }}

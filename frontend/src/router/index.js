@@ -34,6 +34,12 @@ const routes = [
     component: () => import('@/views/ContactView.vue'),
   },
   {
+    path: '/classement',
+    name: 'leaderboard',
+    component: () => import('@/views/LeaderboardView.vue'),
+    meta: { layout: 'app' },
+  },
+  {
     path: '/auth',
     name: 'auth',
     component: () => import('@/views/auth/AuthView.vue'),
@@ -116,9 +122,6 @@ router.beforeEach((to) => {
   }
   if (to.meta.requiresSession) {
     const game = useGameStore()
-    // L'accès est autorisé dès qu'une session est présente dans le store (restaurée depuis
-    // localStorage au refresh). Un invité est identifié par son gameToken, pas par un JWT :
-    // sessionCode et gameToken étant persistés ensemble, l'invité reste admis après refresh.
     if (!game.sessionCode && !game.gameToken) {
       return { name: 'lobby' }
     }

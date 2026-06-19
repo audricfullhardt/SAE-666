@@ -19,21 +19,19 @@ const emit = defineEmits(['result'])
 
 const game = useGameStore()
 
-// phases: idle | reveal | shuffle | choose | done
 const showCountdown = ref(true)
 const phase = ref('idle')
-const result = ref(null) // 'win' | 'lose'
+const result = ref(null)
 const eggVisible = ref(false)
-const choiceMade = ref(false) // empêche le double choix / bloque si l'adversaire a choisi
+const choiceMade = ref(false)
 const oppChoseFirst = ref(false)
 
-// Les 3 gobelets ont la MÊME couleur (jaune). id fixe + slot courant (0,1,2)
 const cups = ref([
   { id: 0, slot: 0 },
   { id: 1, slot: 1 },
   { id: 2, slot: 2 },
 ])
-const eggCupId = ref(1) // l'œuf est sous le gobelet du milieu au départ
+const eggCupId = ref(1)
 
 const arena = ref(null)
 const cupEls = ref({})
@@ -70,12 +68,10 @@ function liftCup(id, up) {
 
 function startSequence() {
   phase.value = 'reveal'
-  // Phase 1 — Révélation : soulever le gobelet du milieu pour montrer l'œuf
   eggVisible.value = true
   liftCup(eggCupId.value, true)
   later(() => {
     liftCup(eggCupId.value, false)
-    // L'œuf est caché dès que le gobelet est reposé
     later(() => (eggVisible.value = false), 250)
     later(startShuffle, 600)
   }, 2000)
@@ -96,7 +92,7 @@ function startShuffle() {
   const swaps = 5
   let t = 0
   for (let i = 0; i < swaps; i++) {
-    const duration = Math.max(0.6 - i * 0.1, 0.25) // de plus en plus rapide
+    const duration = Math.max(0.6 - i * 0.1, 0.25)
     later(() => {
       const ids = [0, 1, 2]
       const a = ids.splice(Math.floor(Math.random() * 3), 1)[0]
@@ -130,17 +126,12 @@ function chooseCup(cup) {
     gsap.to(cupEls.value[cup.id], { y: -90, rotation: 8, duration: 0.5, yoyo: true, repeat: 1 })
   }
 
-  // On diffuse notre choix, puis on laisse 300 ms à l'adversaire pour le recevoir
-  // (et se bloquer) avant de résoudre le duel côté backend.
   sendChoice(cup.id)
   later(() => {
     emit('result', { winner: playerWin ? 'local' : 'opponent', timeMs: Date.now() - startTime })
   }, 300)
 }
 
-// L'adversaire a choisi en premier → on bloque, on révèle son gobelet, et on attend
-// le résultat officiel (duel_resolved, résolu par le premier joueur). On n'émet pas
-// pour ne pas prendre l'ascendant sur le vrai premier joueur.
 function onMercure({ event, data }) {
   if (event !== 'player_tap' || data.playerId !== props.opponentId) return
   if (choiceMade.value) return
@@ -161,7 +152,6 @@ function startGame() {
 }
 
 onMounted(() => {
-  // Mesure de la largeur d'un slot après le rendu
   requestAnimationFrame(() => {
     if (arena.value) {
       slotWidth = arena.value.clientWidth / 3
@@ -181,17 +171,14 @@ onUnmounted(() => {
   <div class="h-[100dvh] w-screen overflow-hidden bg-foret flex flex-col items-center p-4 select-none relative">
     <CountdownOverlay v-if="showCountdown" bg-class="bg-foret" @done="startGame" />
 
-    <!-- Titre -->
     <h1 class="font-luckiest text-white text-2xl text-center mt-2 shrink-0">OÙ EST L'ŒUF ?</h1>
     <p class="font-patrick text-vert text-base mt-1 text-center shrink-0">suis-le bien... ne te trompe pas !</p>
 
-    <!-- Maman dino -->
     <div class="flex flex-col items-center mt-4 shrink-0">
       <img :src="dinoGreen" alt="" class="h-12 w-auto [image-rendering:pixelated]" />
       <p class="font-nunito text-white text-sm mt-2">la maman dino a pondu...</p>
     </div>
 
-    <!-- Statut de phase -->
     <p class="font-patrick text-vert text-base mt-3 h-6 shrink-0">
       <span v-if="oppChoseFirst" class="text-jaune">L'adversaire a choisi en premier !</span>
       <span v-else-if="phase === 'reveal'">Regarde bien où est l'œuf !</span>
@@ -203,7 +190,6 @@ onUnmounted(() => {
       <span v-else-if="result === 'lose'" class="text-rouge">Perdu...</span>
     </p>
 
-    <!-- Arène des gobelets -->
     <div class="flex-1 min-h-0 w-full flex items-center justify-center">
       <div ref="arena" class="relative w-full max-w-md" style="height: min(40vh, 12rem)">
         <div
@@ -215,7 +201,6 @@ onUnmounted(() => {
           style="width: 33.333%"
         >
           <div class="relative flex flex-col items-center">
-            <!-- Œuf : uniquement sous le bon gobelet, caché pendant le mélange, sous le gobelet en z-index -->
             <div
               v-if="cup.id === eggCupId"
               v-show="eggVisible"
@@ -223,7 +208,6 @@ onUnmounted(() => {
             >
               <Egg class="h-9 w-9 fill-menthe text-foret" />
             </div>
-            <!-- Gobelet (toujours au-dessus de l'œuf) -->
             <div
               class="relative z-10 rounded-b-lg rounded-t-2xl shadow-lg bg-jaune"
               style="width: min(22vw, 5rem); height: min(30vw, 7rem)"
@@ -233,7 +217,6 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <!-- Bouton info -->
     <button
       class="bg-white text-foret font-luckiest px-8 py-3 rounded-full shadow-lg disabled:opacity-60 shrink-0"
       disabled

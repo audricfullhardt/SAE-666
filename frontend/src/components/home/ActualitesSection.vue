@@ -49,7 +49,6 @@ function goToArticle(id) {
         {{ t('home.actualites.title') }}
       </h2>
 
-      <!-- MOBILE: carousel -->
       <div class="md:hidden">
         <div class="flex items-center gap-2">
           <button @click="prev" aria-label="Article précédent" class="flex-shrink-0 p-2 transition active:scale-95">
@@ -76,7 +75,6 @@ function goToArticle(id) {
           </button>
         </div>
 
-        <!-- Dots -->
         <div class="mt-4 flex justify-center gap-2">
           <button
             v-for="(_, i) in articles"
@@ -88,7 +86,6 @@ function goToArticle(id) {
         </div>
       </div>
 
-      <!-- DESKTOP: 3-column grid -->
       <div class="hidden md:grid md:grid-cols-3 md:gap-6">
         <button
           v-for="article in articles.slice(0, 3)"

@@ -160,7 +160,26 @@
     },
     "classement": {
       "title": "Leaderboard",
-      "pts": "pts"
+      "pts": "pts",
+      "subtitle": "The best dino trainers",
+      "error": "Unable to load the leaderboard.",
+      "retry": "Retry",
+      "empty": "No game played yet!",
+      "allPlayers": "All players",
+      "victories": "wins",
+      "games": "games",
+      "winsShort": "W",
+      "lossesShort": "L",
+      "table": {
+        "rank": "Rank",
+        "player": "Player",
+        "wins": "Wins",
+        "losses": "Losses",
+        "games": "Games",
+        "winrate": "Winrate"
+      },
+      "ctaTitle": "Ready to climb the leaderboard?",
+      "ctaButton": "Play!"
     },
     "regles": {
       "title": "Game Rules",

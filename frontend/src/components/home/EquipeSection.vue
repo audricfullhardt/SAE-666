@@ -10,6 +10,7 @@ import photoTheoM   from '@/assets/theo_metens.jpg'
 import photoArthur  from '@/assets/arthur.png'
 import photoValou   from '@/assets/valou.png'
 import photoTessa   from '@/assets/tessa.png'
+import photoKillian from '@/assets/killian.jpg'
 
 const { t } = useI18n()
 
@@ -40,7 +41,7 @@ const poles = [
     id: 'creation',
     members: [
       { name: 'Tessa',   roleKey: 'home.equipe.roles.graphiste', photo: photoTessa },
-      { name: 'Killian', roleKey: 'home.equipe.roles.graphiste', photo: null       },
+      { name: 'Killian', roleKey: 'home.equipe.roles.graphiste', photo: photoKillian},
     ],
   },
 ]
@@ -50,18 +51,12 @@ const poles = [
   <section class="bg-transparent px-6 py-14">
     <div class="mx-auto max-w-5xl">
 
-      <!-- Title: right-aligned, black -->
       <h2 class="mb-8 inline-block -rotate-[4deg] text-right font-luckiest text-xl uppercase tracking-wide text-noir md:text-2xl">
         {{ t('home.equipe.title') }}
       </h2>
 
-      <!--
-        Mobile: stacked (dev, com, création)
-        Desktop: 2-col grid — left col: dev (row 1) + création (row 2) | right col: com (rows 1-2)
-      -->
       <div class="flex flex-col gap-8 md:grid md:grid-cols-2 md:items-stretch md:gap-6">
 
-        <!-- DEV — left col row 1 on desktop -->
         <div class="md:col-start-1 md:row-start-1">
           <div class="flex items-center gap-2 pl-1">
             <img :src="poleColorMap.dev.dinoSrc" alt="" aria-hidden="true" class="h-12 w-12 object-contain [image-rendering:pixelated]" />
@@ -87,7 +82,6 @@ const poles = [
           </div>
         </div>
 
-        <!-- COM — right col rows 1-2 on desktop -->
         <div class="flex flex-col md:col-start-2 md:row-start-1 md:row-span-2">
           <div class="flex items-center gap-2 pl-1">
             <img :src="poleColorMap.com.dinoSrc" alt="" aria-hidden="true" class="h-12 w-12 object-contain [image-rendering:pixelated]" />
@@ -113,7 +107,6 @@ const poles = [
           </div>
         </div>
 
-        <!-- CRÉATION — left col row 2 on desktop -->
         <div class="flex flex-col md:col-start-1 md:row-start-2">
           <div class="flex items-center gap-2 pl-1">
             <img :src="poleColorMap.creation.dinoSrc" alt="" aria-hidden="true" class="h-12 w-12 object-contain [image-rendering:pixelated]" />

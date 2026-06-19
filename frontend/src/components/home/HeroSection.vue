@@ -8,7 +8,6 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <!-- ── MOBILE ────────────────────────────────────────────────────────── -->
   <section
     class="md:hidden relative w-full"
     style="aspect-ratio: 3/2;"
@@ -23,7 +22,6 @@ const { t } = useI18n()
       }"
     />
     <div class="relative flex h-full flex-col px-6 pt-10">
-      <!-- Title + dino -->
       <div class="relative flex flex-1 items-center">
         <h1 class="w-[55%] font-luckiest text-2xl uppercase leading-tight tracking-wide text-white drop-shadow-md">
           {{ t('home.hero.tagline') }}
@@ -36,7 +34,6 @@ const { t } = useI18n()
         />
       </div>
     </div>
-    <!-- Buttons: half overflowing into next section -->
     <div class="absolute bottom-0 left-0 right-0 z-10 flex translate-y-1/2 justify-center gap-4 px-6">
       <RouterLink
         to="/game"
@@ -53,9 +50,7 @@ const { t } = useI18n()
     </div>
   </section>
 
-  <!-- ── DESKTOP ───────────────────────────────────────────────────────── -->
   <section class="hidden md:flex min-h-[55vh] items-center gap-12 bg-transparent px-20 py-10 md:border-b-2 md:border-dashed md:border-rouge">
-    <!-- Left: title + buttons -->
     <div class="flex flex-1 flex-col gap-8">
       <h1 class="font-luckiest text-[42px] uppercase leading-tight tracking-wide text-noir">
         {{ t('home.hero.tagline') }}
@@ -75,7 +70,6 @@ const { t } = useI18n()
         </RouterLink>
       </div>
     </div>
-    <!-- Right: hero image card with dino -->
     <div
       class="relative w-[45%] overflow-hidden rounded-lg"
       :style="{

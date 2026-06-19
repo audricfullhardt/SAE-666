@@ -20,18 +20,17 @@ const game = useGameStore()
 
 const ROUNDS = 5
 const WINS_NEEDED = 3
-const PENALTY = 99999 // temps « perdu » (tap trop tôt ou timeout adversaire)
+const PENALTY = 99999
 
-// phases: idle | waiting | active | answered | reveal
 const showCountdown = ref(true)
 const phase = ref('idle')
 const round = ref(1)
 const playerWins = ref(0)
 const opponentWins = ref(0)
-const playerTime = ref(null) // ms de la manche en cours
+const playerTime = ref(null)
 const opponentTime = ref(null)
 const tooEarly = ref(false)
-const roundWinner = ref(null) // 'local' | 'opponent'
+const roundWinner = ref(null)
 const dinoEl = ref(null)
 const haloEl = ref(null)
 
@@ -41,7 +40,7 @@ let revealId = null
 let oppTimeoutId = null
 let haloTween = null
 let waitingOpponent = false
-const opponentQueue = [] // temps reçus en avance
+const opponentQueue = []
 
 function fmt(ms) {
   if (ms === null) return '—'
@@ -67,7 +66,7 @@ function startRound() {
   roundWinner.value = null
   waitingOpponent = false
   phase.value = 'waiting'
-  const delay = 1000 + Math.random() * 3000 // 1 à 4s
+  const delay = 1000 + Math.random() * 3000
   appearId = setTimeout(showDino, delay)
 }
 
@@ -95,7 +94,6 @@ function tap() {
   if (phase.value === 'answered' || phase.value === 'reveal' || phase.value === 'done') return
 
   if (phase.value === 'waiting') {
-    // Tapé trop tôt → manche perdue (temps de pénalité)
     clearTimeout(appearId)
     tooEarly.value = true
     playerTime.value = PENALTY
@@ -113,7 +111,6 @@ function tap() {
   }
 }
 
-// Récupère le temps de l'adversaire (en file s'il est déjà arrivé), sinon attend 5 s max.
 function awaitOpponent() {
   if (opponentQueue.length) {
     opponentTime.value = opponentQueue.shift()
@@ -124,7 +121,7 @@ function awaitOpponent() {
   oppTimeoutId = setTimeout(() => {
     if (!waitingOpponent) return
     waitingOpponent = false
-    opponentTime.value = PENALTY // pas de réponse → l'adversaire perd la manche
+    opponentTime.value = PENALTY
     resolveRound()
   }, 5000)
 }
@@ -203,7 +200,6 @@ const roundLabel = computed(() => `Manche ${Math.min(round.value, ROUNDS)}/${ROU
   >
     <CountdownOverlay v-if="showCountdown" bg-class="bg-foret" @done="startGame" />
 
-    <!-- Score de manches -->
     <div class="shrink-0 text-center">
       <p class="font-luckiest text-white text-2xl">
         {{ playerName }} <span class="text-vert">{{ playerWins }}</span>
@@ -213,7 +209,6 @@ const roundLabel = computed(() => `Manche ${Math.min(round.value, ROUNDS)}/${ROU
       <p class="font-patrick text-vert text-base mt-1">{{ roundLabel }} · tape dès que le dino apparaît</p>
     </div>
 
-    <!-- Zone centrale -->
     <div class="flex-1 min-h-0 w-full flex items-center justify-center relative">
       <div
         ref="haloEl"

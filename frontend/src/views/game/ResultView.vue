@@ -30,7 +30,6 @@ function initial(name) {
 onMounted(async () => {
   subscribe()
 
-  // Rafraîchit les positions (ne fait rien pour un invité sans JWT, le store garde lastResult).
   await game.fetchSession(code).catch(() => null)
 
   if (haloRef.value) {
@@ -56,18 +55,14 @@ function goToBoard() {
   router.push(`/game/minigame/${code}`)
 }
 
-// Clic manuel : déclenche le retour au plateau pour toute la session, puis redirige.
 async function backToBoard() {
   if (redirected) return
   try {
     await game.returnToBoard(code)
-  } catch {
-    // Même en cas d'échec du broadcast, on ramène localement le joueur au plateau.
-  }
+  } catch {}
   goToBoard()
 }
 
-// Un autre joueur a déclenché le retour au plateau → on suit.
 function onMercure({ event }) {
   if (event === 'return_to_board') {
     goToBoard()

@@ -13,14 +13,11 @@ export const useGameStore = defineStore('game', () => {
   const isHost = ref(false)
   const status = ref('waiting')
   const activeMinigame = ref(null)
-  // Résultat du dernier duel résolu (alimente la page de résultat, y compris pour les invités sans JWT).
   const lastResult = ref(null)
-  // Gagnant déclaré en fin de partie (alimente EndView, y compris pour les invités sans JWT).
   const endWinner = ref(null)
 
   const STORAGE_KEY = 'dinomania_game'
 
-  // Sauvegarde les données clés pour survivre à un refresh.
   function persist() {
     localStorage.setItem(
       STORAGE_KEY,
@@ -35,7 +32,6 @@ export const useGameStore = defineStore('game', () => {
     )
   }
 
-  // Restauration immédiate depuis localStorage à l'initialisation du store.
   const saved = localStorage.getItem(STORAGE_KEY)
   if (saved) {
     try {
@@ -51,14 +47,10 @@ export const useGameStore = defineStore('game', () => {
     }
   }
 
-  // En 1v1, l'adversaire est simplement l'autre joueur du duel.
   const opponent = computed(
     () => players.value.find((p) => currentPlayer.value && p.id !== currentPlayer.value.id) ?? null,
   )
 
-  // Le joueur ayant rejoint (invité OU connecté) est identifié côté backend par son gameToken
-  // (user = null pour tout joueur passé par /join). L'hôte, lui, est rattaché au JWT.
-  // On privilégie donc X-Game-Token dès qu'il est disponible, sinon le Bearer JWT.
   function authHeaders(json = false) {
     const headers = {}
     if (json) headers['Content-Type'] = 'application/json'
@@ -119,9 +111,6 @@ export const useGameStore = defineStore('game', () => {
   }
 
   async function fetchSession(code) {
-    // GET /api/game/{code} nécessite un JWT : un invité ne peut pas l'appeler.
-    // - 404 → la session n'existe plus : on le signale pour que la vue fasse reset() + redirect.
-    // - 401/403 → invité sans droit de lecture : on garde l'état restauré (Mercure + /join).
     const res = await fetch(`/api/game/${code}`, { headers: authHeaders() })
     if (res.status === 404) return { notFound: true }
     if (!res.ok) return null
@@ -171,7 +160,6 @@ export const useGameStore = defineStore('game', () => {
     return data
   }
 
-  // L'hôte termine la partie en désignant le gagnant.
   async function finishGame(code, winnerId) {
     const res = await fetch(`/api/game/${code}/finish`, {
       method: 'POST',
@@ -186,7 +174,6 @@ export const useGameStore = defineStore('game', () => {
     return data
   }
 
-  // Alimente l'état de fin depuis l'event Mercure game_finished { winnerId, winnerUsername, players }.
   function setEndResult(data) {
     if (!data) return
     endWinner.value = {
@@ -198,7 +185,6 @@ export const useGameStore = defineStore('game', () => {
     status.value = 'finished'
   }
 
-  // Diffuse le nombre de taps courant du joueur (mini-jeu Bras de fer) via Mercure.
   async function sendTap(code, playerId, taps) {
     const res = await fetch(`/api/game/${code}/minigame/tap`, {
       method: 'POST',
@@ -208,7 +194,6 @@ export const useGameStore = defineStore('game', () => {
     return res.ok
   }
 
-  // Demande le retour au plateau pour toute la session (broadcast Mercure return_to_board).
   async function returnToBoard(code) {
     const res = await fetch(`/api/game/${code}/return`, {
       method: 'POST',
@@ -219,7 +204,6 @@ export const useGameStore = defineStore('game', () => {
     return data
   }
 
-  // Déclenche un duel contre un adversaire choisi ; le backend tire le mini-jeu au sort.
   async function triggerDuel(code, opponentId) {
     const res = await fetch(`/api/game/${code}/scan`, {
       method: 'POST',
@@ -256,7 +240,6 @@ export const useGameStore = defineStore('game', () => {
     return data
   }
 
-  // Ajoute un joueur reçu via Mercure ; renvoie true si réellement ajouté (pour l'animation).
   function addPlayer(player) {
     if (players.value.some((p) => p.id === player.id)) return false
     players.value.push({ isReady: false, isHost: false, position: 0, ...player })

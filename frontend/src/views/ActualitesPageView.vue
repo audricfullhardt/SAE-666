@@ -40,10 +40,8 @@ onMounted(() => {
 <template>
   <main class="min-h-svh bg-menthe">
 
-    <!-- ── LIST VIEW ───────────────────────────────────── -->
     <div v-if="!selected">
 
-      <!-- Page header -->
       <div class="border-b-2 border-dashed border-black bg-white">
         <div class="mx-auto max-w-4xl px-6 py-10">
           <div class="border-l-4 border-rouge pl-4">
@@ -55,7 +53,6 @@ onMounted(() => {
 
       <div class="mx-auto max-w-5xl px-6 py-10">
 
-        <!-- Featured article (first) -->
         <button
           class="mb-8 w-full cursor-pointer overflow-hidden rounded-lg bg-white text-left transition hover:brightness-95 active:scale-[0.99] md:flex"
           @click="open(articles[0])"
@@ -73,7 +70,6 @@ onMounted(() => {
           </div>
         </button>
 
-        <!-- Grid 2-5 -->
         <div class="grid gap-5 md:grid-cols-2">
           <button
             v-for="article in articles.slice(1, 5)"
@@ -95,7 +91,6 @@ onMounted(() => {
           </button>
         </div>
 
-        <!-- Last article full-width -->
         <button
           class="mt-5 flex w-full cursor-pointer overflow-hidden rounded-lg bg-white text-left transition hover:brightness-95 active:scale-[0.99]"
           @click="open(articles[5])"
@@ -116,11 +111,9 @@ onMounted(() => {
       </div>
     </div>
 
-    <!-- ── ARTICLE DETAIL ─────────────────────────────── -->
     <div v-else class="px-6 py-10">
       <div class="mx-auto max-w-3xl">
 
-        <!-- Back -->
         <button
           class="mb-8 flex items-center gap-1.5 font-bryndan text-sm text-gray-500 transition hover:text-noir"
           @click="close"
@@ -128,7 +121,6 @@ onMounted(() => {
           <span>←</span> {{ t('pages.actualites.backBtn') }}
         </button>
 
-        <!-- Article header -->
         <div class="mb-6 h-64 overflow-hidden rounded-lg">
           <img :src="selected.image" alt="" class="h-full w-full object-cover" />
         </div>

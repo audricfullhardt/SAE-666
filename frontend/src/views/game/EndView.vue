@@ -16,7 +16,6 @@ const haloRef = ref(null)
 
 const winner = computed(() => game.endWinner)
 
-// Classement par position décroissante (le plus avancé en premier).
 const ranking = computed(() =>
   [...game.players].sort((a, b) => (b.position ?? 0) - (a.position ?? 0)),
 )
@@ -38,7 +37,6 @@ function rankLabel(index) {
 }
 
 function onMercure({ event, data }) {
-  // Au cas où on arrive sur la page avant que les données soient chargées.
   if (event === 'game_finished') {
     game.setEndResult(data)
   }
@@ -48,7 +46,6 @@ const { subscribe, unsubscribe } = useMercure(`game/${code}`, onMercure)
 
 onMounted(async () => {
   subscribe()
-  // Récupère l'état final (positions à jour). No-op pour un invité sans JWT (401).
   await game.fetchSession(code).catch(() => null)
 
   if (haloRef.value) {

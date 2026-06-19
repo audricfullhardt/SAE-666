@@ -103,7 +103,6 @@ class GameController extends AbstractController
         $this->em->persist($player);
         $this->em->flush();
 
-        // On ne diffuse pas le gameToken (privé au joueur) au reste de la salle.
         $this->mercure->publishToSession($session->getCode(), 'player_joined', [
             'id' => $player->getId(),
             'username' => $player->getUsername(),

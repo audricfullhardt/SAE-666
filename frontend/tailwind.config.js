@@ -1,11 +1,8 @@
-/** @type {import('tailwindcss').Config} */
 export default {
   darkMode: ['class'],
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   safelist: [
-    // Brand colour utilities – guaranteed even when dynamically composed
     { pattern: /^(bg|text|border|ring|fill)-(vert|foret|jaune|bleu|rouge|menthe)$/ },
-    // Font families
     'font-luckiest', 'font-bryndan', 'font-patrick', 'font-nunito',
   ],
   theme: {
