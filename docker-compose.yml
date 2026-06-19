@@ -66,9 +66,10 @@ services:
       SERVER_NAME: ':80'
       MERCURE_PUBLISHER_JWT_KEY: ${MERCURE_JWT_SECRET}
       MERCURE_SUBSCRIBER_JWT_KEY: ${MERCURE_JWT_SECRET}
-      MERCURE_EXTRA_DIRECTIVES: |
-        cors_origins ${MERCURE_CORS_ORIGINS}
+      MERCURE_EXTRA_DIRECTIVES: |-
+        cors_origins https://dinomania.audric-fullhardt.fr
         anonymous 1
+        publish_origins https://dinomania.audric-fullhardt.fr
     volumes:
       - mercure_data:/data
       - mercure_config:/config
